@@ -20,7 +20,7 @@
 <div id="container">
     <a href="FoodItemController">Continue Shopping</a>
     <div id="content">
-        <table>
+        <table border="1">
             <tr>
                 <th>Image</th>
                 <th>Name</th>
@@ -48,6 +48,7 @@
 </div>
 <div class="footer">
     <h2>Sum: ${sum}</h2>
+    <a href="OrderController">Order</a>
 </div>
 </body>
 </html>

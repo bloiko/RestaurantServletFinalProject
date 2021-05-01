@@ -1,6 +1,7 @@
 package dao;
 
 import entity.FoodItem;
+import entity.Item;
 import entity.Order;
 
 import java.util.ArrayList;
@@ -8,22 +9,30 @@ import java.util.List;
 
 public class OrderDAO{
     private List<Order> orderList;
+    private static OrderDAO instance;
 
-    public OrderDAO() {
+    private OrderDAO() {
         orderList = new ArrayList<>();
 
     }
+
+    public static OrderDAO getInstance() {
+        if (instance == null) {
+            return instance = new OrderDAO();
+        } else return instance;
+    }
+
 
     public List<Order> getOrders() throws Exception {
         return orderList;
 
     }
 
-    public void addFoodItemToOrder(String theOrderId,FoodItem foodItem){
+    public void addItemToOrder(String theOrderId, Item item){
         long orderId = Integer.parseInt(theOrderId);
         for (Order order : orderList) {
             if (order.getId() == orderId) {
-                order.addFoodItem(foodItem);
+                order.addFoodItem(item);
             }
         }
     }
