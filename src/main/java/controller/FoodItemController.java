@@ -34,7 +34,7 @@ public class FoodItemController extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         try {
-            foodItemDAO = new FoodListDAO();
+            foodItemDAO = FoodListDAO.getInstance();
         } catch (Exception exc) {
             throw new ServletException(exc);
         }
@@ -49,7 +49,6 @@ public class FoodItemController extends HttpServlet {
             if (theCommand == null) {
                 theCommand = "LIST";
             }
-            HttpSession session = request.getSession();
             // route to the appropriate method
             switch (theCommand) {
 
@@ -57,6 +56,7 @@ public class FoodItemController extends HttpServlet {
                     listFoodItems(request, response);
                     break;
                 case "ORDER":
+                    HttpSession session = request.getSession();
                     List<FoodItem> cart;
                     if (session.getAttribute("cart") == null) {
                         cart = new ArrayList<>();
@@ -66,25 +66,8 @@ public class FoodItemController extends HttpServlet {
                     String foodId = request.getParameter("foodId");
                     cart.add(foodItemDAO.getFoodItem(foodId));
                     session.setAttribute("cart", cart);
-                    request.getRequestDispatcher("cart.jsp").forward(request,response);
+                    request.getRequestDispatcher("cart.jsp").forward(request, response);
                     break;
-			/*
-			case "ADD":
-				addFoodItem(request, response);
-				break;
-				
-			case "LOAD":
-				loadFoodItem(request, response);
-				break;
-				
-			case "UPDATE":
-				updateFoodItem(request, response);
-				break;
-			
-			case "DELETE":
-				deleteFoodItem(request, response);
-				break;
-			*/
                 default:
                     listFoodItems(request, response);
             }

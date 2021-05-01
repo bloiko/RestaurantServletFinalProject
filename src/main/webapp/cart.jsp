@@ -17,7 +17,6 @@
         <h2>Cart</h2>
     </div>
 </div>
-
 <div id="container">
     <a href="FoodItemController">Continue Shopping</a>
     <div id="content">
@@ -31,21 +30,19 @@
                 <th>Option</th>
                 <th>Sub Total</th>
             </tr>
-            <c:forEach var="foodItem" items="${sessionScope.cart}">
-                <c:set var="sum" value="${sum+foodItem.price*foodItem.quantity}"/>
+            <c:forEach var="item" items="${sessionScope.cart}">
+                <c:set var="sum" value="${sum+item.foodItem.price*item.quantity}"/>
                 <tr>
-                    <td><img src="${foodItem.image}" width="100" height="100"></td>
-                    <td> ${foodItem.name} </td>
-                    <td> ${foodItem.price} </td>
-                    <td> ${foodItem.quantity} </td>
-                    <td> ${foodItem.itemCategory} </td>
-                    <td align="center"><a href="">Delete</a></td>
+                    <td><img src="${item.foodItem.image}" width="100" height="100"></td>
+                    <td> ${item.foodItem.name} </td>
+                    <td> ${item.foodItem.price}</td>
+                    <td> ${item.quantity} </td>
+                    <td> ${item.foodItem.itemCategory} </td>
+                    <td align="center"><a href="/CartController?command=DELETE&itemId=${item.foodItem.id}" onclick="return confirm('Are you sure?')">Delete</a></td>
                     >
-                    <td>${foodItem.price*foodItem.quantity} </td>
+                    <td>${item.foodItem.price*item.quantity}</td>
                 </tr>
             </c:forEach>
-
-
         </table>
     </div>
 </div>
