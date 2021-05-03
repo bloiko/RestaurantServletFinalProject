@@ -46,7 +46,7 @@
 </div>
 <div class="footer">
     <h2>Sum: ${sum}</h2>
-    <a href="/AdminController">Order</a>
+    <a href="/AdminController?command=LIST">Order</a>
 </div>
 </body>
 </html>

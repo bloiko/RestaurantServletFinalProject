@@ -3,6 +3,7 @@ package controller;
 import dao.OrderDAO;
 import entity.Item;
 import entity.Order;
+import entity.OrderStatus;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,20 +23,38 @@ public class AdminController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        List<Item> cart = (List<Item>) session.getAttribute("cart");
-        Order order = new Order();
-        order.setOrderDate(new Date());
-        if (cart.size() != 0) {
-            order.setItems(cart);
-
+        String command = request.getParameter("command");
+        if ("LIST".equals(command)) {
+            HttpSession session = request.getSession();
+            List<Item> cart = (List<Item>) session.getAttribute("cart");
+            Order order = new Order();
             try {
-                orderDAO.addOrder(order);
+                order.setId(orderDAO.getOrders().size());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            order.setOrderDate(new Date());
+            order.setStatus(OrderStatus.WAITING);
+            if (cart.size() != 0) {
+                order.setItems(cart);
+                try {
+                    orderDAO.addOrder(order);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            session.setAttribute("cart", new ArrayList<Item>());
+        } else if ("CHANGE_STATUS".equals(command)) {
+            String orderIdString = request.getParameter("orderId");
+            Order order;
+            try {
+                order = orderDAO.getOrder(orderIdString);
+                OrderStatus newStatus = order.getStatus().nextStatus();
+                order.setStatus(newStatus);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        session.setAttribute("cart", new ArrayList<Item>());
         try {
             request.setAttribute("ORDERS_LIST", orderDAO.getOrders());
         } catch (Exception e) {

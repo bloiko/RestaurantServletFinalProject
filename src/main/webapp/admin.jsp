@@ -19,6 +19,7 @@
                 <th>Date of ordering</th>
                 <th>Items</th>
                 <th>Order price</th>
+                <th>Status</th>
             </tr>
             <c:forEach var="order" items="${ORDERS_LIST}">
                 <c:set var="orderPrice" value="${0}"/>
@@ -45,6 +46,11 @@
                         </table>
                     </th>
                     <th>${orderPrice}</th>
+                    <th>
+                            ${order.status}
+                            <br/>
+                            <a href="/AdminController?command=CHANGE_STATUS&orderId=${order.id}">Change status</a>
+                    </th>
                 </tr>
             </c:forEach>
         </table>

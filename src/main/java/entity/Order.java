@@ -12,6 +12,7 @@ public class Order {
     private int id;
     private Date orderDate;
     private List<Item> items;
+    private OrderStatus status;
     public void addFoodItem(Item item){
         items.add(item);
     }
