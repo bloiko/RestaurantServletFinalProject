@@ -1,8 +1,10 @@
 package controller;
 
 import dao.FoodDAOInterface;
+import dao.FoodJDBCDAO;
 import dao.FoodListDAO;
 import entity.FoodItem;
+import entity.Item;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,7 +36,7 @@ public class FoodItemController extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         try {
-            foodItemDAO = FoodListDAO.getInstance();
+            foodItemDAO = FoodJDBCDAO.getInstance();
         } catch (Exception exc) {
             throw new ServletException(exc);
         }
@@ -43,33 +45,46 @@ public class FoodItemController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try {
-            String theCommand = request.getParameter("command");
+            String command = request.getParameter("command");
 
             // if the command is missing, then default to listing FoodItems
-            if (theCommand == null) {
-                theCommand = "LIST";
-            }
+           /* if (command == null) {
+                command = "LIST";
+            }*/
             // route to the appropriate method
-            switch (theCommand) {
-
-                case "LIST":
-                    listFoodItems(request, response);
-                    break;
-                case "ORDER":
-                    HttpSession session = request.getSession();
-                    List<FoodItem> cart;
-                    if (session.getAttribute("cart") == null) {
-                        cart = new ArrayList<>();
-                    } else {
-                        cart = (List<FoodItem>) session.getAttribute("cart");
+            if ("LIST".equals(command)) {
+                listFoodItems(request, response);
+            } else if ("ORDER".equals(command)) {
+                String itemId = request.getParameter("foodId");
+                HttpSession session = request.getSession();
+                List<Item> cart;
+                if (session.getAttribute("cart") == null) {
+                    cart = new ArrayList<>();
+                    try {
+                        cart.add(new Item(foodItemDAO.getFoodItem(itemId), 1));
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    String foodId = request.getParameter("foodId");
-                    cart.add(foodItemDAO.getFoodItem(foodId));
                     session.setAttribute("cart", cart);
-                    request.getRequestDispatcher("cart.jsp").forward(request, response);
-                    break;
-                default:
-                    listFoodItems(request, response);
+                } else {
+                    cart = (List<Item>) session.getAttribute("cart");
+                    int index = isExisting(Integer.parseInt(itemId), cart);
+                    if (index == -1) {
+                        try {
+                            cart.add(new Item(foodItemDAO.getFoodItem(itemId), 1));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        int quantity = cart.get(index).getQuantity() + 1;
+                        cart.get(index).setQuantity(quantity);
+                    }
+                    session.setAttribute("cart", cart);
+                }
+                // request.getRequestDispatcher("list-food.jsp").forward(request,response);
+                response.sendRedirect("/FoodItemController");
+            } else {
+                listFoodItems(request, response);
             }
 
         } catch (Exception exc) {
@@ -80,7 +95,13 @@ public class FoodItemController extends HttpServlet {
 
     private void listFoodItems(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
-        List<FoodItem> foodItems = foodItemDAO.getFoodItems();
+        HttpSession session = request.getSession();
+        List<FoodItem> foodItems = null;
+        if (session.getAttribute("menu") != null) {
+            foodItems = (List<FoodItem>) session.getAttribute("menu");
+        } else {
+            foodItems = foodItemDAO.getFoodItems();
+        }
         String sort = request.getParameter("sort");
         if (sort != null) {
             if (sort.equals("NAME")) {
@@ -88,13 +109,22 @@ public class FoodItemController extends HttpServlet {
             } else if (sort.equals("PRICE")) {
                 foodItems.sort(Comparator.comparing(FoodItem::getPrice));
             } else if (sort.equals("CATEGORY")) {
-                foodItems.sort(Comparator.comparing(FoodItem::getItemCategory));
+                foodItems.sort(Comparator.comparing(FoodItem::getCategory));
             }
+            session.setAttribute("menu", foodItems);
         }
-
         request.setAttribute("FOOD_LIST", foodItems);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/list-food.jsp");
         dispatcher.forward(request, response);
+    }
+
+    private int isExisting(int id, List<Item> cart) {
+        for (int i = 0; i < cart.size(); i++) {
+            if (cart.get(i).getFoodItem().getId() == id) {
+                return i;
+            }
+        }
+        return -1;
     }
 	/*private void deleteFoodItem(HttpServletRequest request, HttpServletResponse response)
 		throws Exception {

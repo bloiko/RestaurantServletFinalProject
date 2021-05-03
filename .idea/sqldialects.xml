@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlResolveMappings">
+    <file url="file://$PROJECT_DIR$/src/main/java/dao/FoodJDBCDAO.java" scope="{&quot;node&quot;:{  &quot;@negative&quot;:&quot;1&quot;,  &quot;group&quot;:{   &quot;@kind&quot;:&quot;root&quot;,   &quot;node&quot;:{    &quot;@negative&quot;:&quot;1&quot;   }  } }}" />
+    <file url="PROJECT" scope="{&quot;node&quot;:{  &quot;@negative&quot;:&quot;1&quot;,  &quot;group&quot;:{   &quot;@kind&quot;:&quot;root&quot;,   &quot;node&quot;:{    &quot;name&quot;:{     &quot;@qname&quot;:&quot;1b8e9fc1-7df2-4fb6-9922-d09e64d694c3&quot;    }   }  } }}" />
+  </component>
+</project>

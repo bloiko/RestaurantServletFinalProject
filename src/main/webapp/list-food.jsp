@@ -12,21 +12,14 @@
     </div>
 </div>
 <div id="container">
-    <form action="/FoodItemController">
-        <select name="sort">
-            <option value="NAME">By name</option>
-            <option value="PRICE">By price</option>
-            <option value="CATEGORY">By category</option>
-        </select>
-        <input type="submit" value="Sort">
-    </form>
+    <a href="cart.jsp">Cart</a>
     <div id="content">
         <table border="1">
             <tr>
                 <th>Image</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Category</th>
+                <th>Name<a href="/FoodItemController?sort=NAME">+</a></th>
+                <th>Price<a href="/FoodItemController?sort=PRICE">+</a></th>
+                <th>Category<a href="/FoodItemController?sort=CATEGORY">+</a></th>
                 <th></th>
             </tr>
             <c:forEach var="foodItem" items="${FOOD_LIST}">
@@ -42,8 +35,8 @@
                     <td><img src="${foodItem.image}" width="100" height="100"></td>
                     <td> ${foodItem.name} </td>
                     <td> ${foodItem.price} </td>
-                    <td>${foodItem.itemCategory}</td>
-                    <td><a href="/CartController?command=ORDER&foodId=${foodItem.id}">Add to Cart</a></td>
+                    <td>${foodItem.category}</td>
+                    <td><a href="/FoodItemController?command=ORDER&foodId=${foodItem.id}">Add to Cart</a></td>
                 </tr>
             </c:forEach>
         </table>

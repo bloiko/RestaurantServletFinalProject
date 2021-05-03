@@ -1,13 +1,41 @@
 package dao;
 
-public class FoodJDBCDAO {
-  /*  private DataSource dataSource;
+import entity.FoodItem;
 
-    public FoodJDBCDAO(DataSource theDataSource) {
-        dataSource = theDataSource;
+import javax.annotation.Resource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class FoodJDBCDAO implements FoodDAOInterface {
+    private String sqlTable = "jdbc/restaurant_system";
+    //@Resource(name = "jdbc/restaurant_system")
+    private DataSource dataSource;
+    private static FoodJDBCDAO instance;
+
+    private FoodJDBCDAO() {
+        Context initContext = null;
+        try {
+            initContext = new InitialContext();
+            Context envContext = (Context) initContext.lookup("java:/comp/env");
+            this.dataSource = (DataSource) envContext.lookup("jdbc/restaurant_system");
+
+        } catch (
+                NamingException e) {
+            e.printStackTrace();
+        }
+
     }
 
-
+    public static FoodJDBCDAO getInstance() {
+        if (instance == null) {
+            return instance = new FoodJDBCDAO();
+        } else return instance;
+    }
 
     @Override
     public List<FoodItem> getFoodItems() throws Exception {
@@ -15,24 +43,27 @@ public class FoodJDBCDAO {
         Connection myConn = null;
         Statement myStmt = null;
         ResultSet myRs = null;
+        String myConnectionString = "jdbc:mysql://localhost:3306/restaurant_system?useSSL=false&serverTimezone=UTC";
         try {
             myConn = dataSource.getConnection();
-            String sql = "select * from student order by last_name";
+            String sql = "select * from food_item";
             myStmt = myConn.createStatement();
             myRs = myStmt.executeQuery(sql);
             while (myRs.next()) {
                 int id = myRs.getInt("id");
-                String firstName = myRs.getString("first_name");
-                String lastName = myRs.getString("last_name");
-                String email = myRs.getString("email");
-                Student tempStudent = new Student(id, firstName, lastName, email);
-                foodItems.add(tempStudent);
+                String name = myRs.getString("name");
+                int price = myRs.getInt("price");
+                String image = myRs.getString("image");
+                int category = myRs.getInt("category");
+                FoodItem foodItem = new FoodItem(id, name, price, image, category);
+                foodItems.add(foodItem);
             }
             return foodItems;
         } finally {
             close(myConn, myStmt, myRs);
         }
     }
+
     private void close(Connection myConn, Statement myStmt, ResultSet myRs) {
 
         try {
@@ -45,25 +76,27 @@ public class FoodJDBCDAO {
             }
 
             if (myConn != null) {
-                myConn.close();   // doesn't really close it ... just puts back in connection pool
+                myConn.close();
             }
         } catch (Exception exc) {
             exc.printStackTrace();
         }
     }
+
     @Override
-    public void addFoodItem(FoodItem theFoodItem) throws Exception {
+    public void addFoodItem(FoodItem foodItem) throws Exception {
         Connection myConn = null;
         PreparedStatement myStmt = null;
         try {
             myConn = dataSource.getConnection();
-            String sql = "insert into student "
-                    + "(first_name, last_name, email) "
-                    + "values (?, ?, ?)";
+            String sql = "insert into food_item "
+                    + "(name, price, image,category) "
+                    + "values (?, ?, ?, ?)";
             myStmt = myConn.prepareStatement(sql);
-            myStmt.setString(1, theStudent.getFirstName());
-            myStmt.setString(2, theStudent.getLastName());
-            myStmt.setString(3, theStudent.getEmail());
+            myStmt.setString(1, foodItem.getName());
+            myStmt.setInt(2, foodItem.getPrice());
+            myStmt.setString(3, foodItem.getImage());
+            myStmt.setInt(4, foodItem.getCategory());
             myStmt.execute();
         } finally {
             close(myConn, myStmt, null);
@@ -72,46 +105,48 @@ public class FoodJDBCDAO {
 
     @Override
     public FoodItem getFoodItem(String theFoodItemId) throws Exception {
-        Student theStudent = null;
+        FoodItem foodItem = null;
         Connection myConn = null;
         PreparedStatement myStmt = null;
         ResultSet myRs = null;
-        int studentId;
+        int foodId;
         try {
-            studentId = Integer.parseInt(theStudentId);
+            foodId = Integer.parseInt(theFoodItemId);
             myConn = dataSource.getConnection();
-            String sql = "select * from student where id=?";
+            String sql = "select * from food_item where id=?";
             myStmt = myConn.prepareStatement(sql);
-            myStmt.setInt(1, studentId);
+            myStmt.setInt(1, foodId);
             myRs = myStmt.executeQuery();
             if (myRs.next()) {
-                String firstName = myRs.getString("first_name");
-                String lastName = myRs.getString("last_name");
-                String email = myRs.getString("email");
-                theStudent = new Student(studentId, firstName, lastName, email);
+                int id = myRs.getInt("id");
+                String name = myRs.getString("name");
+                int price = myRs.getInt("price");
+                String image = myRs.getString("image");
+                int category = myRs.getInt("category");
+                foodItem = new FoodItem(id, name, price, image, category);
             } else {
-                throw new Exception("Could not find student id: " + studentId);
+                throw new Exception("Could not find student id: " + foodId);
             }
-            return theStudent;
+            return foodItem;
         } finally {
             close(myConn, myStmt, myRs);
         }
     }
 
     @Override
-    public void updateFoodItem(FoodItem theFoodItem) throws Exception {
+    public void updateFoodItem(FoodItem foodItem) throws Exception {
         Connection myConn = null;
         PreparedStatement myStmt = null;
         try {
             myConn = dataSource.getConnection();
-            String sql = "update student "
-                    + "set first_name=?, last_name=?, email=? "
+            String sql = "update food_item "
+                    + "set name=?, price=?, image=?, category=?"
                     + "where id=?";
             myStmt = myConn.prepareStatement(sql);
-            myStmt.setString(1, theStudent.getFirstName());
-            myStmt.setString(2, theStudent.getLastName());
-            myStmt.setString(3, theStudent.getEmail());
-            myStmt.setInt(4, theStudent.getId());
+            myStmt.setString(1, foodItem.getName());
+            myStmt.setInt(2, foodItem.getPrice());
+            myStmt.setString(3, foodItem.getImage());
+            myStmt.setInt(4, foodItem.getCategory());
             myStmt.execute();
         } finally {
             close(myConn, myStmt, null);
@@ -119,20 +154,20 @@ public class FoodJDBCDAO {
     }
 
     @Override
-    public void deleteFoodItem(String theFoodItemId) throws Exception {
+    public void deleteFoodItem(String foodItemId) throws Exception {
         Connection myConn = null;
         PreparedStatement myStmt = null;
         try {
-            int studentId = Integer.parseInt(theStudentId);
+            int foodId = Integer.parseInt(foodItemId);
             myConn = dataSource.getConnection();
-            String sql = "delete from student where id=?";
+            String sql = "delete from food_item where id=?";
             myStmt = myConn.prepareStatement(sql);
-            myStmt.setInt(1, studentId);
+            myStmt.setInt(1, foodId);
             myStmt.execute();
         } finally {
             close(myConn, myStmt, null);
         }
-    }*/
+    }
 }
 
 

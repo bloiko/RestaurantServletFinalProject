@@ -26,7 +26,6 @@
                 <th>Name</th>
                 <th>Price</th>
                 <th>Quantity</th>
-                <th>Category</th>
                 <th>Option</th>
                 <th>Sub Total</th>
             </tr>
@@ -37,7 +36,6 @@
                     <td> ${item.foodItem.name} </td>
                     <td> ${item.foodItem.price}</td>
                     <td> ${item.quantity} </td>
-                    <td> ${item.foodItem.itemCategory} </td>
                     <td align="center"><a href="/CartController?command=DELETE&itemId=${item.foodItem.id}" onclick="return confirm('Are you sure?')">Delete</a></td>
                     >
                     <td>${item.foodItem.price*item.quantity}</td>
@@ -48,7 +46,7 @@
 </div>
 <div class="footer">
     <h2>Sum: ${sum}</h2>
-    <a href="OrderController">Order</a>
+    <a href="/AdminController">Order</a>
 </div>
 </body>
 </html>

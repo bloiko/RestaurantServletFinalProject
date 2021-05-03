@@ -5,12 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class FoodItem {
+@AllArgsConstructor
+public class Category {
     private int id;
     private String name;
-    private int price;
-    private String image;
-    private int category;
 }

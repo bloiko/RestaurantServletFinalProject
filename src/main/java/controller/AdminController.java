@@ -22,6 +22,26 @@ public class AdminController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        super.doGet(request,response);
+        HttpSession session = request.getSession();
+        List<Item> cart = (List<Item>) session.getAttribute("cart");
+        Order order = new Order();
+        order.setOrderDate(new Date());
+        if (cart.size() != 0) {
+            order.setItems(cart);
+
+            try {
+                orderDAO.addOrder(order);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        session.setAttribute("cart", new ArrayList<Item>());
+        try {
+            request.setAttribute("ORDERS_LIST", orderDAO.getOrders());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("admin.jsp");
+        requestDispatcher.forward(request, response);
     }
 }
