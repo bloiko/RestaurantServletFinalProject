@@ -11,6 +11,7 @@ import java.util.List;
 public class Order {
     private int id;
     private Date orderDate;
+    private User user;
     private List<Item> items;
     private OrderStatus status;
     public void addFoodItem(Item item){

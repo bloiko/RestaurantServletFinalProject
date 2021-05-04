@@ -16,6 +16,7 @@
         <table border="1">
             <tr>
                 <th>id</th>
+                <th>User information</th>
                 <th>Date of ordering</th>
                 <th>Items</th>
                 <th>Order price</th>
@@ -25,6 +26,34 @@
                 <c:set var="orderPrice" value="${0}"/>
                 <tr>
                     <th>${order.id}</th>
+                    <th>
+                        <table>
+                            <tr>
+                                <td>First Name</td>
+                                <td> ${order.user.firstName} </td>
+                            </tr>
+                            <tr>
+                                <td>Last Name</td>
+                                <td>${order.user.lastName}</td>
+                            </tr>
+                            <tr>
+                                <td>Username</td>
+                                <td>${order.user.userName}</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>${order.user.email}</td>
+                            </tr>
+                            <tr>
+                                <td>Address</td>
+                                <td>${order.user.address}</td>
+                            </tr>
+                            <tr>
+                                <td>Phone Number</td>
+                                <td>${order.user.phoneNumber}</td>
+                            </tr>
+                        </table>
+                    </th>
                     <th>${order.orderDate}</th>
                     <th>
                         <table>
@@ -48,9 +77,10 @@
                     <th>${orderPrice}</th>
                     <th>
                             ${order.status}
-                            <br/>
-                            <a href="/AdminController?command=CHANGE_STATUS&orderId=${order.id}">Change status</a>
+                        <br/>
+                        <a href="/AdminController?command=CHANGE_STATUS&orderId=${order.id}">Change status</a>
                     </th>
+                    <th><a href="/AdminController?command=DELETE&orderId=${order.id}">Delete order</a></th>
                 </tr>
             </c:forEach>
         </table>

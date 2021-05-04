@@ -1,24 +1,23 @@
 package dao;
 
-import entity.FoodItem;
 import entity.Item;
 import entity.Order;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderDAO{
+public class OrderListDAO {
     private List<Order> orderList;
-    private static OrderDAO instance;
+    private static OrderListDAO instance;
 
-    private OrderDAO() {
+    private OrderListDAO() {
         orderList = new ArrayList<>();
 
     }
 
-    public static OrderDAO getInstance() {
+    public static OrderListDAO getInstance() {
         if (instance == null) {
-            return instance = new OrderDAO();
+            return instance = new OrderListDAO();
         } else return instance;
     }
 

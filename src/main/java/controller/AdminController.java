@@ -1,9 +1,10 @@
 package controller;
 
-import dao.OrderDAO;
+import dao.OrderListDAO;
 import entity.Item;
 import entity.Order;
 import entity.OrderStatus;
+import entity.User;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,7 +20,7 @@ import java.util.List;
 
 @WebServlet("/AdminController")
 public class AdminController extends HttpServlet {
-    OrderDAO orderDAO = OrderDAO.getInstance();
+    private OrderListDAO orderListDAO = OrderListDAO.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -27,18 +28,20 @@ public class AdminController extends HttpServlet {
         if ("LIST".equals(command)) {
             HttpSession session = request.getSession();
             List<Item> cart = (List<Item>) session.getAttribute("cart");
+            User user = (User) session.getAttribute("user");
             Order order = new Order();
             try {
-                order.setId(orderDAO.getOrders().size());
+                order.setId(orderListDAO.getOrders().size());
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            order.setUser(user);
             order.setOrderDate(new Date());
             order.setStatus(OrderStatus.WAITING);
             if (cart.size() != 0) {
                 order.setItems(cart);
                 try {
-                    orderDAO.addOrder(order);
+                    orderListDAO.addOrder(order);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -48,15 +51,23 @@ public class AdminController extends HttpServlet {
             String orderIdString = request.getParameter("orderId");
             Order order;
             try {
-                order = orderDAO.getOrder(orderIdString);
+                order = orderListDAO.getOrder(orderIdString);
                 OrderStatus newStatus = order.getStatus().nextStatus();
                 order.setStatus(newStatus);
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else if ("DELETE".equals(command)) {
+            String orderIdString = request.getParameter("orderId");
+            Order order;
+            try {
+                orderListDAO.deleteOrder(orderIdString);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         try {
-            request.setAttribute("ORDERS_LIST", orderDAO.getOrders());
+            request.setAttribute("ORDERS_LIST", orderListDAO.getOrders());
         } catch (Exception e) {
             e.printStackTrace();
         }
