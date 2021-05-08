@@ -16,7 +16,7 @@ import java.io.IOException;
 
 @WebServlet("/LoginController")
 public class LoginController extends HttpServlet {
-    private UserListDAO userListDAO = UserListDAO.getInstance();
+    private UserDAO userListDAO = UserDAO.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

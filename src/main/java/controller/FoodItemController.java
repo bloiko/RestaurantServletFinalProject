@@ -1,8 +1,6 @@
 package controller;
 
-import dao.FoodDAOInterface;
 import dao.FoodJDBCDAO;
-import dao.FoodListDAO;
 import entity.FoodItem;
 import entity.Item;
 
@@ -10,6 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.Resource;
 
@@ -26,8 +26,9 @@ import javax.sql.DataSource;
 @WebServlet("/FoodItemController")
 public class FoodItemController extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    public static final int NUMBER_ITEMS_ON_PAGE = 3;
 
-    private FoodDAOInterface foodItemDAO;
+    private FoodJDBCDAO foodItemDAO;
 
     @Resource(name = "jdbc/web_FoodItem_tracker")
     private DataSource dataSource;
@@ -46,18 +47,17 @@ public class FoodItemController extends HttpServlet {
 
         try {
             String command = request.getParameter("command");
-
-            // if the command is missing, then default to listing FoodItems
-           /* if (command == null) {
-                command = "LIST";
-            }*/
-            // route to the appropriate method
+            HttpSession session = request.getSession();
+            List<Item> cart;
+            if (session.getAttribute("cart") == null) {
+                cart = new ArrayList<>();
+                session.setAttribute("cart", cart);
+            }
             if ("LIST".equals(command)) {
                 listFoodItems(request, response);
             } else if ("ORDER".equals(command)) {
                 String itemId = request.getParameter("foodId");
-                HttpSession session = request.getSession();
-                List<Item> cart;
+
                 if (session.getAttribute("cart") == null) {
                     cart = new ArrayList<>();
                     try {
@@ -113,7 +113,18 @@ public class FoodItemController extends HttpServlet {
             }
             session.setAttribute("menu", foodItems);
         }
-        request.setAttribute("FOOD_LIST", foodItems);
+
+        int page;
+        if (request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }else if (session.getAttribute("page") != null) {
+            page = (int) session.getAttribute("page");
+        }else {
+            page = 1;
+        }
+        session.setAttribute("page", page);
+        List<FoodItem> shortFoodItems = foodItems.stream().skip((page - 1) * NUMBER_ITEMS_ON_PAGE).limit(NUMBER_ITEMS_ON_PAGE).collect(Collectors.toList());
+        request.setAttribute("FOOD_LIST", shortFoodItems);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/list-food.jsp");
         dispatcher.forward(request, response);
     }

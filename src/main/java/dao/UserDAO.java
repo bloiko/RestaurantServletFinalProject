@@ -59,12 +59,10 @@ public class UserDAO {
         Connection myConn = null;
         Statement myStmt = null;
         ResultSet myRs = null;
-        String myConnectionString = "jdbc:mysql://localhost:3306/restaurant_system?useSSL=false&serverTimezone=UTC";
         try {
             myConn = dataSource.getConnection();
-            String sql = "SELECT u.id,u.first_name,u.last_name,u.username,u.password, u.email,u.address,u.phoneNumber,role.name as role_name FROM user as u\n" +
-                    "   INNER JOIN user_role on u.id=user_role.user_id\n" +
-                    "   INNER JOIN role on user_role.role_id = role.role_id;";
+            String sql = "SELECT u.id,u.first_name,u.last_name,u.username,u.password, u.email,u.address,u.phone_number,role.name as role_name FROM user as u" +
+                    "   INNER JOIN role on u.id = role.role_id;";
             myStmt = myConn.createStatement();
             myRs = myStmt.executeQuery(sql);
             while (myRs.next()) {
@@ -75,12 +73,11 @@ public class UserDAO {
                 String password = myRs.getString("password");
                 String email = myRs.getString("email");
                 String address = myRs.getString("address");
-                String phoneNumber = myRs.getString("phoneNumber");
+                String phoneNumber = myRs.getString("phone_number");
                 String role = myRs.getString("role_name");
 
-                List<String> roles = new ArrayList<>();
-                roles.add(role);
-                User user = new User(id, firstName, lastName, userName, password, email, address, phoneNumber, roles);
+
+                User user = new User(id, firstName, lastName, userName, password, email, address, phoneNumber, role);
                 list.add(user);
             }
             return list;
@@ -113,35 +110,64 @@ public class UserDAO {
         Connection myConn = null;
         PreparedStatement myStmt = null;
         try {
+            int roleId = getRoleId(theUser);
             myConn = dataSource.getConnection();
             String sql = "insert into user "
-                    + "(id,first_name,last_name,username,password, email,address,phoneNumber) "
-                    + "values (?, ?, ?, ?,?,?,?,?)";
+                    + "(first_name,last_name,username,password, email,address,phone_number,role_id) "
+                    + "values ( ?, ?, ?, ?, ?, ?, ?, ?)";
             myStmt = myConn.prepareStatement(sql);
-            myStmt.setInt(1, theUser.getId());
-            myStmt.setString(2, theUser.getFirstName());
-            myStmt.setString(3, theUser.getLastName());
-            myStmt.setString(4, theUser.getUserName());
-            myStmt.setString(5, theUser.getPassword());
-            myStmt.setString(6, theUser.getEmail());
-            myStmt.setString(7, theUser.getAddress());
-            myStmt.setString(8, theUser.getPhoneNumber());
+            myStmt.setString(1, theUser.getFirstName());
+            myStmt.setString(2, theUser.getLastName());
+            myStmt.setString(3, theUser.getUserName());
+            myStmt.setString(4, theUser.getPassword());
+            myStmt.setString(5, theUser.getEmail());
+            myStmt.setString(6, theUser.getAddress());
+            myStmt.setString(7, theUser.getPhoneNumber());
+            myStmt.setInt(8, roleId);
             myStmt.execute();
         } finally {
             close(myConn, myStmt, null);
         }
     }
-/*
-    public User getUser(String theUserId) throws Exception {
-        long userId = Integer.parseInt(theUserId);
-        for (User User : userList) {
-            if (User.getId() == userId) {
-                return User;
-            }
-        }
-        return null;
-    }*/
 
+    private int getRoleId(User theUser) throws Exception {
+        Connection myConn = dataSource.getConnection();
+        String sql;
+        ResultSet resultSet;
+        PreparedStatement myStmtRole;
+        sql = "select role_id from role where name= ? ;";
+        myStmtRole = myConn.prepareStatement(sql);
+        myStmtRole.setString(1, theUser.getRole());
+        resultSet = myStmtRole.executeQuery();
+        int roleId = 0;
+        if (resultSet.next()) {
+            roleId = resultSet.getInt("role_id");
+        } else {
+            throw new Exception("Could not find student id: " + roleId);
+        }
+        return roleId;
+    }
+
+    private int getUserId(User theUser) throws Exception {
+        Connection myConn = null;
+        PreparedStatement myStmt = null;
+        try {
+            String sql = "select id from user where username= ? ;";
+            myConn = dataSource.getConnection();
+            PreparedStatement myStmtRole = myConn.prepareStatement(sql);
+            myStmtRole.setString(1, theUser.getUserName());
+            ResultSet resultSet = myStmtRole.executeQuery();
+            int userId = 0;
+            if (resultSet.next()) {
+                userId = resultSet.getInt("id");
+            } else {
+                throw new Exception("Could not find student id: " + userId);
+            }
+            return userId;
+        } finally {
+            close(myConn, myStmt, null);
+        }
+    }
 
     public User getUserByUserName(String theUserName) throws Exception {
 
@@ -150,27 +176,27 @@ public class UserDAO {
         ResultSet myRs = null;
         try {
             myConn = dataSource.getConnection();
-            String sql = "SELECT u.id,u.first_name,u.last_name,u.username,u.password, u.email,u.address,u.phoneNumber,role.name as role_name FROM user as u" +
-                    "        INNER JOIN user_role on u.id=user_role.user_id" +
-                    "        INNER JOIN role on user_role.role_id = role.role_id" +
+            String sql = "SELECT u.id,u.first_name,u.last_name,u.username,u.password, u.email,u.address,u.phone_number,role.name as role_name FROM user as u" +
+                    "        INNER JOIN role on u.role_id = role.role_id" +
                     "        WHERE username=?";
             myStmt = myConn.prepareStatement(sql);
             myStmt.setString(1, theUserName);
-            myRs = myStmt.executeQuery(sql);
-            int id = myRs.getInt("id");
-            String firstName = myRs.getString("first_name");
-            String lastName = myRs.getString("last_name");
-            String userName = myRs.getString("username");
-            String password = myRs.getString("password");
-            String email = myRs.getString("email");
-            String address = myRs.getString("address");
-            String phoneNumber = myRs.getString("phoneNumber");
-            String role = myRs.getString("role_name");
-
-            List<String> roles = new ArrayList<>();
-            roles.add(role);
-            User user = new User(id, firstName, lastName, userName, password, email, address, phoneNumber, roles);
-            return user;
+            myRs = myStmt.executeQuery();
+            if (myRs.next()) {
+                int id = myRs.getInt("id");
+                String firstName = myRs.getString("first_name");
+                String lastName = myRs.getString("last_name");
+                String userName = myRs.getString("username");
+                String password = myRs.getString("password");
+                String email = myRs.getString("email");
+                String address = myRs.getString("address");
+                String phoneNumber = myRs.getString("phone_number");
+                String role = myRs.getString("role_name");
+                User user = new User(id, firstName, lastName, userName, password, email, address, phoneNumber, role);
+                return user;
+            } else {
+                throw new Exception("Could not find student userName: " + theUserName);
+            }
         } finally {
             close(myConn, myStmt, myRs);
         }

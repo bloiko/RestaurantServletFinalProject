@@ -60,6 +60,7 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Price</th>
+                                <th>Quantity</th>
                                 <th>Sub Total</th>
                             </tr>
 
@@ -69,6 +70,7 @@
                                 <tr>
                                     <td> ${item.foodItem.name} </td>
                                     <td> ${item.foodItem.price}</td>
+                                    <td>${item.quantity}</td>
                                     <td>${item.foodItem.price*item.quantity}</td>
                                 </tr>
                             </c:forEach>

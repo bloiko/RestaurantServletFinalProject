@@ -1,5 +1,6 @@
 package dao;
 
+import entity.Category;
 import entity.FoodItem;
 
 import javax.annotation.Resource;
@@ -11,7 +12,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FoodJDBCDAO implements FoodDAOInterface {
+public class FoodJDBCDAO {
     private String sqlTable = "jdbc/restaurant_system";
     //@Resource(name = "jdbc/restaurant_system")
     private DataSource dataSource;
@@ -37,7 +38,6 @@ public class FoodJDBCDAO implements FoodDAOInterface {
         } else return instance;
     }
 
-    @Override
     public List<FoodItem> getFoodItems() throws Exception {
         List<FoodItem> foodItems = new ArrayList<>();
         Connection myConn = null;
@@ -46,7 +46,8 @@ public class FoodJDBCDAO implements FoodDAOInterface {
         String myConnectionString = "jdbc:mysql://localhost:3306/restaurant_system?useSSL=false&serverTimezone=UTC";
         try {
             myConn = dataSource.getConnection();
-            String sql = "select * from food_item";
+            String sql = "select fi.id, fi.name, fi.price,fi.image,category_id, c.name as category from food_item as fi" +
+                    " inner join category as c on fi.category_id=c.id";
             myStmt = myConn.createStatement();
             myRs = myStmt.executeQuery(sql);
             while (myRs.next()) {
@@ -54,7 +55,9 @@ public class FoodJDBCDAO implements FoodDAOInterface {
                 String name = myRs.getString("name");
                 int price = myRs.getInt("price");
                 String image = myRs.getString("image");
-                int category = myRs.getInt("category");
+                int categoryId = myRs.getInt("category_id");
+                String categoryName = myRs.getString("category");
+                Category category = new Category(categoryId, categoryName);
                 FoodItem foodItem = new FoodItem(id, name, price, image, category);
                 foodItems.add(foodItem);
             }
@@ -83,27 +86,27 @@ public class FoodJDBCDAO implements FoodDAOInterface {
         }
     }
 
-    @Override
+
     public void addFoodItem(FoodItem foodItem) throws Exception {
         Connection myConn = null;
         PreparedStatement myStmt = null;
         try {
             myConn = dataSource.getConnection();
             String sql = "insert into food_item "
-                    + "(name, price, image,category) "
+                    + "(name, price, image,category_id) "
                     + "values (?, ?, ?, ?)";
             myStmt = myConn.prepareStatement(sql);
             myStmt.setString(1, foodItem.getName());
             myStmt.setInt(2, foodItem.getPrice());
             myStmt.setString(3, foodItem.getImage());
-            myStmt.setInt(4, foodItem.getCategory());
+            myStmt.setInt(4, foodItem.getCategory().getId());
             myStmt.execute();
         } finally {
             close(myConn, myStmt, null);
         }
     }
 
-    @Override
+
     public FoodItem getFoodItem(String theFoodItemId) throws Exception {
         FoodItem foodItem = null;
         Connection myConn = null;
@@ -113,7 +116,8 @@ public class FoodJDBCDAO implements FoodDAOInterface {
         try {
             foodId = Integer.parseInt(theFoodItemId);
             myConn = dataSource.getConnection();
-            String sql = "select * from food_item where id=?";
+            String sql = "select fi.id, fi.name, fi.price,fi.image,category_id, c.name as category from food_item as fi" +
+                    " inner join category as c on fi.category_id=c.id where fi.id=? ";
             myStmt = myConn.prepareStatement(sql);
             myStmt.setInt(1, foodId);
             myRs = myStmt.executeQuery();
@@ -122,7 +126,9 @@ public class FoodJDBCDAO implements FoodDAOInterface {
                 String name = myRs.getString("name");
                 int price = myRs.getInt("price");
                 String image = myRs.getString("image");
-                int category = myRs.getInt("category");
+                String categoryName = myRs.getString("category");
+                int categoryId = myRs.getInt("category_id");
+                Category category = new Category(categoryId, categoryName);
                 foodItem = new FoodItem(id, name, price, image, category);
             } else {
                 throw new Exception("Could not find student id: " + foodId);
@@ -133,27 +139,27 @@ public class FoodJDBCDAO implements FoodDAOInterface {
         }
     }
 
-    @Override
+
     public void updateFoodItem(FoodItem foodItem) throws Exception {
         Connection myConn = null;
         PreparedStatement myStmt = null;
         try {
             myConn = dataSource.getConnection();
             String sql = "update food_item "
-                    + "set name=?, price=?, image=?, category=?"
+                    + "set name=?, price=?, image=?, category_id=?"
                     + "where id=?";
             myStmt = myConn.prepareStatement(sql);
             myStmt.setString(1, foodItem.getName());
             myStmt.setInt(2, foodItem.getPrice());
             myStmt.setString(3, foodItem.getImage());
-            myStmt.setInt(4, foodItem.getCategory());
+            myStmt.setInt(4, foodItem.getCategory().getId());
             myStmt.execute();
         } finally {
             close(myConn, myStmt, null);
         }
     }
 
-    @Override
+
     public void deleteFoodItem(String foodItemId) throws Exception {
         Connection myConn = null;
         PreparedStatement myStmt = null;

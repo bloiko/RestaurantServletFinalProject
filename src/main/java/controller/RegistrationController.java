@@ -16,7 +16,7 @@ import java.util.List;
 
 @WebServlet("/RegistrationController")
 public class RegistrationController extends HttpServlet {
-    private UserListDAO userListDAO = UserListDAO.getInstance();
+    private UserDAO userListDAO = UserDAO.getInstance();
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String firstName = request.getParameter("first_name");
@@ -37,9 +37,7 @@ public class RegistrationController extends HttpServlet {
         }
         else
         {
-            List<String> roles = new ArrayList<>();
-            roles.add("USER");
-            User user = new User(0,firstName,lastName,username,password,email,address,phoneNumber,roles);
+            User user = new User(1,firstName,lastName,username,password,email,address,phoneNumber,"USER");
             try {
                 userListDAO.addUser(user);
             } catch (Exception e) {

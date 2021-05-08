@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,9 +37,9 @@ public class AdminController extends HttpServlet {
                 e.printStackTrace();
             }
             order.setUser(user);
-            order.setOrderDate(new Date());
+            order.setOrderDate(new Timestamp(new Date().getTime()));
             order.setStatus(OrderStatus.WAITING);
-            if (cart.size() != 0) {
+            if (cart!=null && cart.size() != 0) {
                 order.setItems(cart);
                 try {
                     orderListDAO.addOrder(order);
