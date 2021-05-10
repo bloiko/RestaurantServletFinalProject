@@ -25,6 +25,7 @@ import java.util.List;
 public class RegistrationController extends HttpServlet {
     private OrderJDBCDAO orderListDAO = OrderJDBCDAO.getInstance();
     private UserDAO userListDAO = UserDAO.getInstance();
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String firstName = request.getParameter("first_name");
@@ -37,32 +38,31 @@ public class RegistrationController extends HttpServlet {
 
         //Validation
         //@TO_DO
-        if(firstName.isEmpty() || lastName.isEmpty() ||  address.isEmpty() || phoneNumber.isEmpty())
-        {
+        if (firstName.isEmpty() || lastName.isEmpty() || address.isEmpty() || phoneNumber.isEmpty()) {
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("registration.jsp");
             requestDispatcher.include(request, response);
-        }
-        else
-        {
-            User user = new User(1,firstName,lastName,"","",email,address,phoneNumber,"USER");
+        } else {
+            User user = new User(0, firstName, lastName, "", "", email, address, phoneNumber, "USER");
+            UserDAO userDAO = UserDAO.getInstance();
             try {
+                userDAO.addUser(user);
                 userListDAO.addUser(user);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             HttpSession session = request.getSession();
             List<Item> cart = (List<Item>) session.getAttribute("cart");
-            session.setAttribute("user",user);
+            session.setAttribute("user", user);
             Order order = new Order();
             try {
-                order.setId(orderListDAO.getOrders().size()+1);
+                order.setId(0);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             order.setUser(user);
             order.setOrderDate(new Timestamp(new Date().getTime()));
             order.setStatus(OrderStatus.WAITING);
-            if (cart!=null && cart.size() != 0) {
+            if (cart != null && cart.size() != 0) {
                 order.setItems(cart);
                 try {
                     orderListDAO.addOrder(order);

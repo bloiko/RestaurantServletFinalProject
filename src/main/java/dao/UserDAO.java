@@ -159,14 +159,15 @@ public class UserDAO {
         return roleId;
     }
 
-    private int getUserId(User theUser) throws Exception {
+    public int getUserId(User theUser) throws Exception {
         Connection myConn = null;
         PreparedStatement myStmt = null;
         try {
-            String sql = "select id from user where username= ? ;";
+            String sql = "select id from user where last_name= ? && phone_number= ? ;";
             myConn = dataSource.getConnection();
             PreparedStatement myStmtRole = myConn.prepareStatement(sql);
-            myStmtRole.setString(1, theUser.getUserName());
+            myStmtRole.setString(1, theUser.getLastName());
+            myStmtRole.setString(2, theUser.getPhoneNumber());
             ResultSet resultSet = myStmtRole.executeQuery();
             int userId = 0;
             if (resultSet.next()) {

@@ -1,7 +1,7 @@
 package dao;
 
 import entity.*;
-
+import java.sql.Timestamp;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -68,7 +68,7 @@ public class OrderJDBCDAO {
     }
 
     private List<Item> getOrderItems(int orderId) throws Exception {
-        List<Item> items = null;
+        List<Item> items = new ArrayList<>();
         Connection myConn = null;
         PreparedStatement myStmt = null;
         try {
@@ -135,10 +135,10 @@ public class OrderJDBCDAO {
         }
     }
 
-    public void addItemToOrder(String theOrderId, Item item) throws SQLException {
-        int orderId = Integer.parseInt(theOrderId);
-        int itemId = item.getId();
+    public void addItemToOrder(Order order, Item item) throws Exception {
+        int orderId = getOrderId(order);
         addItemToDataBase(item);
+        int itemId = getItemId(item);
         Connection myConn = null;
         PreparedStatement myStmt = null;
         try {
@@ -152,6 +152,54 @@ public class OrderJDBCDAO {
         } finally {
             close(myConn, myStmt, null);
         }
+    }
+
+    private int getOrderId(Order order) {
+        List<Item> items = null;
+        Connection myConn = null;
+        PreparedStatement myStmt = null;
+        try {
+            String sql = "select id from food_order " +
+                    "where user_id=? AND status_id=? ORDER BY order_date DESC";
+            myConn = dataSource.getConnection();
+            PreparedStatement statement = myConn.prepareStatement(sql);
+            statement.setInt(1,order.getUser().getId());
+            statement.setInt(2, getStatusId(order.getStatus()));
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                int orderId = resultSet.getInt("id");
+                return orderId;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(myConn, myStmt, null);
+        }
+        return  -1;
+    }
+    private int getItemId(Item item) throws SQLException {
+        List<Item> items = null;
+        Connection myConn = null;
+        PreparedStatement myStmt = null;
+        try {
+            String sql = "select id from item " +
+                    "where food_id= ? AND quantity=? ;";
+            myConn = dataSource.getConnection();
+            PreparedStatement statement = myConn.prepareStatement(sql);
+            statement.setInt(1, item.getFoodItem().getId());
+            statement.setInt(2,item.getQuantity());
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                int itemId = resultSet.getInt("id");
+                return itemId;
+            }
+        } finally {
+            close(myConn, myStmt, null);
+        }
+        return  -1;
     }
 
     private void addItemToDataBase(Item item) throws SQLException {
@@ -170,22 +218,29 @@ public class OrderJDBCDAO {
         }
     }
 
-    public void addOrder(Order theOrder) throws Exception {
+    public void addOrder(Order theOrder)  {
         Connection myConn = null;
         PreparedStatement myStmt = null;
         try {
             myConn = dataSource.getConnection();
-            String sql = "insert into food_order(id, order_date, user_id, status_id)\n" +
-                    "VALUES (?,?,?,?)";
+            String sql = "insert into food_order( order_date, user_id, status_id) " +
+                    "VALUES (?,?,?)";
             myStmt = myConn.prepareStatement(sql);
-            myStmt.setInt(1, theOrder.getId());
-            myStmt.setTimestamp(2, theOrder.getOrderDate());
-            myStmt.setInt(3, theOrder.getUser().getId());
-            myStmt.setInt(4, getStatusId(theOrder.getStatus()));
+          //  myStmt.setInt(1, theOrder.getId());
+            UserDAO userDAO = UserDAO.getInstance();
+            int userId = userDAO.getUserId(theOrder.getUser());
+            theOrder.getUser().setId(userId);
+            myStmt.setTimestamp(1, theOrder.getOrderDate());
+            myStmt.setInt(2, userId);
+            myStmt.setInt(3, getStatusId(theOrder.getStatus()));
             myStmt.execute();
             for (Item item : theOrder.getItems()){
-                addItemToOrder(String.valueOf(theOrder.getId()),item);
+                addItemToOrder(theOrder,item);
             }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             close(myConn, myStmt, null);
         }
