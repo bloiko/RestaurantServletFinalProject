@@ -56,22 +56,22 @@ public class FoodItemController extends HttpServlet {
             if ("LIST".equals(command)) {
                 listFoodItems(request, response);
             } else if ("ORDER".equals(command)) {
-                String itemId = request.getParameter("foodId");
+                String foodId = request.getParameter("foodId");
 
                 if (session.getAttribute("cart") == null) {
                     cart = new ArrayList<>();
                     try {
-                        cart.add(new Item(foodItemDAO.getFoodItem(itemId), 1));
+                        cart.add(new Item(1,foodItemDAO.getFoodItem(foodId), 1));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     session.setAttribute("cart", cart);
                 } else {
                     cart = (List<Item>) session.getAttribute("cart");
-                    int index = isExisting(Integer.parseInt(itemId), cart);
+                    int index = isExisting(Integer.parseInt(foodId), cart);
                     if (index == -1) {
                         try {
-                            cart.add(new Item(foodItemDAO.getFoodItem(itemId), 1));
+                            cart.add(new Item(1,foodItemDAO.getFoodItem(foodId), 1));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

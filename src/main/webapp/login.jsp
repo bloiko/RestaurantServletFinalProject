@@ -9,7 +9,7 @@
 <body>
 <form action="/LoginController">
     <table style="with: 50%">
-
+        ${message}
         <tr>
             <td>UserName</td>
             <td><input type="text" name="username"/></td>

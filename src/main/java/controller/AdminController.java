@@ -1,5 +1,6 @@
 package controller;
 
+import dao.OrderJDBCDAO;
 import dao.OrderListDAO;
 import entity.Item;
 import entity.Order;
@@ -21,33 +22,13 @@ import java.util.List;
 
 @WebServlet("/AdminController")
 public class AdminController extends HttpServlet {
-    private OrderListDAO orderListDAO = OrderListDAO.getInstance();
+    private OrderJDBCDAO orderListDAO = OrderJDBCDAO.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String command = request.getParameter("command");
-        if ("LIST".equals(command)) {
-            HttpSession session = request.getSession();
-            List<Item> cart = (List<Item>) session.getAttribute("cart");
-            User user = (User) session.getAttribute("user");
-            Order order = new Order();
-            try {
-                order.setId(orderListDAO.getOrders().size());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            order.setUser(user);
-            order.setOrderDate(new Timestamp(new Date().getTime()));
-            order.setStatus(OrderStatus.WAITING);
-            if (cart!=null && cart.size() != 0) {
-                order.setItems(cart);
-                try {
-                    orderListDAO.addOrder(order);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            session.setAttribute("cart", new ArrayList<Item>());
+        if ("LIST".equals(command) || command==null) {
+
         } else if ("CHANGE_STATUS".equals(command)) {
             String orderIdString = request.getParameter("orderId");
             Order order;
@@ -68,7 +49,8 @@ public class AdminController extends HttpServlet {
             }
         }
         try {
-            request.setAttribute("ORDERS_LIST", orderListDAO.getOrders());
+            List<Order> orders = orderListDAO.getOrders();
+            request.setAttribute("ORDERS_LIST", orders);
         } catch (Exception e) {
             e.printStackTrace();
         }

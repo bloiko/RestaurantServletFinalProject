@@ -13,6 +13,21 @@ public enum OrderStatus {
         this.value = value;
     }
 
+    public static OrderStatus getOrderStatus(String value){
+        if(value.equals(WAITING)){
+            return WAITING;
+        }else if(value.equals(PREPARING)){
+            return PREPARING;
+        }else if(value.equals(READY)){
+            return READY;
+        }else if(value.equals(DELIVERED)){
+            return DELIVERED;
+        }else if(value.equals(DONE)){
+            return DONE;
+        }
+        return DONE;
+    }
+
     public boolean equalsTo(String name) {
         return value.equals(name);
     }

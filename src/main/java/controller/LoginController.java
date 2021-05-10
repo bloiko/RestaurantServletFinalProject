@@ -22,6 +22,15 @@ public class LoginController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        if (userListDAO.isCorrectAdmin(username,password)) {
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/AdminController");
+            requestDispatcher.include(request, response);
+        } else {
+            request.setAttribute("message","Account's Invalid");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }
+        /*String username = request.getParameter("username");
+        String password = request.getParameter("password");
         if (username.isEmpty() || password.isEmpty() || !userListDAO.isCorrectUser(username, password)) {
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("registration.jsp");
             requestDispatcher.include(request, response);
@@ -36,6 +45,6 @@ public class LoginController extends HttpServlet {
             }
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/FoodItemController");
             requestDispatcher.forward(request, response);
-        }
+        }*/
     }
 }

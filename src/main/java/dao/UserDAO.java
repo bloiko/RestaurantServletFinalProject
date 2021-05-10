@@ -40,16 +40,27 @@ public class UserDAO {
     }
 
     public boolean isCorrectUser(String userName, String password) {
-        List<User> userList = new ArrayList<>();
+        User user = null;
         try {
-            userList = getUsers();
+            user = getUserByUserName(userName);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        for (User user : userList) {
-            if (user.getUserName().equals(userName) && user.getPassword().equals(password)) {
-                return true;
-            }
+        if (user != null && user.getUserName().equals(userName) && user.getPassword().equals(password)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isCorrectAdmin(String userName, String password) {
+        User user = null;
+        try {
+            user = getUserByUserName(userName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (user != null && user.getUserName().equals(userName) && user.getPassword().equals(password) && user.getRole().equals("ADMIN")) {
+            return true;
         }
         return false;
     }
@@ -143,7 +154,7 @@ public class UserDAO {
         if (resultSet.next()) {
             roleId = resultSet.getInt("role_id");
         } else {
-            throw new Exception("Could not find student id: " + roleId);
+            throw new Exception("Could not find user id: " + roleId);
         }
         return roleId;
     }
@@ -161,14 +172,45 @@ public class UserDAO {
             if (resultSet.next()) {
                 userId = resultSet.getInt("id");
             } else {
-                throw new Exception("Could not find student id: " + userId);
+                throw new Exception("Could not find user id: " + userId);
             }
             return userId;
         } finally {
             close(myConn, myStmt, null);
         }
     }
+    public User getUserByUserId(int userId) throws Exception {
 
+        Connection myConn = null;
+        PreparedStatement myStmt = null;
+        ResultSet myRs = null;
+        try {
+            myConn = dataSource.getConnection();
+            String sql = "SELECT u.id,u.first_name,u.last_name,u.username,u.password, u.email,u.address,u.phone_number,role.name as role_name FROM user as u" +
+                    "        INNER JOIN role on u.role_id = role.role_id" +
+                    "        WHERE u.id=?";
+            myStmt = myConn.prepareStatement(sql);
+            myStmt.setInt(1, userId);
+            myRs = myStmt.executeQuery();
+            if (myRs.next()) {
+                int id = myRs.getInt("id");
+                String firstName = myRs.getString("first_name");
+                String lastName = myRs.getString("last_name");
+                String userName = myRs.getString("username");
+                String password = myRs.getString("password");
+                String email = myRs.getString("email");
+                String address = myRs.getString("address");
+                String phoneNumber = myRs.getString("phone_number");
+                String role = myRs.getString("role_name");
+                User user = new User(id, firstName, lastName, userName, password, email, address, phoneNumber, role);
+                return user;
+            } else {
+                throw new Exception("Could not find user userId: " + userId);
+            }
+        } finally {
+            close(myConn, myStmt, myRs);
+        }
+    }
     public User getUserByUserName(String theUserName) throws Exception {
 
         Connection myConn = null;
@@ -195,7 +237,7 @@ public class UserDAO {
                 User user = new User(id, firstName, lastName, userName, password, email, address, phoneNumber, role);
                 return user;
             } else {
-                throw new Exception("Could not find student userName: " + theUserName);
+                throw new Exception("Could not find user userName: " + theUserName);
             }
         } finally {
             close(myConn, myStmt, myRs);
