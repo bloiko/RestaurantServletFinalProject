@@ -45,7 +45,6 @@ public class OrderJDBCDAO {
         try {
             myConn = dataSource.getConnection();
             String sql = "select * from food_order" +
-                    " join order_item oi on food_order.id = oi.order_id" +
                     " join user u on u.id = food_order.user_id" +
                     " join status s on s.id = food_order.status_id";
             myStmt = myConn.createStatement();

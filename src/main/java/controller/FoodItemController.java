@@ -26,7 +26,7 @@ import javax.sql.DataSource;
 @WebServlet("/FoodItemController")
 public class FoodItemController extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    public static final int NUMBER_ITEMS_ON_PAGE = 3;
+    public static final int NUMBER_ITEMS_ON_PAGE = 5;
 
     private FoodJDBCDAO foodItemDAO;
 
@@ -103,15 +103,36 @@ public class FoodItemController extends HttpServlet {
             foodItems = foodItemDAO.getFoodItems();
         }
         String sort = request.getParameter("sort");
+        String sessionSort = (String) session.getAttribute("sort");
+        String order = (String) session.getAttribute("order");
         if (sort != null) {
             if (sort.equals("NAME")) {
-                foodItems.sort(Comparator.comparing(FoodItem::getName));
+                if("NAME".equals(sessionSort) && "ASC".equals(order)){
+                    foodItems.sort(Comparator.comparing(FoodItem::getName).reversed());
+                    session.setAttribute("order","DESC");
+                }else {
+                    foodItems.sort(Comparator.comparing(FoodItem::getName));
+                    session.setAttribute("order", "ASC");
+                }
             } else if (sort.equals("PRICE")) {
-                foodItems.sort(Comparator.comparing(FoodItem::getPrice));
-            } else if (sort.equals("CATEGORY")) {
-                foodItems.sort(Comparator.comparing(FoodItem::getCategory));
+                if("PRICE".equals(sessionSort)&& "ASC".equals(order)){
+                    foodItems.sort(Comparator.comparing(FoodItem::getPrice).reversed());
+                    session.setAttribute("order","DESC");
+                }else {
+                    foodItems.sort(Comparator.comparing(FoodItem::getPrice));
+                    session.setAttribute("order", "ASC");
+                }
+            } else if (sort.equals("CATEGORY")&& "ASC".equals(order)) {
+                if("CATEGORY".equals(sessionSort)){
+                    foodItems.sort(Comparator.comparing(FoodItem::getCategory).reversed());
+                    session.setAttribute("order","DESC");
+                }else {
+                    foodItems.sort(Comparator.comparing(FoodItem::getCategory));
+                    session.setAttribute("order", "ASC");
+                }
             }
             session.setAttribute("menu", foodItems);
+            session.setAttribute("sort",sort);
         }
 
         int page;

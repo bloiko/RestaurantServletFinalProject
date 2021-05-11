@@ -27,9 +27,7 @@ public class AdminController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String command = request.getParameter("command");
-        if ("LIST".equals(command) || command==null) {
-
-        } else if ("CHANGE_STATUS".equals(command)) {
+         if ("CHANGE_STATUS".equals(command)) {
             String orderIdString = request.getParameter("orderId");
             Order order;
             try {
