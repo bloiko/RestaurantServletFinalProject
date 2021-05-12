@@ -2,7 +2,6 @@ package controller;
 
 import dao.OrderJDBCDAO;
 import dao.UserDAO;
-import dao.UserListDAO;
 import entity.Item;
 import entity.Order;
 import entity.OrderStatus;
@@ -20,6 +19,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @WebServlet("/RegistrationController")
 public class RegistrationController extends HttpServlet {
@@ -28,21 +29,17 @@ public class RegistrationController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String firstName = request.getParameter("first_name");
-        String lastName = request.getParameter("last_name");
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String email = request.getParameter("email");
-        String address = request.getParameter("address");
-        String phoneNumber = request.getParameter("phoneNumber");
 
-        //Validation
-        //@TO_DO
-        if (firstName.isEmpty() || lastName.isEmpty() || address.isEmpty() || phoneNumber.isEmpty()) {
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("registration.jsp");
+
+        User user = getUserIfCorrectData(request, response);
+        if (user == null) {
+            request.setAttribute("first_name",request.getParameter("first_name"));
+            request.setAttribute("last_name",request.getParameter("last_name"));
+            request.setAttribute("email",request.getParameter("email"));
+            request.setAttribute("address",request.getParameter("address"));
+            request.setAttribute("phoneNumber",request.getParameter("phoneNumber"));            RequestDispatcher requestDispatcher = request.getRequestDispatcher("registration.jsp");
             requestDispatcher.include(request, response);
         } else {
-            User user = new User(0, firstName, lastName, "", "", email, address, phoneNumber, "USER");
             UserDAO userDAO = UserDAO.getInstance();
             try {
                 userDAO.addUser(user);
@@ -74,5 +71,36 @@ public class RegistrationController extends HttpServlet {
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("login.jsp");
             requestDispatcher.forward(request, response);
         }
+
+    }
+
+    private User getUserIfCorrectData(HttpServletRequest request, HttpServletResponse response) {
+        boolean isCorrect = true;
+        String firstName = request.getParameter("first_name");
+        String lastName = request.getParameter("last_name");
+        String email = request.getParameter("email");
+        String address = request.getParameter("address");
+        String phoneNumber = request.getParameter("phoneNumber");
+        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || address.isEmpty() || phoneNumber.isEmpty()) {
+            request.setAttribute("error_message", "The data can not be empty!");
+            isCorrect = false;
+        }
+        //validate phone number
+        String patterns
+                = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$"
+                + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"
+                + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$";
+        Pattern pattern = Pattern.compile(patterns);
+        Matcher matcher = pattern.matcher(phoneNumber);
+        if (!matcher.matches()) {
+            request.setAttribute("phone_number_error_message", "Incorrect phone number format!");
+            isCorrect = false;
+        }
+        if (isCorrect) {
+            return new User(0, firstName, lastName, "", "", email, address, phoneNumber, "USER");
+        } else {
+            return null;
+        }
     }
 }
+

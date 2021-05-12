@@ -9,11 +9,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <style>
-        .bs-example {
-            margin: 20px;
-        }
-    </style>
     <title>Menu</title>
 </head>
 <style>
@@ -44,6 +39,37 @@
         background: whitesmoke;
     }
 </style>
+<style>
+
+    /* header styling */
+    h1 {
+        color: green;
+    }
+
+    /* pagination position styling */
+    .pagination_section {
+        position: fixed;
+        top: 100%;
+        left: 50%;
+        margin-top: -50px;
+        margin-left: -100px;
+    }
+
+    /* pagination styling */
+    .pagination_section a {
+        background-color: lightgray;
+        color: black;
+        padding: 10px 18px;
+        text-decoration: none;
+    }
+
+    /* pagination hover effect on non-active */
+    .pagination_section a:hover:not(.active) {
+        background-color: red;
+        color: black;
+    }
+
+</style>
 <body>
 <div class="bs-example">
     <nav class="navbar navbar-expand-md navbar-light bg-light">
@@ -58,10 +84,8 @@
 
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav">
-                <a href="#" class="nav-item nav-link active">Home</a>
-                <a href="#" class="nav-item nav-link">Profile</a>
-                <a href="#" class="nav-item nav-link">Messages</a>
-                <a href="#" class="nav-item nav-link disabled" tabindex="-1">Reports</a>
+                <a href="FoodItemController" class="nav-item nav-link active">Home</a>
+                <a href="cart.jsp" class="nav-item nav-link">Cart</a>
             </div>
             <div class="navbar-nav ml-auto">
                 <a href="#" class="nav-item nav-link">Login</a>
@@ -75,7 +99,6 @@
         </div>
     </nav>
 </div>
-
 <div id="wrapper">
     <div id="header">
         <h2>Menu</h2>
@@ -95,14 +118,6 @@
             </thead>
             <tbody>
             <c:forEach var="foodItem" items="${FOOD_LIST}">
-                <%--<c:url var="tempLink" value="FoodItemController">
-                    <c:param name="command" value="LOAD" />
-                    <c:param name="studentId" value="${tempStudent.id}" />
-                </c:url>--%>
-                <%--<c:url var="deleteLink" value="FoodItemController">
-                    <c:param name="command" value="ADD" />
-                    <c:param name="foodId" value="${foodItem.id}" />
-                </c:url>--%>
                 <tr>
                     <td><img src="${foodItem.image}" width="100" height="100"></td>
                     <td> ${foodItem.name} </td>
@@ -113,7 +128,7 @@
             </c:forEach>
             </tbody>
         </table>
-        <div>
+        <div class="pagination_section">
             <a href="FoodItemController?page=1">1</a>
             <a href="FoodItemController?page=2">2</a>
             <a href="FoodItemController?page=3">3</a>
@@ -121,8 +136,6 @@
     </div>
 </div>
 </body>
-
-
 </html>
 
 

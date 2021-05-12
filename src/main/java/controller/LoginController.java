@@ -1,9 +1,6 @@
 package controller;
 
-import dao.OrderListDAO;
 import dao.UserDAO;
-import dao.UserListDAO;
-import entity.User;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -24,6 +21,8 @@ public class LoginController extends HttpServlet {
         String password = request.getParameter("password");
         if (userListDAO.isCorrectAdmin(username,password)) {
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/AdminController");
+            HttpSession session = request.getSession();
+            session.setAttribute("username",username);
             requestDispatcher.include(request, response);
         } else {
             request.setAttribute("message","Account's Invalid");

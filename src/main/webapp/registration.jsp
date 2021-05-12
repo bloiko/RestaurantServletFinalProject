@@ -1,41 +1,106 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
+
 <head>
-    <title>Registration</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+    <title>Input person information</title>
+    <style>
+        .divider-text {
+            position: relative;
+            text-align: center;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .divider-text span {
+            padding: 7px;
+            font-size: 12px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .divider-text:after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            border-bottom: 1px solid #ddd;
+            top: 55%;
+            left: 0;
+            z-index: 1;
+        }
+        .errorMessage {
+            font-weight: bold;
+            color: red;
+        }
+        .btn-facebook {
+            background-color: #405D9D;
+            color: #fff;
+        }
+
+        .btn-twitter {
+            background-color: #42AEEC;
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
-<h1>Guru Register Form</h1>
-<a href="login.jsp">Log in</a>
-<form action="/RegistrationController" method="post">
-    <table style="with: 50%">
-        <tr>
-            <td>First Name</td>
-            <td><input type="text" name="first_name" /></td>
-        </tr>
-        <tr>
-            <td>Last Name</td>
-            <td><input type="text" name="last_name" /></td>
-        </tr>
-<%--        <tr>
-            <td>UserName</td>
-            <td><input type="text" name="username" /></td>
-        </tr>
-        <tr>
-            <td>Password</td>
-            <td><input type="password" name="password" /></td>
-        </tr>
-        <tr>--%>
-            <td>Email</td>
-            <td><input type="text" name="email" /></td>
-        </tr>
-        <tr>
-            <td>Address</td>
-            <td><input type="text" name="address" /></td>
-        </tr>
-        <tr>
-            <td>Phone Number</td>
-            <td><input type="text" name="phoneNumber" /></td>
-        </tr></table>
-    <input type="submit" value="Submit"/></form>
+<article class="card-body mx-auto" style="max-width: 400px;">
+    <h4 class="card-title mt-3 text-center">Write your information!</h4>
+    <form action="/RegistrationController" method="post">
+        <label class="errorMessage">${error_message}</label>
+        <div class="form-group input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+            <input name="first_name" class="form-control" placeholder="First Name" value="${first_name}" type="text">
+        </div>
+        <div class="form-group input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+            </div>
+            <input name="last_name" class="form-control" placeholder="Last Name" type="text" value="${last_name}">
+        </div>
+        <div class="form-group input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+            </div>
+            <input name="email" class="form-control" placeholder="Email" type="text" value="${email}">
+        </div>
+        <div class="form-group input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"> <i class="fa fa-building"></i> </span>
+            </div>
+            <input name="address" class="form-control" placeholder="Address" type="text" value="${address}">
+        </div>
+        <label class="errorMessage">${phone_number_error_message}</label>
+        <div class="form-group input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
+            </div>
+            <input name="phoneNumber" class="form-control" placeholder="Phone Number" type="text" value="${phoneNumber}">
+        </div> <!-- form-group// -->
+        <%--            <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                        </div>
+                        <input class="form-control" placeholder="Create password" type="password">
+                    </div> <!-- form-group// -->--%>
+        <%--            <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                        </div>
+                        <input class="form-control" placeholder="Repeat password" type="password">
+                    </div> <!-- form-group// -->--%>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+        </div> <!-- form-group// -->
+        <%--<p class="text-center">Have an account? <a href="">Submit</a></p>--%>
+    </form>
+</article>
 </body>
 </html>

@@ -82,7 +82,7 @@ public class FoodItemController extends HttpServlet {
                     session.setAttribute("cart", cart);
                 }
                 // request.getRequestDispatcher("list-food.jsp").forward(request,response);
-                response.sendRedirect("/FoodItemController");
+               // response.sendRedirect("/FoodItemController");
             } else {
                 listFoodItems(request, response);
             }

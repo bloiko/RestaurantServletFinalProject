@@ -14,15 +14,15 @@ public enum OrderStatus {
     }
 
     public static OrderStatus getOrderStatus(String value){
-        if(value.equals(WAITING)){
+        if(value.equals(WAITING.value)){
             return WAITING;
-        }else if(value.equals(PREPARING)){
+        }else if(value.equals(PREPARING.value)){
             return PREPARING;
-        }else if(value.equals(READY)){
+        }else if(value.equals(READY.value)){
             return READY;
-        }else if(value.equals(DELIVERED)){
+        }else if(value.equals(DELIVERED.value)){
             return DELIVERED;
-        }else if(value.equals(DONE)){
+        }else if(value.equals(DONE.value)){
             return DONE;
         }
         return DONE;
