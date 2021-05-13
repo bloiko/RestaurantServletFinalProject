@@ -1,47 +1,47 @@
 
-[	java:S112¡"FDefine and throw a dedicated exception instead of using a generic one.(—Œ¨[
-\	java:S112œ"FDefine and throw a dedicated exception instead of using a generic one.(ìÒŠê
-f
-java:S1192P"KDefine a constant instead of duplicating this literal "first_name" 3 times.(§ó‡üûÿÿÿÿ
+a	java:S112ğ"FDefine and throw a dedicated exception instead of using a generic one.(öŠˆÎşÿÿÿÿ
 `
 java:S1192Q"JDefine a constant instead of duplicating this literal "last_name" 3 times.(Ôºûš
-G
-java:S1068",Remove this unused "sqlTable" private field.(şÔ§öøÿÿÿÿ
-a	java:S112ğ"FDefine and throw a dedicated exception instead of using a generic one.(öŠˆÎşÿÿÿÿ
-h
-java:S1192V"MDefine a constant instead of duplicating this literal "phone_number" 3 times.(¶Œ‘œúÿÿÿÿ
+\	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(ÔØ‚–
 a
 java:S1192T"FDefine a constant instead of duplicating this literal "email" 3 times.(Ÿ°†»üÿÿÿÿ
-\	java:S112Ö"FDefine and throw a dedicated exception instead of using a generic one.(ú¡â»
-c
-java:S1192U"HDefine a constant instead of duplicating this literal "address" 3 times.(é›¡åøÿÿÿÿ
-\	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(ÔØ‚–
+I
+java:S1121%".Extract the assignment out of this expression.(İå£üÿÿÿÿ
+x
+java:S1488Í"\Immediately return this expression instead of assigning it to the temporary variable "user".(é‘Éíûÿÿÿÿ
 \
 java:S11260"AReplace this if-then-else statement by a single return statement.(¼Ö¨ úÿÿÿÿ
-\	java:S112¶"FDefine and throw a dedicated exception instead of using a generic one.(­´ÇÕ
+W	java:S125÷"<This block of commented-out lines of code should be removed.(ò×‡Îøÿÿÿÿ
+f
+java:S2095§"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(³•Œé
+_
+java:S1192R"IDefine a constant instead of duplicating this literal "username" 3 times.(‘Íª”
+a	java:S112Ğ"FDefine and throw a dedicated exception instead of using a generic one.(æÙ·Ôûÿÿÿÿ
+x
+java:S1488í"\Immediately return this expression instead of assigning it to the temporary variable "user".(é‘Éíûÿÿÿÿ
 e
 java:S1192W"JDefine a constant instead of duplicating this literal "role_name" 3 times.(Ï’”ïÿÿÿÿÿ
 W
 java:S1126="AReplace this if-then-else statement by a single return statement.( ¶è¦
-k
-java:S2095•"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(¡­éºøÿÿÿÿ
-W	java:S125÷"<This block of commented-out lines of code should be removed.(ò×‡Îøÿÿÿÿ
-Ú
-java:S1192J"ÃDefine a constant instead of duplicating this literal "SELECT u.id,u.first_name,u.last_name,u.username,u.password, u.email,u.address,u.phone_number,role.name as role_name FROM user as u" 3 times.(°ñü½
-a	java:S112Ğ"FDefine and throw a dedicated exception instead of using a generic one.(æÙ·Ôûÿÿÿÿ
-x
-java:S1488í"\Immediately return this expression instead of assigning it to the temporary variable "user".(é‘Éíûÿÿÿÿ
-a	java:S112¯"FDefine and throw a dedicated exception instead of using a generic one.(“åˆøÿÿÿÿ
+`	java:S112C"FDefine and throw a dedicated exception instead of using a generic one.(ôıû¼ûÿÿÿÿ
+c
+java:S1192U"HDefine a constant instead of duplicating this literal "address" 3 times.(é›¡åøÿÿÿÿ
+\	java:S112œ"FDefine and throw a dedicated exception instead of using a generic one.(ìÒŠê
+\	java:S112¶"FDefine and throw a dedicated exception instead of using a generic one.(­´ÇÕ
 _
 java:S2095"HUse try-with-resources or close this "Connection" in a "finally" clause.(ÈââÄ
-f
-java:S2095§"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(³•Œé
-x
-java:S1488Í"\Immediately return this expression instead of assigning it to the temporary variable "user".(é‘Éíûÿÿÿÿ
-I
-java:S1121%".Extract the assignment out of this expression.(İå£üÿÿÿÿ
-`	java:S112C"FDefine and throw a dedicated exception instead of using a generic one.(ôıû¼ûÿÿÿÿ
-_
-java:S1192R"IDefine a constant instead of duplicating this literal "username" 3 times.(‘Íª”
+a	java:S112¯"FDefine and throw a dedicated exception instead of using a generic one.(“åˆøÿÿÿÿ
+Ú
+java:S1192J"ÃDefine a constant instead of duplicating this literal "SELECT u.id,u.first_name,u.last_name,u.username,u.password, u.email,u.address,u.phone_number,role.name as role_name FROM user as u" 3 times.(°ñü½
 d
 java:S1192S"IDefine a constant instead of duplicating this literal "password" 3 times.(ÎÚõúÿÿÿÿ
+f
+java:S1192P"KDefine a constant instead of duplicating this literal "first_name" 3 times.(§ó‡üûÿÿÿÿ
+k
+java:S2095•"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(¡­éºøÿÿÿÿ
+h
+java:S1192V"MDefine a constant instead of duplicating this literal "phone_number" 3 times.(¶Œ‘œúÿÿÿÿ
+G
+java:S1068",Remove this unused "sqlTable" private field.(şÔ§öøÿÿÿÿ
+[	java:S112¡"FDefine and throw a dedicated exception instead of using a generic one.(—Œ¨[
+\	java:S112Ö"FDefine and throw a dedicated exception instead of using a generic one.(ú¡â»

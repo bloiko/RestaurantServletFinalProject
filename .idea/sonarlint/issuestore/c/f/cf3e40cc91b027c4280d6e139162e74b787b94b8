@@ -1,9 +1,3 @@
 
-
-java:S1989K"_Handle the following exceptions that could be thrown by "doGet": ServletException, IOException.(®Ó‘ûÿÿÿÿÿ8¡›ü¥–/
 j
-java:S1192"HDefine a constant instead of duplicating this literal "orderId" 3 times.(Îíò·şÿÿÿÿ8˜²Ô¥–/
-~
-java:S1989;"aHandle the following exceptions that could be thrown by "forward": ServletException, IOException.(ò¢ë‡8§Ô¦ˆ–/
-u
-java:S2226"XRemove this misleading mutable servlet instance field or make it "static" and/or "final"(ÅÙ8§Ô¦ˆ–/
+java:S1192"HDefine a constant instead of duplicating this literal "orderId" 3 times.(Îíò·şÿÿÿÿ8˜²Ô¥–/

@@ -1,13 +1,13 @@
 
-R
-java:S1481/"7Remove this unused "myConnectionString" local variable.(Ù‡‚ºøÿÿÿÿ
-[	java:S112["FDefine and throw a dedicated exception instead of using a generic one.(Ö™ÿë
-D
-java:S1121&".Extract the assignment out of this expression.(ğÒš‘
-\	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(¤¾Ë
-\	java:S112¤"FDefine and throw a dedicated exception instead of using a generic one.(‘İØ
-`	java:S112*"FDefine and throw a dedicated exception instead of using a generic one.(ŒºìÊüÿÿÿÿ
 \	java:S112‡"FDefine and throw a dedicated exception instead of using a generic one.(‡­õø
 `	java:S112o"FDefine and throw a dedicated exception instead of using a generic one.(ìÌşÊıÿÿÿÿ
+\	java:S112¤"FDefine and throw a dedicated exception instead of using a generic one.(‘İØ
+R
+java:S1481/"7Remove this unused "myConnectionString" local variable.(Ù‡‚ºøÿÿÿÿ
 G
 java:S1068",Remove this unused "sqlTable" private field.(şÔ§öøÿÿÿÿ
+`	java:S112*"FDefine and throw a dedicated exception instead of using a generic one.(ŒºìÊüÿÿÿÿ
+D
+java:S1121&".Extract the assignment out of this expression.(ğÒš‘
+[	java:S112["FDefine and throw a dedicated exception instead of using a generic one.(Ö™ÿë
+\	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(¤¾Ë

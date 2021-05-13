@@ -5,11 +5,13 @@ import entity.FoodItem;
 import entity.Item;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -18,53 +20,66 @@ import java.util.stream.Collectors;
 
 @WebServlet("/FoodItemController")
 public class FoodItemController extends HttpServlet {
-    public static final int NUMBER_ITEMS_ON_PAGE = 5;
+    private static final int NUMBER_ITEMS_ON_PAGE = 5;
 
-    private static FoodJDBCDAO foodItemDAO=FoodJDBCDAO.getInstance();
 
+    private FoodJDBCDAO foodItemDAO;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        try {
+            foodItemDAO = FoodJDBCDAO.getInstance();
+        } catch (Exception exc) {
+            throw new ServletException(exc);
+        }
+    }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-
-        try {
-            String command = request.getParameter("command");
-            HttpSession session = request.getSession();
-            List<Item> cart;
-/*            if (session.getAttribute("cart") == null) {
+        String command = request.getParameter("command");
+        HttpSession session = request.getSession();
+        List<Item> cart;
+           if (session.getAttribute("cart") == null) {
                 cart = new ArrayList<>();
                 session.setAttribute("cart", cart);
-            }*/
-            if ("ORDER".equals(command)) {
-                String foodId = request.getParameter("foodId");
+            }
+        if ("ORDER".equals(command)) {
+            String foodId = request.getParameter("foodId");
 
-                if (session.getAttribute("cart") == null) {
-                    cart = new ArrayList<>();
+            if (session.getAttribute("cart") == null) {
+                cart = new ArrayList<>();
+                try {
+                    cart.add(new Item(1, foodItemDAO.getFoodItem(foodId), 1));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                session.setAttribute("cart", cart);
+            } else {
+                cart = (List<Item>) session.getAttribute("cart");
+                int index = isExisting(Integer.parseInt(foodId), cart);
+                if (index == -1) {
                     try {
                         cart.add(new Item(1, foodItemDAO.getFoodItem(foodId), 1));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    session.setAttribute("cart", cart);
                 } else {
-                    cart = (List<Item>) session.getAttribute("cart");
-                    int index = isExisting(Integer.parseInt(foodId), cart);
-                    if (index == -1) {
-                        try {
-                            cart.add(new Item(1, foodItemDAO.getFoodItem(foodId), 1));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        int quantity = cart.get(index).getQuantity() + 1;
-                        cart.get(index).setQuantity(quantity);
-                    }
-                    session.setAttribute("cart", cart);
+                    int quantity = cart.get(index).getQuantity() + 1;
+                    cart.get(index).setQuantity(quantity);
                 }
-                response.sendRedirect("/FoodItemController");
-            } else {
-                listFoodItems(request, response);
+                session.setAttribute("cart", cart);
             }
-
-        } catch (Exception exc) {
+            try {
+                response.sendRedirect("/FoodItemController");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                listFoodItems(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -122,7 +137,7 @@ public class FoodItemController extends HttpServlet {
         session.setAttribute("page", page);
         List<FoodItem> shortFoodItems = foodItems.stream().skip((page - 1) * NUMBER_ITEMS_ON_PAGE).limit(NUMBER_ITEMS_ON_PAGE).collect(Collectors.toList());
         request.setAttribute("FOOD_LIST", shortFoodItems);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/list-food.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/list-food.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -134,74 +149,9 @@ public class FoodItemController extends HttpServlet {
         }
         return -1;
     }
-	/*private void deleteFoodItem(HttpServletRequest request, HttpServletResponse response)
-		throws Exception {
-
-		// read FoodItem id from form data
-		String theFoodItemId = request.getParameter("foodItemId");
-
-		// delete FoodItem from database
-		foodItemDAO.deleteFoodItem(theFoodItemId);
-
-		// send them back to "list FoodItems" page
-		listFoodItems(request, response);
-	}
-
-	private void updateFoodItem(HttpServletRequest request, HttpServletResponse response)
-		throws Exception {
-
-		// read FoodItem info from form data
-		int id = Integer.parseInt(request.getParameter("foodItemId"));
-		String firstName = request.getParameter("firstName");
-		String lastName = request.getParameter("lastName");
-		String email = request.getParameter("email");
-
-		// create a new FoodItem object
-		FoodItem theFoodItem = new FoodItem(id, firstName, lastName, email);
-
-		// perform update on database
-		foodItemDAO.updateFoodItem(theFoodItem);
-
-		// send them back to the "list FoodItems" page
-		listFoodItems(request, response);
-
-	}
-
-	private void loadFoodItem(HttpServletRequest request, HttpServletResponse response)
-		throws Exception {
-
-		// read FoodItem id from form data
-		String theFoodItemId = request.getParameter("FoodItemId");
-
-		// get FoodItem from database (db util)
-		FoodItem theFoodItem = foodItemDAO.getFoodItem(theFoodItemId);
-
-		// place FoodItem in the request attribute
-		request.setAttribute("THE_FoodItem", theFoodItem);
-
-		// send to jsp page: update-FoodItem-form.jsp
-		RequestDispatcher dispatcher =
-				request.getRequestDispatcher("/update-FoodItem-form.jsp");
-		dispatcher.forward(request, response);
-	}
-
-	private void addFoodItem(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-		// read FoodItem info from form data
-		String firstName = request.getParameter("firstName");
-		String lastName = request.getParameter("lastName");
-		String email = request.getParameter("email");
-
-		// create a new FoodItem object
-		FoodItem theFoodItem = new FoodItem(firstName, lastName, email);
-
-		// add the FoodItem to the database
-		foodItemDAO.addFoodItem(theFoodItem);
-
-		// send back to main page (the FoodItem list)
-		listFoodItems(request, response);
-	}*/
-
+    public void setFoodItemDAO(FoodJDBCDAO foodItemDAO) {
+       this.foodItemDAO = foodItemDAO;
+    }
 
 }
 
