@@ -1,0 +1,25 @@
+
+`	java:S112$"FDefine and throw a dedicated exception instead of using a generic one.(ôıû¼ûÿÿÿÿ
+[	java:S112)"FDefine and throw a dedicated exception instead of using a generic one.(‘ıµâ
+[	java:S112-"FDefine and throw a dedicated exception instead of using a generic one.(ÇËš€
+`	java:S1126"FDefine and throw a dedicated exception instead of using a generic one.(²À¹ğÿÿÿÿÿ
+`	java:S112>"FDefine and throw a dedicated exception instead of using a generic one.(œÙóúÿÿÿÿ
+`	java:S112G"FDefine and throw a dedicated exception instead of using a generic one.(±ŠÁÿúÿÿÿÿ
+I
+java:S1121".Extract the assignment out of this expression.(È¹Éœıÿÿÿÿ
+R
+java:S1854"<Remove this useless assignment to local variable "userList".(Ô®È
+Q
+java:S1117";Rename "userList" which hides the field declared at line 9.(Ô®È
+‡
+java:S1130$"lRemove the declaration of thrown exception 'java.lang.Exception', as it cannot be thrown from method's body.(ôıû¼ûÿÿÿÿ
+‚
+java:S1130)"lRemove the declaration of thrown exception 'java.lang.Exception', as it cannot be thrown from method's body.(‘ıµâ
+‡
+java:S11306"lRemove the declaration of thrown exception 'java.lang.Exception', as it cannot be thrown from method's body.(²À¹ğÿÿÿÿÿ
+S
+java:S1854A"8Remove this useless assignment to local variable "User".(æè€ıÿÿÿÿ
+‡
+java:S1130>"lRemove the declaration of thrown exception 'java.lang.Exception', as it cannot be thrown from method's body.(œÙóúÿÿÿÿ
+C
+java:S1481"-Remove this unused "userList" local variable.(Ô®È

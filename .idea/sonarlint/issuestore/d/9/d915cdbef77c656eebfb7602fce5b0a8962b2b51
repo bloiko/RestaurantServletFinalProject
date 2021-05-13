@@ -1,0 +1,12 @@
+
+]	java:S125 "<This block of commented-out lines of code should be removed.(‹“ûóÿÿÿÿÿ8µñ„•/
+~
+java:S1989"aHandle the following exceptions that could be thrown by "forward": ServletException, IOException.(°°‘û8ûû„•/
+n
+java:S2226"XRemove this misleading mutable servlet instance field or make it "static" and/or "final"(õæœõ
+B
+java:S1128",Remove this unused import 'dao.UserListDAO'.(§÷İÕ
+~
+java:S1989"aHandle the following exceptions that could be thrown by "include": ServletException, IOException.(·ı¹Š8Æ™ò„•/
+C
+java:S1128"-Remove this unused import 'dao.OrderListDAO'.(÷ê£‹

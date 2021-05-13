@@ -376,6 +376,30 @@ public class OrderJDBCDAO {
             close(myConn, myStmt, null);
         }
     }
+
+    public List<OrderStatus> getStatuses() {
+        List<OrderStatus> statuses = new ArrayList<>();
+        Connection myConn = null;
+        Statement myStmt = null;
+        ResultSet myRs = null;
+        try {
+            myConn = dataSource.getConnection();
+            String sql = "select * from status;";
+            myStmt = myConn.createStatement();
+            myRs = myStmt.executeQuery(sql);
+            while (myRs.next()) {
+                String statusName = myRs.getString("status_name");
+                OrderStatus orderStatus = OrderStatus.getOrderStatus(statusName);
+                statuses.add(orderStatus);
+            }
+            return statuses;
+        } catch (Exception throwables) {
+            throwables.printStackTrace();
+        } finally {
+            close(myConn, myStmt, myRs);
+        }
+        return  null;
+    }
 }
 
 
