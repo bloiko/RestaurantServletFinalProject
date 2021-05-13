@@ -1,7 +1,6 @@
 package dao;
 
-import entity.FoodItem;
-import entity.User;
+import entity.*;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;

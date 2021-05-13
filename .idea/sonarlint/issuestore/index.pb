@@ -7,10 +7,6 @@ R
 "src/main/java/entity/FoodItem.java,7\3\7395996119890a80de44b2d4a4f93e5bc9f50bbe
 \
 ,src/main/java/controller/CartController.java,c\4\c4cebafce4a20940673ebe66f3dcb823ab9933d5
-S
-#src/main/java/dao/OrderListDAO.java,b\6\b675a9456e56938e47764365784cf5abd2a91451
-R
-"src/main/java/dao/UserListDAO.java,1\8\184bc2aba6297aec6e33c6106dcb972149c081e0
 `
 0src/main/java/controller/FoodItemController.java,8\c\8cf29d2d9c6be86f46e487ed4293923636e2c5cf
 ]
@@ -37,3 +33,15 @@ S
 #src/main/java/dao/OrderJDBCDAO.java,7\5\752f385688e1470bdd61f40fd596110a7ffefede
 N
 src/main/java/dao/UserDAO.java,0\8\08fd4d05331df73808435971d121bd8c04c01bab
+J
+src/main/webapp/index.html,1\3\1337d72a3b1928dba82aa5210f5cdc0e88ce895b
+M
+src/main/webapp/list-food.jsp,d\4\d4f174107769c0830721b6221c1ac4bf3bf6d1f2
+I
+src/main/webapp/admin.jsp,1\6\16c841072742f24edfb63d62f4da7ea207d6a9cd
+7
+pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
+R
+"src/main/java/entity/Category.java,8\3\83a72104605c776c1c12b5a6e0ae305f9a204970
+d
+4src/test/java/controller/FoodItemControllerTest.java,a\2\a20e7323f7778d55cd1e1e2aa5e1dabec86de5c8

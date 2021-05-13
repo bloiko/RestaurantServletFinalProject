@@ -1,43 +1,46 @@
 
 K
-java:S1121"".Extract the assignment out of this expression.(Ë½¬8‚Õ½…•/
-l
-java:S2095d"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(³•Œé8´ª¨§•/
-m
-java:S2095"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(³•Œé8ã¦°©•/
-H
-java:S1481"*Remove this unused "items" local variable.(¼è®Ú8ÂÉá­•/
+java:S1121!".Extract the assignment out of this expression.(Ë½¬8è±¿°–/
 G
-java:S1481ú")Remove this unused "item" local variable.(Š×ğ 8¨Îº©•/
-c	java:S112˜"FDefine and throw a dedicated exception instead of using a generic one.(ÜÂ÷8À¨æ§•/
-h	java:S112Š"FDefine and throw a dedicated exception instead of using a generic one.(Õ¨ãïÿÿÿÿÿ8§Â¹µ•/
-h	java:S112ˆ"FDefine and throw a dedicated exception instead of using a generic one.(âÔ¨şÿÿÿÿ8ã¦°©•/
-}
-java:S1488«"_Immediately return this expression instead of assigning it to the temporary variable "orderId".(Á¡†Œ8ÂÉá­•/
-
-java:S1130"lRemove the declaration of thrown exception 'java.lang.Exception', as it cannot be thrown from method's body.(¬ĞÕÉşÿÿÿÿ8Àö­«•/
-h	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(¬ĞÕÉşÿÿÿÿ8À¨æ§•/
-h	java:S112“"FDefine and throw a dedicated exception instead of using a generic one.(ÕÂ¯šûÿÿÿÿ8À¨æ§•/
-T
-java:S1172"1Remove this unused method parameter "theOrderId".(¬ĞÕÉşÿÿÿÿ8öØÃ©•/
-g	java:S112o"FDefine and throw a dedicated exception instead of using a generic one.(Ùç¥Äøÿÿÿÿ8‚Õ½…•/
-
-java:S1488Ä"^Immediately return this expression instead of assigning it to the temporary variable "itemId".(ˆÜûÉÿÿÿÿÿ8Á¨é­•/
+java:S1481ù")Remove this unused "item" local variable.(Š×ğ 8è±¿°–/
 r
-java:S2095¿"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(›Æíşÿÿÿÿ8Á¨é­•/
-l
-java:S2095N"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(³•Œé8ÅÈş¦•/
-N
-java:S1068",Remove this unused "sqlTable" private field.(şÔ§öøÿÿÿÿ8ÉåÀ…•/
-c	java:S112ù"FDefine and throw a dedicated exception instead of using a generic one.(ûÉüà8À¨æ§•/
-X	java:S125å"<This block of commented-out lines of code should be removed.(ª£ãg8ÊĞû²•/
-r
-java:S2095¥"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(›Æíşÿÿÿÿ8š»Ï­•/
-¤
-java:S1186“"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ÕÂ¯šûÿÿÿÿ8ä«À©•/
-Ÿ
-java:S1186˜"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ÜÂ÷8‰À©•/
-ƒ
-java:S1488…"`Immediately return this expression instead of assigning it to the temporary variable "statusId".(¾å‚üÿÿÿÿ8Ò¸º©•/
+java:S2095£"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(›Æíşÿÿÿÿ8è±¿°–/
+Y	java:S125Û"<This block of commented-out lines of code should be removed.(»ï¦Ó8è±¿°–/
+^	java:S125Ë"<This block of commented-out lines of code should be removed.(øï…¨üÿÿÿÿ8è±¿°–/
 H
-java:S1481¸"*Remove this unused "items" local variable.(¼è®Ú8Á¨é­•/
+java:S1481·"*Remove this unused "items" local variable.(¼è®Ú8è±¿°–/
+{
+java:S1488£"]Immediately return this expression instead of assigning it to the temporary variable "order".(×À¦ï8è±¿°–/
+h	java:S112‡"FDefine and throw a dedicated exception instead of using a generic one.(âÔ¨şÿÿÿÿ8è±¿°–/
+}
+java:S1488©"_Immediately return this expression instead of assigning it to the temporary variable "orderId".(Á¡†Œ8è±¿°–/
+H
+java:S1481œ"*Remove this unused "items" local variable.(¼è®Ú8è±¿°–/
+R
+java:S1144ë"/Remove this unused private "removeItem" method.(•¨îøÿÿÿÿ8è±¿°–/
+r
+java:S2095¾"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(›Æíşÿÿÿÿ8è±¿°–/
+r
+java:S2095Ö"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(„»İ™úÿÿÿÿ8è±¿°–/
+g	java:S112m"FDefine and throw a dedicated exception instead of using a generic one.(Ùç¥Äøÿÿÿÿ8è±¿°–/
+l
+java:S2095b"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(³•Œé8è±¿°–/
+ƒ
+java:S1488„"`Immediately return this expression instead of assigning it to the temporary variable "statusId".(¾å‚üÿÿÿÿ8è±¿°–/
+l
+java:S2095L"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(³•Œé8è±¿°–/
+N
+java:S1068",Remove this unused "sqlTable" private field.(şÔ§öøÿÿÿÿ8è±¿°–/
+g
+java:S2259ğ"DA "NullPointerException" could be thrown; "myConn" is nullable here.(„»İ™úÿÿÿÿ8è±¿°–/
+X	java:S125ä"<This block of commented-out lines of code should be removed.(ª£ãg8è±¿°–/
+I
+java:S1168"+Return an empty collection instead of null.(¥¹ï8è±¿°–/
+h	java:S112ˆ"FDefine and throw a dedicated exception instead of using a generic one.(Õ¨ãïÿÿÿÿÿ8è±¿°–/
+n
+java:S11927"LDefine a constant instead of duplicating this literal "status_name" 3 times.(Ûî¬çşÿÿÿÿ8è±¿°–/
+c	java:S112ø"FDefine and throw a dedicated exception instead of using a generic one.(ûÉüà8è±¿°–/
+m
+java:S2095€"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(³•Œé8è±¿°–/
+
+java:S1488Ã"^Immediately return this expression instead of assigning it to the temporary variable "itemId".(ˆÜûÉÿÿÿÿÿ8è±¿°–/

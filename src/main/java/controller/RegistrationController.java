@@ -1,11 +1,7 @@
 package controller;
 
-import dao.OrderJDBCDAO;
-import dao.UserDAO;
-import entity.Item;
-import entity.Order;
-import entity.OrderStatus;
-import entity.User;
+import entity.*;
+import dao.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

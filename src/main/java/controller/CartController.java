@@ -1,7 +1,7 @@
 package controller;
 
-import dao.FoodJDBCDAO;
-import entity.Item;
+import entity.*;
+import dao.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
