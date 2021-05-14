@@ -14,17 +14,6 @@ import java.util.List;
 
 @WebServlet("/CartController")
 public class CartController extends HttpServlet {
-    private FoodJDBCDAO foodItemDAO;
-
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        try {
-            foodItemDAO = FoodJDBCDAO.getInstance();
-        } catch (Exception exc) {
-            throw new ServletException(exc);
-        }
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -39,6 +28,7 @@ public class CartController extends HttpServlet {
             request.getRequestDispatcher("cart.jsp").forward(request, response);
         }
     }
+
     private int isExisting(int id, List<Item> cart) {
         for (int i = 0; i < cart.size(); i++) {
             if (cart.get(i).getFoodItem().getId() == id) {
@@ -47,5 +37,4 @@ public class CartController extends HttpServlet {
         }
         return -1;
     }
-
 }

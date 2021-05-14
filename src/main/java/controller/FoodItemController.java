@@ -21,8 +21,6 @@ import java.util.stream.Collectors;
 @WebServlet("/FoodItemController")
 public class FoodItemController extends HttpServlet {
     private static final int NUMBER_ITEMS_ON_PAGE = 5;
-
-
     private FoodJDBCDAO foodItemDAO;
 
     @Override
@@ -35,14 +33,15 @@ public class FoodItemController extends HttpServlet {
         }
     }
 
+    @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         String command = request.getParameter("command");
         HttpSession session = request.getSession();
         List<Item> cart;
-           if (session.getAttribute("cart") == null) {
-                cart = new ArrayList<>();
-                session.setAttribute("cart", cart);
-            }
+        if (session.getAttribute("cart") == null) {
+            cart = new ArrayList<>();
+            session.setAttribute("cart", cart);
+        }
         if ("ORDER".equals(command)) {
             String foodId = request.getParameter("foodId");
 
@@ -84,8 +83,7 @@ public class FoodItemController extends HttpServlet {
 
     }
 
-    private void listFoodItems(HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
+    private void listFoodItems(HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
         List<FoodItem> foodItems = null;
         if (session.getAttribute("menu") != null) {
@@ -113,8 +111,8 @@ public class FoodItemController extends HttpServlet {
                     foodItems.sort(Comparator.comparing(FoodItem::getPrice));
                     session.setAttribute("order", "ASC");
                 }
-            } else if (sort.equals("CATEGORY") ) {
-                if ("CATEGORY".equals(sessionSort)&& "ASC".equals(order)) {
+            } else if (sort.equals("CATEGORY")) {
+                if ("CATEGORY".equals(sessionSort) && "ASC".equals(order)) {
                     foodItems.sort(Comparator.comparing(FoodItem::getCategory).reversed());
                     session.setAttribute("order", "DESC");
                 } else {
@@ -148,8 +146,9 @@ public class FoodItemController extends HttpServlet {
         }
         return -1;
     }
+
     public void setFoodItemDAO(FoodJDBCDAO foodItemDAO) {
-       this.foodItemDAO = foodItemDAO;
+        this.foodItemDAO = foodItemDAO;
     }
 
 }

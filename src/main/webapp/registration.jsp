@@ -65,6 +65,7 @@
             </div>
             <input name="last_name" class="form-control" placeholder="Last Name" type="text" value="${last_name}">
         </div>
+        <label class="errorMessage">${email_error_message}</label>
         <div class="form-group input-group">
             <div class="input-group-prepend">
                 <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>

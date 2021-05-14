@@ -20,26 +20,32 @@ import java.util.regex.Pattern;
 
 @WebServlet("/RegistrationController")
 public class RegistrationController extends HttpServlet {
-    private OrderJDBCDAO orderListDAO = OrderJDBCDAO.getInstance();
-    private UserDAO userListDAO = UserDAO.getInstance();
-
+    private OrderJDBCDAO orderListDAO;
+    private UserDAO userDAO;
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        try {
+            orderListDAO = OrderJDBCDAO.getInstance();
+            userDAO = UserDAO.getInstance();
+        } catch (Exception exc) {
+            throw new ServletException(exc);
+        }
+    }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
         User user = getUserIfCorrectData(request, response);
         if (user == null) {
-            request.setAttribute("first_name",request.getParameter("first_name"));
-            request.setAttribute("last_name",request.getParameter("last_name"));
-            request.setAttribute("email",request.getParameter("email"));
-            request.setAttribute("address",request.getParameter("address"));
-            request.setAttribute("phoneNumber",request.getParameter("phoneNumber"));            RequestDispatcher requestDispatcher = request.getRequestDispatcher("registration.jsp");
+            request.setAttribute("first_name", request.getParameter("first_name"));
+            request.setAttribute("last_name", request.getParameter("last_name"));
+            request.setAttribute("email", request.getParameter("email"));
+            request.setAttribute("address", request.getParameter("address"));
+            request.setAttribute("phoneNumber", request.getParameter("phoneNumber"));
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("registration.jsp");
             requestDispatcher.include(request, response);
         } else {
-            UserDAO userDAO = UserDAO.getInstance();
             try {
                 userDAO.addUser(user);
-                userListDAO.addUser(user);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -92,11 +98,29 @@ public class RegistrationController extends HttpServlet {
             request.setAttribute("phone_number_error_message", "Incorrect phone number format!");
             isCorrect = false;
         }
+
+        //validate email
+        patterns = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+
+        pattern = Pattern.compile(patterns);
+        matcher = pattern.matcher(email);
+        if (!matcher.matches()) {
+            request.setAttribute("email_error_message", "Incorrect email format!");
+            isCorrect = false;
+        }
         if (isCorrect) {
             return new User(0, firstName, lastName, "", "", email, address, phoneNumber, "USER");
         } else {
             return null;
         }
+    }
+
+    public void setOrderListDAO(OrderJDBCDAO orderListDAO) {
+        this.orderListDAO = orderListDAO;
+    }
+
+    public void setUserDAO(UserDAO userDAO) {
+        this.userDAO = userDAO;
     }
 }
 
