@@ -113,8 +113,8 @@ public class FoodItemController extends HttpServlet {
                     foodItems.sort(Comparator.comparing(FoodItem::getPrice));
                     session.setAttribute("order", "ASC");
                 }
-            } else if (sort.equals("CATEGORY") && "ASC".equals(order)) {
-                if ("CATEGORY".equals(sessionSort)) {
+            } else if (sort.equals("CATEGORY") ) {
+                if ("CATEGORY".equals(sessionSort)&& "ASC".equals(order)) {
                     foodItems.sort(Comparator.comparing(FoodItem::getCategory).reversed());
                     session.setAttribute("order", "DESC");
                 } else {
@@ -125,7 +125,6 @@ public class FoodItemController extends HttpServlet {
             session.setAttribute("menu", foodItems);
             session.setAttribute("sort", sort);
         }
-
         int page;
         if (request.getParameter("page") != null) {
             page = Integer.parseInt(request.getParameter("page"));
