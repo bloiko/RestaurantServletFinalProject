@@ -116,7 +116,7 @@
 </div>
 <div class="footer">
     <h2>Sum: ${sum}</h2>
-    <a href="/registration.jsp">
+    <a href="/RegistrationController">
         <button type="button" class="btn btn-danger"> Order</button>
     </a>
 </div>

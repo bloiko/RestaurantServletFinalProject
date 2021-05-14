@@ -12,4 +12,11 @@
     <res-ref-name>jdbc/restaurant_system</res-ref-name>
     <res-type>javax.sql.DataSource</res-type>
   </resource-ref>
+
+  <jsp-config>
+    <taglib>
+      <taglib-uri>sssuri</taglib-uri>
+      <taglib-location>/WEB-INF/mytags.tld</taglib-location>
+    </taglib>
+  </jsp-config>
 </web-app>

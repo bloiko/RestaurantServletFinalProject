@@ -6,10 +6,7 @@ import dao.*;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -22,6 +19,7 @@ import java.util.regex.Pattern;
 public class RegistrationController extends HttpServlet {
     private OrderJDBCDAO orderListDAO;
     private UserDAO userDAO;
+
     @Override
     public void init() throws ServletException {
         super.init();
@@ -32,6 +30,34 @@ public class RegistrationController extends HttpServlet {
             throw new ServletException(exc);
         }
     }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Cookie[] cookies = request.getCookies();
+        int number = getNumberOfParametersInCookies(cookies);
+        if (number == 5) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("first_name")) {
+                    request.setAttribute("first_name", cookie.getValue());
+                }
+                if (cookie.getName().equals("last_name")) {
+                    request.setAttribute("last_name", cookie.getValue());
+                }
+                if (cookie.getName().equals("email")) {
+                    request.setAttribute("email", cookie.getValue());
+                }
+                if (cookie.getName().equals("address")) {
+                    request.setAttribute("address", cookie.getValue());
+                }
+                if (cookie.getName().equals("phoneNumber")) {
+                    request.setAttribute("phoneNumber", cookie.getValue());
+                }
+            }
+        }
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("registration.jsp");
+        requestDispatcher.include(request, response);
+    }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user = getUserIfCorrectData(request, response);
@@ -41,9 +67,20 @@ public class RegistrationController extends HttpServlet {
             request.setAttribute("email", request.getParameter("email"));
             request.setAttribute("address", request.getParameter("address"));
             request.setAttribute("phoneNumber", request.getParameter("phoneNumber"));
+            request.setAttribute("command", "REDIRECT");
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("registration.jsp");
             requestDispatcher.include(request, response);
         } else {
+            Cookie cookieFirstName = new Cookie("first_name", request.getParameter("first_name"));
+            Cookie cookieLastName = new Cookie("last_name", request.getParameter("last_name"));
+            Cookie cookieEmail = new Cookie("email", request.getParameter("email"));
+            Cookie cookieAddress = new Cookie("address", request.getParameter("address"));
+            Cookie cookiePhoneNumber = new Cookie("phoneNumber", request.getParameter("phoneNumber"));
+            response.addCookie(cookieFirstName);
+            response.addCookie(cookieLastName);
+            response.addCookie(cookieEmail);
+            response.addCookie(cookieAddress);
+            response.addCookie(cookiePhoneNumber);
             try {
                 userDAO.addUser(user);
             } catch (Exception e) {
@@ -74,6 +111,28 @@ public class RegistrationController extends HttpServlet {
             requestDispatcher.forward(request, response);
         }
 
+    }
+
+    private int getNumberOfParametersInCookies(Cookie[] cookies) {
+        int counter = 0;
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("first_name")) {
+                counter++;
+            }
+            if (cookie.getName().equals("last_name")) {
+                counter++;
+            }
+            if (cookie.getName().equals("email")) {
+                counter++;
+            }
+            if (cookie.getName().equals("address")) {
+                counter++;
+            }
+            if (cookie.getName().equals("phoneNumber")) {
+                counter++;
+            }
+        }
+        return counter;
     }
 
     private User getUserIfCorrectData(HttpServletRequest request, HttpServletResponse response) {

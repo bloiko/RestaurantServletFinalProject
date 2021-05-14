@@ -28,22 +28,5 @@ public class LoginController extends HttpServlet {
             request.setAttribute("message","Account's Invalid");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
-        /*String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        if (username.isEmpty() || password.isEmpty() || !userListDAO.isCorrectUser(username, password)) {
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("registration.jsp");
-            requestDispatcher.include(request, response);
-        } else {
-            try {
-                User user = userListDAO.getUserByUserName(username);
-
-                HttpSession session = request.getSession();
-                session.setAttribute("user",user);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/FoodItemController");
-            requestDispatcher.forward(request, response);
-        }*/
     }
 }

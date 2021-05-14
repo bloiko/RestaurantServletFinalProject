@@ -1,3 +1,6 @@
+<%@ page import="entity.FoodItem" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
@@ -106,6 +109,14 @@
 </div>
 <div id="container">
     <div id="content">
+
+        <%--TO DO--%>
+        <button type="button" class="btn btn-light">All categories</button>
+        <c:forEach var="category" items="${categories}">
+            <button type="button" class="btn btn-light">${category.name}</button>
+        </c:forEach>
+        <%--TO DO--%>
+
         <table class="table">
             <thead>
             <tr>
@@ -129,9 +140,9 @@
             </tbody>
         </table>
         <div class="pagination_section">
-            <a href="FoodItemController?page=1">1</a>
-            <a href="FoodItemController?page=2">2</a>
-            <a href="FoodItemController?page=3">3</a>
+            <c:forEach var="i" begin="1" end="${numberOfPages}">
+                <a href="FoodItemController?page=${i}">${i}</a>
+            </c:forEach>
         </div>
     </div>
 </div>

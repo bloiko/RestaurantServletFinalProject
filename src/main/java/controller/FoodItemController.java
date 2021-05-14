@@ -133,6 +133,9 @@ public class FoodItemController extends HttpServlet {
         }
         session.setAttribute("page", page);
         List<FoodItem> shortFoodItems = foodItems.stream().skip((page - 1) * NUMBER_ITEMS_ON_PAGE).limit(NUMBER_ITEMS_ON_PAGE).collect(Collectors.toList());
+        request.setAttribute("categories",foodItemDAO.getCategories());
+        request.setAttribute("numberOfPages", foodItems.size()/NUMBER_ITEMS_ON_PAGE+1);
+
         request.setAttribute("FOOD_LIST", shortFoodItems);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/list-food.jsp");
         dispatcher.forward(request, response);

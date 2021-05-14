@@ -6,10 +6,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -174,6 +171,31 @@ public class FoodJDBCDAO {
         } finally {
             close(myConn, myStmt, null);
         }
+    }
+
+    public List<Category> getCategories() {
+        List<Category> categories = new ArrayList<>();
+        Connection myConn = null;
+        Statement myStmt = null;
+        ResultSet myRs = null;
+        try {
+            myConn = dataSource.getConnection();
+            String sql = "select * from category;";
+            myStmt = myConn.createStatement();
+            myRs = myStmt.executeQuery(sql);
+            while (myRs.next()) {
+                int id = myRs.getInt("id");
+                String name = myRs.getString("name");
+                Category category = new Category(id, name);
+                categories.add(category);
+            }
+            return categories;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            close(myConn, myStmt, myRs);
+        }
+        return null;
     }
 }
 
