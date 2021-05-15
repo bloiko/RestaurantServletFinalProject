@@ -1,6 +1,5 @@
 package controller;
 
-
 import dao.OrderJDBCDAO;
 import entity.Order;
 import entity.OrderStatus;
@@ -17,22 +16,22 @@ import java.util.stream.Collectors;
 
 @WebServlet("/AdminController")
 public class AdminController extends HttpServlet {
-    private OrderJDBCDAO orderListDAO = OrderJDBCDAO.getInstance();
+    private OrderJDBCDAO orderListDAO;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        try {
+            orderListDAO = OrderJDBCDAO.getInstance();
+        } catch (Exception exc) {
+            throw new ServletException(exc);
+        }
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String command = request.getParameter("command");
-         if ("CHANGE_STATUS".equals(command)) {
-             String orderIdString = request.getParameter("orderId");
-             Order order;
-             try {
-                 order = orderListDAO.getOrder(orderIdString);
-                 OrderStatus newStatus = order.getStatus().nextStatus();
-                 orderListDAO.updateOrder(order.getId(),newStatus);
-             } catch (Exception e) {
-                 e.printStackTrace();
-             }
-        } else if ("DELETE".equals(command)) {
+        if ("DELETE".equals(command)) {
             String orderIdString = request.getParameter("orderId");
             try {
                 orderListDAO.deleteOrder(orderIdString);
@@ -43,13 +42,13 @@ public class AdminController extends HttpServlet {
         try {
             List<Order> orders = orderListDAO.getOrders();
             List<OrderStatus> orderStatuses = orderListDAO.getStatuses();
-            request.setAttribute("statusList",orderStatuses);
+            request.setAttribute("statusList", orderStatuses);
             List<Order> notDoneOrders = orders.stream()
-                    .filter(order->!order.getStatus().equals(OrderStatus.DONE))
+                    .filter(order -> !order.getStatus().equals(OrderStatus.DONE))
                     .collect(Collectors.toList());
             request.setAttribute("NOT_DONE_ORDERS_LIST", notDoneOrders);
             List<Order> doneOrders = orders.stream()
-                    .filter(order->order.getStatus().equals(OrderStatus.DONE))
+                    .filter(order -> order.getStatus().equals(OrderStatus.DONE))
                     .collect(Collectors.toList());
             request.setAttribute("DONE_ORDERS_LIST", doneOrders);
         } catch (Exception e) {
@@ -63,15 +62,18 @@ public class AdminController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String statusName = request.getParameter("status");
         String orderIdString = request.getParameter("orderId");
-
         Order order;
         try {
             order = orderListDAO.getOrder(orderIdString);
             OrderStatus newStatus = OrderStatus.getOrderStatus(statusName);
-            orderListDAO.updateOrder(order.getId(),newStatus);
+            orderListDAO.updateOrder(order.getId(), newStatus);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        doGet(request,response);
+        doGet(request, response);
+    }
+
+    public void setOrderListDAO(OrderJDBCDAO orderListDAO) {
+        this.orderListDAO = orderListDAO;
     }
 }

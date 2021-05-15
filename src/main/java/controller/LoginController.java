@@ -13,8 +13,16 @@ import java.io.IOException;
 
 @WebServlet("/LoginController")
 public class LoginController extends HttpServlet {
-    private UserDAO userListDAO = UserDAO.getInstance();
-
+    private UserDAO userListDAO;
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        try {
+            userListDAO = UserDAO.getInstance();
+        } catch (Exception exc) {
+            throw new ServletException(exc);
+        }
+    }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
@@ -28,5 +36,9 @@ public class LoginController extends HttpServlet {
             request.setAttribute("message","Account's Invalid");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
+    }
+
+    public void setUserListDAO(UserDAO userListDAO) {
+        this.userListDAO = userListDAO;
     }
 }
