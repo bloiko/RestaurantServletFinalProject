@@ -29,6 +29,10 @@
                     <td>
                         <table>
                             <tr>
+                                <td>Id</td>
+                                <td> ${order.user.id} </td>
+                            </tr>
+                            <tr>
                                 <td>First Name</td>
                                 <td> ${order.user.firstName} </td>
                             </tr>

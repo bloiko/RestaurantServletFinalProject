@@ -162,11 +162,14 @@ public class UserDAO {
         Connection myConn = null;
         PreparedStatement myStmt = null;
         try {
-            String sql = "select id from user where last_name= ? && phone_number= ? ;";
+            String sql = "select id from user where first_name= ? && last_name= ? && email= ?&& address= ?&& phone_number= ? ;";
             myConn = dataSource.getConnection();
             PreparedStatement myStmtRole = myConn.prepareStatement(sql);
-            myStmtRole.setString(1, theUser.getLastName());
-            myStmtRole.setString(2, theUser.getPhoneNumber());
+            myStmtRole.setString(1, theUser.getFirstName());
+            myStmtRole.setString(2, theUser.getLastName());
+            myStmtRole.setString(3, theUser.getEmail());
+            myStmtRole.setString(4, theUser.getAddress());
+            myStmtRole.setString(5 , theUser.getPhoneNumber());
             ResultSet resultSet = myStmtRole.executeQuery();
             int userId = 0;
             if (resultSet.next()) {

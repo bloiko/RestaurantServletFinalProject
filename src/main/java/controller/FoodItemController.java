@@ -91,6 +91,15 @@ public class FoodItemController extends HttpServlet {
         } else {
             foodItems = foodItemDAO.getFoodItems();
         }
+        String filterBy = request.getParameter("filter");
+        if(filterBy!=null && !"allCategories".equals(filterBy)) {
+            foodItems = foodItemDAO.getFoodItems();
+            foodItems = foodItems.stream().filter(foodItem -> foodItem.getCategory().getName().equals(filterBy)).collect(Collectors.toList());
+            session.setAttribute("menu",foodItems);
+        }else if("allCategories".equals(filterBy)){
+            foodItems = foodItemDAO.getFoodItems();
+            session.setAttribute("menu",foodItems);
+        }
         String sort = request.getParameter("sort");
         String sessionSort = (String) session.getAttribute("sort");
         String order = (String) session.getAttribute("order");
@@ -134,7 +143,10 @@ public class FoodItemController extends HttpServlet {
         session.setAttribute("page", page);
         List<FoodItem> shortFoodItems = foodItems.stream().skip((page - 1) * NUMBER_ITEMS_ON_PAGE).limit(NUMBER_ITEMS_ON_PAGE).collect(Collectors.toList());
         request.setAttribute("categories",foodItemDAO.getCategories());
-        request.setAttribute("numberOfPages", foodItems.size()/NUMBER_ITEMS_ON_PAGE+1);
+        int modOfTheDivision = foodItems.size()%NUMBER_ITEMS_ON_PAGE;
+        int incorrectNumOfPages = foodItems.size()/NUMBER_ITEMS_ON_PAGE;
+        int numOfPages = modOfTheDivision==0 ? incorrectNumOfPages :incorrectNumOfPages+1;
+        request.setAttribute("numberOfPages", numOfPages);
 
         request.setAttribute("FOOD_LIST", shortFoodItems);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/list-food.jsp");

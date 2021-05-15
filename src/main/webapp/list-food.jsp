@@ -111,9 +111,9 @@
     <div id="content">
 
         <%--TO DO--%>
-        <button type="button" class="btn btn-light">All categories</button>
+        <a href="/FoodItemController?filter=allCategories"> <button type="button" class="btn btn-light">All categories</button></a>
         <c:forEach var="category" items="${categories}">
-            <button type="button" class="btn btn-light">${category.name}</button>
+            <a href="/FoodItemController?filter=${category.name}"> <button type="button" class="btn btn-light">${category.name}</button></a>
         </c:forEach>
         <%--TO DO--%>
 

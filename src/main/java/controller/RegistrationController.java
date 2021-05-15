@@ -82,7 +82,12 @@ public class RegistrationController extends HttpServlet {
             response.addCookie(cookieAddress);
             response.addCookie(cookiePhoneNumber);
             try {
-                userDAO.addUser(user);
+                int userId = userDAO.getUserId(user);
+                if (userId > 0) {
+                    user.setId(userId);
+                } else {
+                    userDAO.addUser(user);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
