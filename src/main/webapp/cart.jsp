@@ -1,10 +1,22 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page isELIgnored="false" %>
+<%@ page session="true" %>
+
+<fmt:setLocale value="${sessionScope.lang}"/>
+<fmt:setBundle basename="messages"/>
+
+<html lang="${sessionScope.lang}">
 <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.1.0/css/flag-icon.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <title>Cart</title>
     <style>
@@ -67,8 +79,13 @@
                 <a href="FoodItemController" class="nav-item nav-link">Home</a>
                 <a href="cart.jsp" class="nav-item nav-link active">Cart</a>
             </div>
-            <div class="navbar-nav ml-auto">
-                <a href="#" class="nav-item nav-link">Login</a>
+            <div class="nav-item dropdown ml-auto">
+                <a class="nav-link dropdown-toggle" href="" id="dropdown09" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="flag-icon flag-icon-${sessionScope.lang}"> </span> Language</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown09">
+                    <a class="dropdown-item" href="/CartController?sessionLocale=ua"><span class="flag-icon flag-icon-ua"> </span>  Ukrainian</a>
+                    <a class="dropdown-item" href="/CartController?sessionLocale=us"><span class="flag-icon flag-icon-us"> </span>  English</a>
+                </div>
             </div>
             <a href="cart.jsp">
             <span class="fa-stack fa-2x has-badge" data-count="${sessionScope.cart.size()}">
