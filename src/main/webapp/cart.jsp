@@ -1,11 +1,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page isELIgnored="false" %>
 <%@ page session="true" %>
 
+
+
 <fmt:setLocale value="${sessionScope.lang}"/>
-<fmt:setBundle basename="messages"/>
+<fmt:setBundle basename="resources"/>
 
 <html lang="${sessionScope.lang}">
 <head>
@@ -76,15 +78,15 @@
 
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav">
-                <a href="FoodItemController" class="nav-item nav-link">Home</a>
-                <a href="cart.jsp" class="nav-item nav-link active">Cart</a>
+                <a href="FoodItemController" class="nav-item nav-link"><fmt:message key="cart.menu"/></a>
+                <a href="cart.jsp" class="nav-item nav-link active"><fmt:message key="cart.cart"/></a>
             </div>
             <div class="nav-item dropdown ml-auto">
                 <a class="nav-link dropdown-toggle" href="" id="dropdown09" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="flag-icon flag-icon-${sessionScope.lang}"> </span> Language</a>
+                    <span class="flag-icon flag-icon-${sessionScope.lang}"> </span> <fmt:message key="cart.language"/></a>
                 <div class="dropdown-menu" aria-labelledby="dropdown09">
-                    <a class="dropdown-item" href="/CartController?sessionLocale=ua"><span class="flag-icon flag-icon-ua"> </span>  Ukrainian</a>
-                    <a class="dropdown-item" href="/CartController?sessionLocale=us"><span class="flag-icon flag-icon-us"> </span>  English</a>
+                    <a class="dropdown-item" href="/CartController?sessionLocale=ua"><span class="flag-icon flag-icon-ua"> </span>  <fmt:message key="list_food.ukrainian"/></a>
+                    <a class="dropdown-item" href="/CartController?sessionLocale=en"><span class="flag-icon flag-icon-us"> </span>  <fmt:message key="list_food.english"/></a>
                 </div>
             </div>
             <a href="cart.jsp">
@@ -105,12 +107,12 @@
         <table class="table">
             <thead></thead>
             <tr>
-                <th scope="col">Image</th>
-                <th scope="col">Name</th>
-                <th scope="col">Price</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Option</th>
-                <th scope="col">Sub Total</th>
+                <th scope="col"><fmt:message key="cart.image"/></th>
+                <th scope="col"><fmt:message key="cart.name"/></th>
+                <th scope="col"><fmt:message key="cart.price"/></th>
+                <th scope="col"><fmt:message key="cart.quantity"/></th>
+                <th scope="col"><fmt:message key="cart.option"/></th>
+                <th scope="col"><fmt:message key="cart.sub_total"/></th>
             </tr>
             </thead>
             <tbody>
@@ -122,7 +124,7 @@
                     <td> ${item.foodItem.price}</td>
                     <td> ${item.quantity} </td>
                     <td align="center"><a href="/CartController?command=DELETE&itemId=${item.foodItem.id}"
-                                          onclick="return confirm('Are you sure?')">Delete</a></td>
+                                          onclick="return confirm('Are you sure?')"><fmt:message key="cart.delete"/></a></td>
                     >
                     <td>${item.foodItem.price*item.quantity}</td>
                 </tr>
@@ -134,7 +136,7 @@
 <div class="footer">
     <h2>Sum: ${sum}</h2>
     <a href="/RegistrationController">
-        <button type="button" class="btn btn-danger"> Order</button>
+        <button type="button" class="btn btn-danger"><fmt:message key="cart.order"/></button>
     </a>
 </div>
 </body>

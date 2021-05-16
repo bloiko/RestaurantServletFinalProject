@@ -1,13 +1,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-         pageEncoding="ISO-8859-1" %>
+<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib uri="mypredefinedtaglibrary" prefix="my" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page isELIgnored="false" %>
 <%@ page session="true" %>
 <!DOCTYPE html>
 <fmt:setLocale value="${sessionScope.lang}"/>
-<fmt:setBundle basename="messages"/>
+<fmt:setBundle basename="resources"/>
 
 <html lang="${sessionScope.lang}">
 <head>
@@ -95,15 +94,15 @@
 
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav">
-                <a href="FoodItemController" class="nav-item nav-link active">Home</a>
-                <a href="cart.jsp" class="nav-item nav-link">Cart</a>
+                <a href="FoodItemController" class="nav-item nav-link active"><fmt:message key="list_food.menu"/></a>
+                <a href="cart.jsp" class="nav-item nav-link"><fmt:message key="list_food.cart"/></a>
             </div>
             <div class="nav-item dropdown ml-auto">
                 <a class="nav-link dropdown-toggle" href="" id="dropdown09" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                   <span class="flag-icon flag-icon-${sessionScope.lang}"> </span> Language</a>
+                   <span class="flag-icon flag-icon-${sessionScope.lang}"> </span> <fmt:message key="list_food.language"/></a>
                 <div class="dropdown-menu" aria-labelledby="dropdown09">
-                    <a class="dropdown-item" href="/FoodItemController?sessionLocale=ua"><span class="flag-icon flag-icon-ua"> </span>  Ukrainian</a>
-                    <a class="dropdown-item" href="/FoodItemController?sessionLocale=us"><span class="flag-icon flag-icon-us"> </span>  English</a>
+                    <a class="dropdown-item" href="/FoodItemController?sessionLocale=ua"><span class="flag-icon flag-icon-ua"> </span> <fmt:message key="list_food.ukrainian"/></a>
+                    <a class="dropdown-item" href="/FoodItemController?sessionLocale=en"><span class="flag-icon flag-icon-us"> </span><fmt:message key="list_food.english"/></a>
                 </div>
             </div>
             <a href="cart.jsp">
@@ -117,7 +116,7 @@
 </div>
 <div id="wrapper">
     <div id="header">
-        <h2>Menu</h2>
+        <h2><fmt:message key="list_food.menu"/></h2>
     </div>
 </div>
 <div id="container">
@@ -137,10 +136,10 @@
         <table class="table">
             <thead>
             <tr>
-                <th scope="col">Image</th>
-                <th scope="col">Name<a href="/FoodItemController?sort=NAME">&#8597;</a></th>
-                <th scope="col">Price<a href="/FoodItemController?sort=PRICE">&#8597;</a></th>
-                <th scope="col">Category<a href="/FoodItemController?sort=CATEGORY">&#8597;</a></th>
+                <th scope="col"><fmt:message key="list_food.image"/></th>
+                <th scope="col"><fmt:message key="list_food.name"/><a href="/FoodItemController?sort=NAME">&#8597;</a></th>
+                <th scope="col"><fmt:message key="list_food.price"/><a href="/FoodItemController?sort=PRICE">&#8597;</a></th>
+                <th scope="col"><fmt:message key="list_food.category"/><a href="/FoodItemController?sort=CATEGORY">&#8597;</a></th>
                 <th scope="col"></th>
             </tr>
             </thead>
@@ -151,7 +150,7 @@
                     <td> ${foodItem.name} </td>
                     <td> ${foodItem.price}$</td>
                     <td>${foodItem.category.name}</td>
-                    <td><a href="/FoodItemController?command=ORDER&foodId=${foodItem.id}">Add to Cart</a></td>
+                    <td><a href="/FoodItemController?command=ORDER&foodId=${foodItem.id}"><fmt:message key="list_food.add_to_cart"/></a></td>
                 </tr>
             </c:forEach>
             </tbody>

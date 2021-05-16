@@ -18,15 +18,16 @@ public class CartController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String theCommand = request.getParameter("command");
-         if (theCommand.equals("DELETE")) {
+        HttpSession session = request.getSession();
+        if ("DELETE".equals(theCommand)) {
             String itemId = request.getParameter("itemId");
-            HttpSession session = request.getSession();
             List<Item> cart = (List<Item>) session.getAttribute("cart");
             int index = isExisting(Integer.parseInt(itemId), cart);
             cart.remove(index);
             session.setAttribute("cart", cart);
-            request.getRequestDispatcher("cart.jsp").forward(request, response);
         }
+        request.getRequestDispatcher("cart.jsp").forward(request, response);
+
     }
 
     private int isExisting(int id, List<Item> cart) {
