@@ -1,7 +1,7 @@
-<%@ page import="entity.FoodItem" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+         pageEncoding="ISO-8859-1" %>
+<%@ taglib uri="mypredefinedtaglibrary" prefix="my" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -111,9 +111,13 @@
     <div id="content">
 
         <%--TO DO--%>
-        <a href="/FoodItemController?filter=allCategories"> <button type="button" class="btn btn-light">All categories</button></a>
+        <a href="/FoodItemController?filter=allCategories">
+            <button type="button" class="btn btn-light">All categories</button>
+        </a>
         <c:forEach var="category" items="${categories}">
-            <a href="/FoodItemController?filter=${category.name}"> <button type="button" class="btn btn-light">${category.name}</button></a>
+            <a href="/FoodItemController?filter=${category.name}">
+                <button type="button" class="btn btn-light">${category.name}</button>
+            </a>
         </c:forEach>
         <%--TO DO--%>
 
@@ -140,11 +144,16 @@
             </tbody>
         </table>
         <div class="pagination_section">
-            <c:forEach var="i" begin="1" end="${numberOfPages}">
-                <a href="FoodItemController?page=${i}">${i}</a>
-            </c:forEach>
+            <c:set var="counter" value="1"/>
+            <c:set var="end" value="${requestScope.numberOfPages}"/>
+            <my:looping start="1" end="${end}">
+                <a href="FoodItemController?page=${counter}">${counter}</a>
+                <c:set var="counter" value="${counter+1}"/>
+            </my:looping>
         </div>
+
     </div>
+
 </div>
 </body>
 </html>

@@ -20,4 +20,11 @@
     <exception-type>javax.servlet.ServletException</exception-type>
     <location>/AppExceptionHandler</location>
   </error-page>
+
+  <jsp-config>
+    <taglib>
+      <taglib-uri>mypredefinedtaglibrary</taglib-uri>
+      <taglib-location>/WEB-INF/tags/mytags.tld</taglib-location>
+    </taglib>
+  </jsp-config>
 </web-app>
