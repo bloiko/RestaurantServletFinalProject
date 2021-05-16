@@ -96,6 +96,7 @@ public class FoodItemController extends HttpServlet {
             foodItems = foodItemDAO.getFoodItems();
             foodItems = foodItems.stream().filter(foodItem -> foodItem.getCategory().getName().equals(filterBy)).collect(Collectors.toList());
             session.setAttribute("menu",foodItems);
+            session.setAttribute("page", 1);//
         }else if("allCategories".equals(filterBy)){
             foodItems = foodItemDAO.getFoodItems();
             session.setAttribute("menu",foodItems);

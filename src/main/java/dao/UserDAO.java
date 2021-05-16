@@ -15,9 +15,8 @@ import java.util.List;
 
 public class UserDAO {
     private String sqlTable = "jdbc/restaurant_system";
-    //@Resource(name = "jdbc/restaurant_system")
     private DataSource dataSource;
-    private static UserDAO instance;
+    private static volatile UserDAO instance;
 
     private UserDAO() {
         Context initContext = null;
@@ -33,9 +32,16 @@ public class UserDAO {
     }
 
     public static UserDAO getInstance() {
-        if (instance == null) {
-            return instance = new UserDAO();
-        } else return instance;
+        UserDAO localInstance = instance;
+        if (localInstance == null) {
+            synchronized (UserDAO.class) {
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new UserDAO();
+                }
+            }
+        }
+        return localInstance;
     }
 
     public boolean isCorrectUser(String userName, String password) {
@@ -171,11 +177,9 @@ public class UserDAO {
             myStmtRole.setString(4, theUser.getAddress());
             myStmtRole.setString(5 , theUser.getPhoneNumber());
             ResultSet resultSet = myStmtRole.executeQuery();
-            int userId = 0;
+            int userId = -1;
             if (resultSet.next()) {
                 userId = resultSet.getInt("id");
-            } else {
-                throw new Exception("Could not find user id: " + userId);
             }
             return userId;
         } finally {

@@ -2,10 +2,8 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
   <display-name>web-student-tracker-solution</display-name>
   <welcome-file-list>
-    <welcome-file>registration.jsp</welcome-file>
     <welcome-file>FoodItemController</welcome-file>
-   <!-- <welcome-file>index.jsp</welcome-file>
-    <welcome-file>index.html</welcome-file>-->
+    <welcome-file>CartController</welcome-file>
   </welcome-file-list>
 
   <resource-ref>
@@ -13,4 +11,13 @@
     <res-type>javax.sql.DataSource</res-type>
   </resource-ref>
 
+  <error-page>
+    <error-code>404</error-code>
+    <location>/AppExceptionHandler</location>
+  </error-page>
+
+  <error-page>
+    <exception-type>javax.servlet.ServletException</exception-type>
+    <location>/AppExceptionHandler</location>
+  </error-page>
 </web-app>

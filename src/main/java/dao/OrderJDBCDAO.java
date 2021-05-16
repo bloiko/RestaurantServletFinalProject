@@ -11,9 +11,8 @@ import java.util.List;
 
 public class OrderJDBCDAO {
     private String sqlTable = "jdbc/restaurant_system";
-    //@Resource(name = "jdbc/restaurant_system")
     private DataSource dataSource;
-    private static OrderJDBCDAO instance;
+    private static volatile OrderJDBCDAO instance;
 
     private OrderJDBCDAO() {
         Context initContext = null;
@@ -29,9 +28,16 @@ public class OrderJDBCDAO {
     }
 
     public static OrderJDBCDAO getInstance() {
-        if (instance == null) {
-            return instance = new OrderJDBCDAO();
-        } else return instance;
+        OrderJDBCDAO localInstance = instance;
+        if (localInstance == null) {
+            synchronized (OrderJDBCDAO.class) {
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new OrderJDBCDAO();
+                }
+            }
+        }
+        return localInstance;
     }
 
 

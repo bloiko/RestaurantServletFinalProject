@@ -50,8 +50,8 @@ public class LoginControllerTest {
         doNothing().when(requestDispatcher).include(request, response);
 
         adminControllerSpy.doGet(request, response);
-        verify(session, atLeast(1)).setAttribute(eq("username"), eq("username"));
-        verify(requestDispatcher, atLeast(1)).include(request, response);
+        verify(session, times(1)).setAttribute(eq("username"), eq("username"));
+        verify(requestDispatcher, times(1)).include(request, response);
     }
 
     @Test
@@ -71,8 +71,8 @@ public class LoginControllerTest {
 
         adminControllerSpy.doGet(request, response);
 
-        verify(request, atLeast(1)).setAttribute(eq("message"), anyString());
-        verify(requestDispatcher, atLeast(1)).forward(request, response);
+        verify(request, times(1)).setAttribute(eq("message"), anyString());
+        verify(requestDispatcher, times(1)).forward(request, response);
     }
     /*@Test
     public void testServlet_showAllOrdersWithChangeStatusCommand() throws Exception {
@@ -87,7 +87,7 @@ public class LoginControllerTest {
         doNothing().when(adminControllerSpy).doGet(request, response);
 
         adminControllerSpy.doPost(request, response);
-        verify(userDAO, atLeast(1)).updateOrder(1, OrderStatus.getOrderStatus("DONE"));
+        verify(userDAO, times(1)).updateOrder(1, OrderStatus.getOrderStatus("DONE"));
         verify(adminControllerSpy, atLeastOnce()).doGet(request,response);
     }*/
 }

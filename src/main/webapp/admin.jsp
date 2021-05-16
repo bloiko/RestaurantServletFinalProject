@@ -91,7 +91,7 @@
                                 </c:forEach>
                             </select>
                             <br/>
-                            <input type="submit" value="Submit"/>
+                            <input type="submit" value="Change"/>
                         </form>
                     </td>
                     <%--<th><a href="/AdminController?command=DELETE&orderId=${order.id}">Delete order</a></th>--%>

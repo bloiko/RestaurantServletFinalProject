@@ -48,11 +48,11 @@ public class AdminControllerTest {
         doNothing().when(requestDispatcher).forward(request, response);
 
         adminControllerSpy.doGet(request, response);
-        verify(request, atLeast(1)).setAttribute(eq("statusList"), anyList());
-        verify(request, atLeast(1)).setAttribute(eq("NOT_DONE_ORDERS_LIST"), anyList());
-        verify(request, atLeast(1)).setAttribute(eq("DONE_ORDERS_LIST"), anyList());
+        verify(request, times(1)).setAttribute(eq("statusList"), anyList());
+        verify(request, times(1)).setAttribute(eq("NOT_DONE_ORDERS_LIST"), anyList());
+        verify(request, times(1)).setAttribute(eq("DONE_ORDERS_LIST"), anyList());
 
-        verify(requestDispatcher, atLeast(1)).forward(request, response);
+        verify(requestDispatcher, times(1)).forward(request, response);
     }
 
     @Test
@@ -72,12 +72,12 @@ public class AdminControllerTest {
         doNothing().when(requestDispatcher).forward(request, response);
 
         adminControllerSpy.doGet(request, response);
-        verify(orderJDBCDAO, atLeast(1)).deleteOrder(eq("1"));
-        verify(request, atLeast(1)).setAttribute(eq("statusList"), anyList());
-        verify(request, atLeast(1)).setAttribute(eq("NOT_DONE_ORDERS_LIST"), anyList());
-        verify(request, atLeast(1)).setAttribute(eq("DONE_ORDERS_LIST"), anyList());
+        verify(orderJDBCDAO, times(1)).deleteOrder(eq("1"));
+        verify(request, times(1)).setAttribute(eq("statusList"), anyList());
+        verify(request, times(1)).setAttribute(eq("NOT_DONE_ORDERS_LIST"), anyList());
+        verify(request, times(1)).setAttribute(eq("DONE_ORDERS_LIST"), anyList());
 
-        verify(requestDispatcher, atLeast(1)).forward(request, response);
+        verify(requestDispatcher, times(1)).forward(request, response);
     }
     @Test
     public void testServlet_showAllOrdersWithChangeStatusCommand() throws Exception {
@@ -92,7 +92,7 @@ public class AdminControllerTest {
         doNothing().when(adminControllerSpy).doGet(request, response);
 
         adminControllerSpy.doPost(request, response);
-        verify(orderJDBCDAO, atLeast(1)).updateOrder(1, OrderStatus.getOrderStatus("DONE"));
+        verify(orderJDBCDAO, times(1)).updateOrder(1, OrderStatus.getOrderStatus("DONE"));
         verify(adminControllerSpy, atLeastOnce()).doGet(request,response);
     }
 }

@@ -48,8 +48,8 @@ public class CartControllerTest {
 
         servlet.doGet(request, response);
 
-        verify(requestDispatcher, atLeast(1)).forward(request, response);
-        verify(session, atLeast(1)).setAttribute(eq("cart"), anyList());
+        verify(requestDispatcher, times(1)).forward(request, response);
+        verify(session, times(1)).setAttribute(eq("cart"), anyList());
     }
     @Test(expected = IndexOutOfBoundsException.class)
     public void testServletIsExisting_ThrowIndexOutOfBoundsException() throws Exception {

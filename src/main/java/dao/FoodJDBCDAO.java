@@ -12,9 +12,8 @@ import java.util.List;
 
 public class FoodJDBCDAO {
     private String sqlTable = "jdbc/restaurant_system";
-    //@Resource(name = "jdbc/restaurant_system")
     private DataSource dataSource;
-    private static FoodJDBCDAO instance;
+    private static volatile FoodJDBCDAO instance;
 
     private FoodJDBCDAO() {
         Context initContext = null;
@@ -31,9 +30,16 @@ public class FoodJDBCDAO {
     }
 
     public static FoodJDBCDAO getInstance() {
-        if (instance == null) {
-            return instance = new FoodJDBCDAO();
-        } else return instance;
+        FoodJDBCDAO localInstance = instance;
+        if (localInstance == null) {
+            synchronized (FoodJDBCDAO.class) {
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new FoodJDBCDAO();
+                }
+            }
+        }
+        return localInstance;
     }
 
     public List<FoodItem> getFoodItems() throws Exception {

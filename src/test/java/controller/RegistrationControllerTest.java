@@ -57,7 +57,7 @@ public class RegistrationControllerTest {
         doNothing().when(requestDispatcher).forward(request,response);
         registrationControllerSpy.doPost(request, response);
 
-        verify(session, atLeast(1)).setAttribute(eq("cart"),anyList());
+        verify(session, times(1)).setAttribute(eq("cart"),anyList());
     }
     @Test
     public void testServletWithIncorrectUserData() throws Exception {
@@ -80,7 +80,7 @@ public class RegistrationControllerTest {
         doNothing().when(requestDispatcher).forward(request,response);
         registrationControllerSpy.doPost(request, response);
 
-        verify(requestDispatcher, atLeast(1)).include(request,response);
+        verify(requestDispatcher, times(1)).include(request,response);
 
     }
 }
