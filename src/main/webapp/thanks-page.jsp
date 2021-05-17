@@ -19,49 +19,8 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <title>Cart</title>
-    <style>
-        .fa-stack[data-count]:after {
-            position: absolute;
-            right: 0%;
-            top: 0%;
-            content: attr(data-count);
-            font-size: 40%;
-            padding: .6em;
-            border-radius: 999px;
-            line-height: .75em;
-            color: whitesmoke;
-            color: #DF0000;
-            text-align: center;
-            min-width: 1em;
-            font-weight: bold;
-            background: whitesmoke;
-            border-style: solid;
-        }
-
-        .fa-circle {
-            color: #DF0000;
-        }
-
-        .red-cart {
-            color: #DF0000;
-            background: whitesmoke;
-        }
-    </style>
-    <style>
-
-        /* header styling */
-        button {
-            position: relative;
-            font-weight: bold;
-            height: 50px;
-            width: 150px;
-            top: 100%;
-            left: 90%;
-            margin-top: -50px;
-            margin-left: -100px;
-        }
-    </style>
+    <title>Thanks page</title>
+    <style><%@include file="/WEB-INF/css/styles.css"%></style>
 </head>
 <body>
 <div class="bs-example">

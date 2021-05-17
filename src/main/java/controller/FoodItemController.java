@@ -44,7 +44,6 @@ public class FoodItemController extends HttpServlet {
         }
         if ("ORDER".equals(command)) {
             String foodId = request.getParameter("foodId");
-
             if (session.getAttribute("cart") == null) {
                 cart = new ArrayList<>();
                 try {
@@ -142,18 +141,20 @@ public class FoodItemController extends HttpServlet {
             page = 1;
         }
         session.setAttribute("page", page);
-        List<FoodItem> shortFoodItems = foodItems.stream().skip((page - 1) * NUMBER_ITEMS_ON_PAGE).limit(NUMBER_ITEMS_ON_PAGE).collect(Collectors.toList());
         request.setAttribute("categories",foodItemDAO.getCategories());
+
+        List<FoodItem> shortFoodItems = foodItems.stream().skip((page - 1) * NUMBER_ITEMS_ON_PAGE).limit(NUMBER_ITEMS_ON_PAGE).collect(Collectors.toList());
+
         int modOfTheDivision = foodItems.size()%NUMBER_ITEMS_ON_PAGE;
         int incorrectNumOfPages = foodItems.size()/NUMBER_ITEMS_ON_PAGE;
         int numOfPages = modOfTheDivision==0 ? incorrectNumOfPages :incorrectNumOfPages+1;
+
         request.setAttribute("numberOfPages", numOfPages);
 
         request.setAttribute("FOOD_LIST", shortFoodItems);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/list-food.jsp");
         dispatcher.forward(request, response);
     }
-
     private int isExisting(int id, List<Item> cart) {
         for (int i = 0; i < cart.size(); i++) {
             if (cart.get(i).getFoodItem().getId() == id) {
@@ -162,7 +163,6 @@ public class FoodItemController extends HttpServlet {
         }
         return -1;
     }
-
     public void setFoodItemDAO(FoodJDBCDAO foodItemDAO) {
         this.foodItemDAO = foodItemDAO;
     }

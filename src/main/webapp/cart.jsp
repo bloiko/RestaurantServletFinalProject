@@ -21,48 +21,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <title>Cart</title>
-    <style>
-        .fa-stack[data-count]:after {
-            position: absolute;
-            right: 0%;
-            top: 0%;
-            content: attr(data-count);
-            font-size: 40%;
-            padding: .6em;
-            border-radius: 999px;
-            line-height: .75em;
-            color: whitesmoke;
-            color: #DF0000;
-            text-align: center;
-            min-width: 1em;
-            font-weight: bold;
-            background: whitesmoke;
-            border-style: solid;
-        }
-
-        .fa-circle {
-            color: #DF0000;
-        }
-
-        .red-cart {
-            color: #DF0000;
-            background: whitesmoke;
-        }
-    </style>
-    <style>
-
-        /* header styling */
-        button {
-            position: relative;
-            font-weight: bold;
-            height: 50px;
-            width: 150px;
-            top: 100%;
-            left: 90%;
-            margin-top: -50px;
-            margin-left: -100px;
-        }
-    </style>
+    <style><%@include file="/WEB-INF/css/styles.css"%></style>
 </head>
 <body>
 <div class="bs-example">
@@ -134,11 +93,13 @@
         </table>
     </div>
 </div>
-<div class="footer">
+<div class="order" style="position: relative;">
     <h2>Sum: ${sum}</h2>
     <a href="/RegistrationController">
-        <button type="button" class="btn btn-danger"><fmt:message key="cart.order"/></button>
+        <button type="button" class="btn btn-danger order-button" style="position: absolute; right: 10%"><fmt:message key="cart.order"/></button>
     </a>
 </div>
+<br/><br/>
+<%@ include file="/WEB-INF/jspf/footer.jspf" %>
 </body>
 </html>

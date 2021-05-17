@@ -15,44 +15,7 @@
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
     <title>Input person information</title>
-    <style>
-        .divider-text {
-            position: relative;
-            text-align: center;
-            margin-top: 15px;
-            margin-bottom: 15px;
-        }
-
-        .divider-text span {
-            padding: 7px;
-            font-size: 12px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .divider-text:after {
-            content: "";
-            position: absolute;
-            width: 100%;
-            border-bottom: 1px solid #ddd;
-            top: 55%;
-            left: 0;
-            z-index: 1;
-        }
-        .errorMessage {
-            font-weight: bold;
-            color: red;
-        }
-        .btn-facebook {
-            background-color: #405D9D;
-            color: #fff;
-        }
-
-        .btn-twitter {
-            background-color: #42AEEC;
-            color: #fff;
-        }
-    </style>
+    <style><%@include file="/WEB-INF/css/styles.css"%></style>
 </head>
 <body>
 <article class="card-body mx-auto" style="max-width: 400px;">

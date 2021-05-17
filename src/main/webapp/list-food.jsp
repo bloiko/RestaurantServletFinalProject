@@ -18,68 +18,10 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.1.0/css/flag-icon.min.css" rel="stylesheet">
-
+    <%--<link rel="stylesheet" type="text/css" href="/WEB-INF/css/styles.css"/>--%>
     <title>Menu</title>
+    <style><%@include file="/WEB-INF/css/styles.css"%></style>
 </head>
-<style>
-    .fa-stack[data-count]:after {
-        position: absolute;
-        right: 0%;
-        top: 0%;
-        content: attr(data-count);
-        font-size: 40%;
-        padding: .6em;
-        border-radius: 999px;
-        line-height: .75em;
-        color: whitesmoke;
-        color: #DF0000;
-        text-align: center;
-        min-width: 1em;
-        font-weight: bold;
-        background: whitesmoke;
-        border-style: solid;
-    }
-
-    .fa-circle {
-        color: #DF0000;
-    }
-
-    .red-cart {
-        color: #DF0000;
-        background: whitesmoke;
-    }
-</style>
-<style>
-
-    /* header styling */
-    h1 {
-        color: green;
-    }
-
-    /* pagination position styling */
-    .pagination_section {
-        position: fixed;
-        top: 100%;
-        left: 50%;
-        margin-top: -50px;
-        margin-left: -100px;
-    }
-
-    /* pagination styling */
-    .pagination_section a {
-        background-color: lightgray;
-        color: black;
-        padding: 10px 18px;
-        text-decoration: none;
-    }
-
-    /* pagination hover effect on non-active */
-    .pagination_section a:hover:not(.active) {
-        background-color: red;
-        color: black;
-    }
-
-</style>
 <body>
 <div class="bs-example">
     <nav class="navbar navbar-expand-md navbar-light bg-light">
@@ -99,7 +41,7 @@
                 <a href="cart.jsp" class="nav-item nav-link"><fmt:message key="list_food.my_orders"/></a>
             </div>
             <div class="nav-item dropdown ml-auto">
-                <a class="nav-link dropdown-toggle" href="" id="dropdown09" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="" id="dropdown09" style="color:black;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                    <span class="flag-icon flag-icon-${sessionScope.lang}"> </span> <fmt:message key="list_food.language"/></a>
                 <div class="dropdown-menu" aria-labelledby="dropdown09">
                     <a class="dropdown-item" href="/FoodItemController?sessionLocale=ua"><span class="flag-icon flag-icon-ua"> </span> <fmt:message key="list_food.ukrainian"/></a>
@@ -151,7 +93,7 @@
                     <td> ${foodItem.name} </td>
                     <td> ${foodItem.price}$</td>
                     <td>${foodItem.category.name}</td>
-                    <td><a href="/FoodItemController?command=ORDER&foodId=${foodItem.id}"><fmt:message key="list_food.add_to_cart"/></a></td>
+                    <td><a href="/FoodItemController?command=ORDER&foodId=${foodItem.id}" style="color:black;"><button type="button" class="btn btn-dark"><fmt:message key="list_food.add_to_cart"/></button></a></td>
                 </tr>
             </c:forEach>
             </tbody>
