@@ -19,7 +19,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.1.0/css/flag-icon.min.css" rel="stylesheet">
     <%--<link rel="stylesheet" type="text/css" href="/WEB-INF/css/styles.css"/>--%>
-    <title>Menu</title>
+    <title>My Orders</title>
     <style><%@include file="/WEB-INF/css/styles.css"%></style>
 </head>
 <body>
@@ -38,7 +38,7 @@
             <div class="navbar-nav">
                 <a href="FoodItemController" class="nav-item nav-link active"><fmt:message key="list_food.menu"/></a>
                 <a href="cart.jsp" class="nav-item nav-link"><fmt:message key="list_food.cart"/></a>
-                <a href="/MyOrdersController" class="nav-item nav-link"><fmt:message key="list_food.my_orders"/></a>
+                <a href="my-orders.jsp" class="nav-item nav-link"><fmt:message key="list_food.my_orders"/></a>
             </div>
             <div class="nav-item dropdown ml-auto">
                 <a class="nav-link dropdown-toggle" href="" id="dropdown09" style="color:black;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -59,52 +59,54 @@
 </div>
 <div id="wrapper">
     <div id="header">
-        <h2><fmt:message key="list_food.menu"/></h2>
+        <h2><fmt:message key="list_food.my_orders"/></h2>
     </div>
 </div>
 <div id="container">
     <div id="content">
 
-        <a href="/FoodItemController?filter=allCategories">
-            <button type="button" class="btn btn-light">All categories</button>
-        </a>
-        <c:forEach var="category" items="${categories}">
-            <a href="/FoodItemController?filter=${category.name}">
-                <button type="button" class="btn btn-light">${category.name}</button>
-            </a>
-        </c:forEach>
 
-        <table class="table">
+        <table border="1" class="table">
             <thead>
             <tr>
-                <th scope="col"><fmt:message key="list_food.image"/></th>
-                <th scope="col"><fmt:message key="list_food.name"/><a href="/FoodItemController?sort=NAME">&#8597;</a></th>
-                <th scope="col"><fmt:message key="list_food.price"/><a href="/FoodItemController?sort=PRICE">&#8597;</a></th>
-                <th scope="col"><fmt:message key="list_food.category"/><a href="/FoodItemController?sort=CATEGORY">&#8597;</a></th>
-                <th scope="col"></th>
+                <th>Date of ordering</th>
+                <th>Items</th>
+                <th>Order price</th>
+                <th>Status</th>
             </tr>
             </thead>
             <tbody>
-            <c:forEach var="foodItem" items="${FOOD_LIST}">
+            <c:forEach var="order" items="${ORDERS_LIST}">
+                <c:set var="orderPrice" value="${0}"/>
                 <tr>
-                    <td><img src="${foodItem.image}" width="100" height="100"></td>
-                    <td> ${foodItem.name} </td>
-                    <td> ${foodItem.price}$</td>
-                    <td>${foodItem.category.name}</td>
-                    <td><a href="/FoodItemController?command=ORDER&foodId=${foodItem.id}" style="color:black;"><button type="button" class="btn btn-dark"><fmt:message key="list_food.add_to_cart"/></button></a></td>
+                    <td>${order.orderDate}</td>
+                    <td>
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Sub Total</th>
+                            </tr>
+                            <c:forEach var="item" items="${order.items}">
+                                <c:set var="orderPrice" value="${orderPrice+item.foodItem.price*item.quantity}"/>
+                                <tr>
+                                    <td> ${item.foodItem.name} </td>
+                                    <td> ${item.foodItem.price}</td>
+                                    <td>${item.quantity}</td>
+                                    <td>${item.foodItem.price*item.quantity}</td>
+                                </tr>
+                            </c:forEach>
+                        </table>
+                    </td>
+                    <td>${orderPrice}</td>
+                    <td>
+                            ${order.status}
+                    </td>
                 </tr>
             </c:forEach>
             </tbody>
         </table>
-        <div class="pagination_section">
-            <c:set var="counter" value="1"/>
-            <c:set var="end" value="${requestScope.numberOfPages}"/>
-            <my:looping start="1" end="${end}">
-                <a href="FoodItemController?page=${counter}">${counter}</a>
-                <c:set var="counter" value="${counter+1}"/>
-            </my:looping>
-        </div>
-
     </div>
 </div>
 <%@ include file="/WEB-INF/jspf/footer.jspf" %>

@@ -39,7 +39,7 @@
             <div class="navbar-nav">
                 <a href="FoodItemController" class="nav-item nav-link"><fmt:message key="cart.menu"/></a>
                 <a href="cart.jsp" class="nav-item nav-link active"><fmt:message key="cart.cart"/></a>
-                <a href="my-orders.jsp" class="nav-item nav-link"><fmt:message key="cart.my_orders"/></a>
+                <a href="/MyOrdersController" class="nav-item nav-link"><fmt:message key="cart.my_orders"/></a>
             </div>
             <div class="nav-item dropdown ml-auto">
                 <a class="nav-link dropdown-toggle" href="" id="dropdown09" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -83,8 +83,8 @@
                     <td> ${item.foodItem.name} </td>
                     <td> ${item.foodItem.price}</td>
                     <td> ${item.quantity} </td>
-                    <td align="center"><a href="/CartController?command=DELETE&itemId=${item.foodItem.id}"
-                                          onclick="return confirm('Are you sure?')"><fmt:message key="cart.delete"/></a></td>
+                    <td align="left"><a href="/CartController?command=DELETE&itemId=${item.foodItem.id}"
+                                          onclick="return confirm('Are you sure?')"><button type="button" class="btn btn-dark"><fmt:message key="cart.delete"/></button></a></td>
                     >
                     <td>${item.foodItem.price*item.quantity}</td>
                 </tr>

@@ -38,7 +38,7 @@
             <div class="navbar-nav">
                 <a href="FoodItemController" class="nav-item nav-link"><fmt:message key="thanks.menu"/></a>
                 <a href="cart.jsp" class="nav-item nav-link"><fmt:message key="thanks.cart"/></a>
-                <a href="my-orders.jsp" class="nav-item nav-link"><fmt:message key="thanks.my_orders"/></a>
+                <a href="/MyOrdersController" class="nav-item nav-link"><fmt:message key="thanks.my_orders"/></a>
             </div>
             <div class="nav-item dropdown ml-auto">
                 <a class="nav-link dropdown-toggle" href="" id="dropdown09" data-toggle="dropdown" aria-haspopup="true"
