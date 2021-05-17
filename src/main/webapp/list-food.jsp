@@ -96,6 +96,7 @@
             <div class="navbar-nav">
                 <a href="FoodItemController" class="nav-item nav-link active"><fmt:message key="list_food.menu"/></a>
                 <a href="cart.jsp" class="nav-item nav-link"><fmt:message key="list_food.cart"/></a>
+                <a href="cart.jsp" class="nav-item nav-link"><fmt:message key="list_food.my_orders"/></a>
             </div>
             <div class="nav-item dropdown ml-auto">
                 <a class="nav-link dropdown-toggle" href="" id="dropdown09" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -165,8 +166,8 @@
         </div>
 
     </div>
-
 </div>
+<%@ include file="/WEB-INF/jspf/footer.jspf" %>
 </body>
 </html>
 

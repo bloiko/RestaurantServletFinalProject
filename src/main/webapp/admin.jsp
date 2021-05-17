@@ -41,10 +41,6 @@
                                 <td>${order.user.lastName}</td>
                             </tr>
                             <tr>
-                                <td>Username</td>
-                                <td>${order.user.userName}</td>
-                            </tr>
-                            <tr>
                                 <td>Email</td>
                                 <td>${order.user.email}</td>
                             </tr>

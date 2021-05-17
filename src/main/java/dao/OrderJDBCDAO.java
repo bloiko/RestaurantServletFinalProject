@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderJDBCDAO {
-    private String sqlTable = "jdbc/restaurant_system";
     private DataSource dataSource;
     private static volatile OrderJDBCDAO instance;
 

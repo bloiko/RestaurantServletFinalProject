@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FoodJDBCDAO {
-    private String sqlTable = "jdbc/restaurant_system";
     private DataSource dataSource;
     private static volatile FoodJDBCDAO instance;
 

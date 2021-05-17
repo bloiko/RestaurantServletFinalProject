@@ -7,7 +7,7 @@ CREATE TABLE food_item (
   image varchar(45) DEFAULT NULL,
   category int(11) DEFAULT NULL,
   PRIMARY KEY (id)
-);
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci ROW_FORMAT=DYNAMIC;
 
 /*insert desserts*/
 INSERT INTO food_item VALUES (1,'Ice cream',4,'https://storcpdkenticomedia.blob.core.windows.net/media/recipemanagementsystem/media/recipe-media-files/recipes/retail/x17/17244-caramel-topped-ice-cream-dessert-760x580.jpg?ext=.jpg',6),

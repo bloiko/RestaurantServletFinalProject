@@ -1,9 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
+<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page isELIgnored="false" %>
 <%@ page session="true" %>
-
 
 
 <fmt:setLocale value="${sessionScope.lang}"/>
@@ -78,16 +77,19 @@
 
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav">
-                <a href="FoodItemController" class="nav-item nav-link"><fmt:message key="cart.menu"/></a>
-                <a href="cart.jsp" class="nav-item nav-link active"><fmt:message key="cart.cart"/></a>
-                <a href="my-orders.jsp" class="nav-item nav-link"><fmt:message key="cart.my_orders"/></a>
+                <a href="FoodItemController" class="nav-item nav-link"><fmt:message key="thanks.menu"/></a>
+                <a href="cart.jsp" class="nav-item nav-link"><fmt:message key="thanks.cart"/></a>
+                <a href="my-orders.jsp" class="nav-item nav-link"><fmt:message key="thanks.my_orders"/></a>
             </div>
             <div class="nav-item dropdown ml-auto">
-                <a class="nav-link dropdown-toggle" href="" id="dropdown09" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="flag-icon flag-icon-${sessionScope.lang}"> </span> <fmt:message key="cart.language"/></a>
+                <a class="nav-link dropdown-toggle" href="" id="dropdown09" data-toggle="dropdown" aria-haspopup="true"
+                   aria-expanded="false">
+                    <span class="flag-icon flag-icon-${sessionScope.lang}"> </span> <fmt:message key="thanks.language"/></a>
                 <div class="dropdown-menu" aria-labelledby="dropdown09">
-                    <a class="dropdown-item" href="/CartController?sessionLocale=ua"><span class="flag-icon flag-icon-ua"> </span>  <fmt:message key="cart.ukrainian"/></a>
-                    <a class="dropdown-item" href="/CartController?sessionLocale=en"><span class="flag-icon flag-icon-us"> </span>  <fmt:message key="cart.english"/></a>
+                    <a class="dropdown-item" href="/CartController?sessionLocale=ua"><span
+                            class="flag-icon flag-icon-ua"> </span> <fmt:message key="thanks.ukrainian"/></a>
+                    <a class="dropdown-item" href="/CartController?sessionLocale=en"><span
+                            class="flag-icon flag-icon-us"> </span> <fmt:message key="thanks.english"/></a>
                 </div>
             </div>
             <a href="cart.jsp">
@@ -100,45 +102,13 @@
     </nav>
 </div>
 <div id="header">
-    <h2>Cart</h2>
+    <h2>Gratitude</h2>
 </div>
 <div id="container">
-    <%--<a href="FoodItemController"><button type="button" class="btn btn-light">Continue Shopping</button></a>--%>
-    <div id="content">
-        <table class="table">
-            <thead></thead>
-            <tr>
-                <th scope="col"><fmt:message key="cart.image"/></th>
-                <th scope="col"><fmt:message key="cart.name"/></th>
-                <th scope="col"><fmt:message key="cart.price"/></th>
-                <th scope="col"><fmt:message key="cart.quantity"/></th>
-                <th scope="col"><fmt:message key="cart.option"/></th>
-                <th scope="col"><fmt:message key="cart.sub_total"/></th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:forEach var="item" items="${sessionScope.cart}">
-                <c:set var="sum" value="${sum+item.foodItem.price*item.quantity}"/>
-                <tr>
-                    <td><img src="${item.foodItem.image}" width="80" height="80"></td>
-                    <td> ${item.foodItem.name} </td>
-                    <td> ${item.foodItem.price}</td>
-                    <td> ${item.quantity} </td>
-                    <td align="center"><a href="/CartController?command=DELETE&itemId=${item.foodItem.id}"
-                                          onclick="return confirm('Are you sure?')"><fmt:message key="cart.delete"/></a></td>
-                    >
-                    <td>${item.foodItem.price*item.quantity}</td>
-                </tr>
-            </c:forEach>
-            </tbody>
-        </table>
-    </div>
+    <h4><fmt:message key="thanks.message.first_line"/></h4>
+    <h4><fmt:message key="thanks.message.contact"/></h4>
+    <h4><fmt:message key="thanks.message.track"/></h4>
 </div>
-<div class="footer">
-    <h2>Sum: ${sum}</h2>
-    <a href="/RegistrationController">
-        <button type="button" class="btn btn-danger"><fmt:message key="cart.order"/></button>
-    </a>
-</div>
+<%@ include file="/WEB-INF/jspf/footer.jspf" %>
 </body>
 </html>

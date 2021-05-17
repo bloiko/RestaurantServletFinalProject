@@ -112,7 +112,7 @@ public class RegistrationController extends HttpServlet {
                 }
             }
             session.setAttribute("cart", new ArrayList<Item>());
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("login.jsp");
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("thanks-page.jsp");
             requestDispatcher.forward(request, response);
         }
 
