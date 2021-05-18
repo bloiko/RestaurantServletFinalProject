@@ -36,16 +36,16 @@
 
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav">
-                <a href="FoodItemController" class="nav-item nav-link active"><fmt:message key="list_food.menu"/></a>
-                <a href="cart.jsp" class="nav-item nav-link"><fmt:message key="list_food.cart"/></a>
-                <a href="my-orders.jsp" class="nav-item nav-link"><fmt:message key="list_food.my_orders"/></a>
+                <a href="FoodItemController" class="nav-item nav-link"><fmt:message key="my_orders.menu"/></a>
+                <a href="cart.jsp" class="nav-item nav-link"><fmt:message key="my_orders.cart"/></a>
+                <a href="my-orders.jsp" class="nav-item nav-link active"><fmt:message key="my_orders.my_orders"/></a>
             </div>
             <div class="nav-item dropdown ml-auto">
                 <a class="nav-link dropdown-toggle" href="" id="dropdown09" style="color:black;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                   <span class="flag-icon flag-icon-${sessionScope.lang}"> </span> <fmt:message key="list_food.language"/></a>
+                   <span class="flag-icon flag-icon-${sessionScope.lang}"> </span> <fmt:message key="my_orders.language"/></a>
                 <div class="dropdown-menu" aria-labelledby="dropdown09">
-                    <a class="dropdown-item" href="/FoodItemController?sessionLocale=ua"><span class="flag-icon flag-icon-ua"> </span> <fmt:message key="list_food.ukrainian"/></a>
-                    <a class="dropdown-item" href="/FoodItemController?sessionLocale=en"><span class="flag-icon flag-icon-us"> </span><fmt:message key="list_food.english"/></a>
+                    <a class="dropdown-item" href="/MyOrdersController?sessionLocale=ua"><span class="flag-icon flag-icon-ua"> </span> <fmt:message key="my_orders.ukrainian"/></a>
+                    <a class="dropdown-item" href="/MyOrdersController?sessionLocale=en"><span class="flag-icon flag-icon-us"> </span><fmt:message key="my_orders.english"/></a>
                 </div>
             </div>
             <a href="cart.jsp">
@@ -59,20 +59,18 @@
 </div>
 <div id="wrapper">
     <div id="header">
-        <h2><fmt:message key="list_food.my_orders"/></h2>
+        <h2><fmt:message key="my_orders.my_orders"/></h2>
     </div>
 </div>
 <div id="container">
     <div id="content">
-
-
         <table border="1" class="table">
-            <thead>
+            <thead class="thead-light">
             <tr>
-                <th>Date of ordering</th>
-                <th>Items</th>
-                <th>Order price</th>
-                <th>Status</th>
+                <th scope="col"><fmt:message key="my_orders.date_of_ordering"/></th>
+                <th scope="col"><fmt:message key="my_orders.items"/></th>
+                <th scope="col"><fmt:message key="my_orders.order_price"/></th>
+                <th scope="col"><fmt:message key="my_orders.status"/></th>
             </tr>
             </thead>
             <tbody>
@@ -83,10 +81,10 @@
                     <td>
                         <table>
                             <tr>
-                                <th>Name</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Sub Total</th>
+                                <th><fmt:message key="my_orders.name"/></th>
+                                <th><fmt:message key="my_orders.price"/></th>
+                                <th><fmt:message key="my_orders.quantity"/></th>
+                                <th><fmt:message key="my_orders.sub_total"/></th>
                             </tr>
                             <c:forEach var="item" items="${order.items}">
                                 <c:set var="orderPrice" value="${orderPrice+item.foodItem.price*item.quantity}"/>

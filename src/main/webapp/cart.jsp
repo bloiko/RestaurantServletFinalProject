@@ -42,8 +42,8 @@
                 <a href="/MyOrdersController" class="nav-item nav-link"><fmt:message key="cart.my_orders"/></a>
             </div>
             <div class="nav-item dropdown ml-auto">
-                <a class="nav-link dropdown-toggle" href="" id="dropdown09" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="flag-icon flag-icon-${sessionScope.lang}"> </span> <fmt:message key="cart.language"/></a>
+                <a class="nav-link dropdown-toggle" style="color:black;" href="" id="dropdown09" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="flag-icon flag-icon-${sessionScope.lang}" > </span> <fmt:message key="cart.language"/></a>
                 <div class="dropdown-menu" aria-labelledby="dropdown09">
                     <a class="dropdown-item" href="/CartController?sessionLocale=ua"><span class="flag-icon flag-icon-ua"> </span>  <fmt:message key="cart.ukrainian"/></a>
                     <a class="dropdown-item" href="/CartController?sessionLocale=en"><span class="flag-icon flag-icon-us"> </span>  <fmt:message key="cart.english"/></a>
@@ -62,7 +62,6 @@
     <h2>Cart</h2>
 </div>
 <div id="container">
-    <%--<a href="FoodItemController"><button type="button" class="btn btn-light">Continue Shopping</button></a>--%>
     <div id="content">
         <table class="table">
             <thead></thead>
