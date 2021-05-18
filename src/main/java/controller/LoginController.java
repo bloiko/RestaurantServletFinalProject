@@ -2,6 +2,7 @@ package controller;
 
 import dao.*;
 import exception.DBException;
+import service.UserService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,36 +15,34 @@ import java.io.IOException;
 
 @WebServlet("/LoginController")
 public class LoginController extends HttpServlet {
-    private UserDAO userListDAO;
+    private UserService userService;
+
     @Override
     public void init() throws ServletException {
         super.init();
         try {
-            userListDAO = UserDAO.getInstance();
+            userService = new UserService();
         } catch (Exception exc) {
             throw new ServletException(exc);
         }
     }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         try {
-            if (userListDAO.isCorrectAdmin(username,password)) {
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/AdminController");
+            if (userService.isCorrectAdmin(username, password)) {
                 HttpSession session = request.getSession();
-                session.setAttribute("username",username);
+                session.setAttribute("username", username);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/AdminController");
                 requestDispatcher.include(request, response);
             } else {
-                request.setAttribute("message","Account's Invalid");
+                request.setAttribute("message", "Account's Invalid");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
             }
         } catch (DBException e) {
             e.printStackTrace();
         }
-    }
-
-    public void setUserListDAO(UserDAO userListDAO) {
-        this.userListDAO = userListDAO;
     }
 }

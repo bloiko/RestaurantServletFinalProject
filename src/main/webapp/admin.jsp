@@ -54,7 +54,9 @@
                             </tr>
                         </table>
                     </td>
-                    <td>${order.orderDate}</td>
+                    <td>
+                            ${order.orderDate}
+                    </td>
                     <td>
                         <table>
                             <tr>
@@ -90,13 +92,13 @@
                             <input type="submit" value="Change"/>
                         </form>
                     </td>
-                    <%--<th><a href="/AdminController?command=DELETE&orderId=${order.id}">Delete order</a></th>--%>
+                        <%--<th><a href="/AdminController?command=DELETE&orderId=${order.id}">Delete order</a></th>--%>
                 </tr>
             </c:forEach>
         </table>
 
 
-<h1>Done tasks:</h1>
+        <h1>Done tasks:</h1>
         <table border="1">
             <tr>
                 <th>id</th>

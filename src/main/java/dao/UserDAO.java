@@ -43,19 +43,6 @@ public class UserDAO {
     }
 
     /**
-     * Check if user with username and password is admin
-     *
-     * @param userName user name
-     * @param password user password.
-     * @return boolean if user is admin.
-     */
-    public boolean isCorrectAdmin(String userName, String password) throws DBException {
-        User user = getUserByUserName(userName);
-        return user != null && user.getUserName().equals(userName) && user.getPassword().equals(password) 
-                && user.getRole().equals("ADMIN");
-    }
-
-    /**
      * Close connection, statement and resultSet of the database
      *
      * @param connection connection to be closed

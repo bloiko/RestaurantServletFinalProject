@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +46,7 @@ public class AdminController extends HttpServlet {
             request.setAttribute("statusList", orderStatuses);
             List<Order> notDoneOrders = orders.stream()
                     .filter(order -> !order.getStatus().equals(OrderStatus.DONE))
+                    .sorted(Comparator.comparing(Order::getId).reversed())
                     .collect(Collectors.toList());
             request.setAttribute("NOT_DONE_ORDERS_LIST", notDoneOrders);
             List<Order> doneOrders = orders.stream()
