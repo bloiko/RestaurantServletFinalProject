@@ -198,7 +198,7 @@ public class OrderJDBCDAO {
         }
     }
 
-    private int getOrderId(Order order) throws DBException {
+    public int getOrderId(Order order) throws DBException {
         List<Item> items = null;
         Connection myConn = null;
         PreparedStatement myStmt = null;

@@ -60,6 +60,7 @@ public class RegistrationController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Order order = new Order();
         User user = getUserIfCorrectData(request, response);
         if (user == null) {
             request.setAttribute("first_name", request.getParameter("first_name"));
@@ -94,7 +95,6 @@ public class RegistrationController extends HttpServlet {
             HttpSession session = request.getSession();
             List<Item> cart = (List<Item>) session.getAttribute("cart");
             session.setAttribute("user", user);
-            Order order = new Order();
             try {
                 order.setId(0);
             } catch (Exception e) {
@@ -107,10 +107,12 @@ public class RegistrationController extends HttpServlet {
                 order.setItems(cart);
                 try {
                     orderListDAO.addOrder(order);
+                    request.setAttribute("orderId",orderListDAO.getOrderId(order));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
             session.setAttribute("cart", new ArrayList<Item>());
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("thanks-page.jsp");
             requestDispatcher.forward(request, response);
