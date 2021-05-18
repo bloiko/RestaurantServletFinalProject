@@ -91,25 +91,6 @@ public class FoodJDBCDAO {
     }
 
 
-/*    public void addFoodItem(FoodItem foodItem) throws Exception {
-        Connection myConn = null;
-        PreparedStatement myStmt = null;
-        try {
-            myConn = dataSource.getConnection();
-            String sql = "insert into food_item "
-                    + "(name, price, image,category_id) "
-                    + "values (?, ?, ?, ?)";
-            myStmt = myConn.prepareStatement(sql);
-            myStmt.setString(1, foodItem.getName());
-            myStmt.setInt(2, foodItem.getPrice());
-            myStmt.setString(3, foodItem.getImage());
-            myStmt.setInt(4, foodItem.getCategory().getId());
-            myStmt.execute();
-        } finally {
-            close(myConn, myStmt, null);
-        }
-    }*/
-
 
     public FoodItem getFoodItem(String theFoodItemId) throws DBException {
         FoodItem foodItem = null;
@@ -147,45 +128,6 @@ public class FoodJDBCDAO {
         }
     }
 
-
-   /* public void updateFoodItem(FoodItem foodItem) throws DBException {
-        Connection myConn = null;
-        PreparedStatement myStmt = null;
-        try {
-            myConn = dataSource.getConnection();
-            String sql = "update food_item "
-                    + "set name=?, price=?, image=?, category_id=?"
-                    + "where id=?";
-            myStmt = myConn.prepareStatement(sql);
-            myStmt.setString(1, foodItem.getName());
-            myStmt.setInt(2, foodItem.getPrice());
-            myStmt.setString(3, foodItem.getImage());
-            myStmt.setInt(4, foodItem.getCategory().getId());
-            myStmt.execute();
-        } catch (SQLException throwables) {
-            throw new DBException("Cannot update food item in the database",throwables);
-        }  finally {
-            close(myConn, myStmt, null);
-        }
-    }*/
-
-
-   /* public void deleteFoodItem(String foodItemId) throws DBException {
-        Connection myConn = null;
-        PreparedStatement myStmt = null;
-        try {
-            int foodId = Integer.parseInt(foodItemId);
-            myConn = dataSource.getConnection();
-            String sql = "delete from food_item where id=?";
-            myStmt = myConn.prepareStatement(sql);
-            myStmt.setInt(1, foodId);
-            myStmt.execute();
-        }  catch (SQLException throwables) {
-            throw new DBException("Cannot delete food item from the database",throwables);
-        } finally {
-            close(myConn, myStmt, null);
-        }
-    }*/
 
     public List<Category> getCategories() throws DBException {
         List<Category> categories = new ArrayList<>();

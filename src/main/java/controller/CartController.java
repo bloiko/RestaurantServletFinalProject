@@ -2,6 +2,7 @@ package controller;
 
 import entity.*;
 import dao.*;
+import service.CartService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,28 +15,25 @@ import java.util.List;
 
 @WebServlet("/CartController")
 public class CartController extends HttpServlet {
+    private CartService cartService;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        cartService = new CartService();
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String theCommand = request.getParameter("command");
         HttpSession session = request.getSession();
         if ("DELETE".equals(theCommand)) {
-            String itemId = request.getParameter("itemId");
             List<Item> cart = (List<Item>) session.getAttribute("cart");
-            int index = isExisting(Integer.parseInt(itemId), cart);
-            cart.remove(index);
+            String itemId = request.getParameter("itemId");
+            cart = cartService.removeItemFromCart(cart, itemId);
             session.setAttribute("cart", cart);
         }
         request.getRequestDispatcher("cart.jsp").forward(request, response);
 
-    }
-
-    private int isExisting(int id, List<Item> cart) {
-        for (int i = 0; i < cart.size(); i++) {
-            if (cart.get(i).getFoodItem().getId() == id) {
-                return i;
-            }
-        }
-        return -1;
     }
 }

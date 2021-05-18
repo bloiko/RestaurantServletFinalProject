@@ -28,7 +28,6 @@ public class FoodItemControllerTest {
     public void setUp() {
         foodJDBCDAO = mock(FoodJDBCDAO.class);
         servlet = new FoodItemController();
-        servlet.setFoodItemDAO(foodJDBCDAO);
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);
     }
