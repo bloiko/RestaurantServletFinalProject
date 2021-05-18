@@ -1,6 +1,7 @@
 package dao;
 
 import entity.*;
+import exception.DBException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -14,21 +15,19 @@ public class FoodJDBCDAO {
     private DataSource dataSource;
     private static volatile FoodJDBCDAO instance;
 
-    private FoodJDBCDAO() {
+    private FoodJDBCDAO() throws DBException {
         Context initContext = null;
         try {
             initContext = new InitialContext();
             Context envContext = (Context) initContext.lookup("java:/comp/env");
             this.dataSource = (DataSource) envContext.lookup("jdbc/restaurant_system");
-
-        } catch (
-                NamingException e) {
-            e.printStackTrace();
+        } catch (NamingException e) {
+            throw new DBException("Cannot connect to the database", e);
         }
 
     }
 
-    public static FoodJDBCDAO getInstance() {
+    public static FoodJDBCDAO getInstance() throws DBException {
         FoodJDBCDAO localInstance = instance;
         if (localInstance == null) {
             synchronized (FoodJDBCDAO.class) {
@@ -41,15 +40,15 @@ public class FoodJDBCDAO {
         return localInstance;
     }
 
-    public List<FoodItem> getFoodItems() throws Exception {
+    public List<FoodItem> getFoodItems() throws DBException {
         List<FoodItem> foodItems = new ArrayList<>();
         Connection myConn = null;
         Statement myStmt = null;
         ResultSet myRs = null;
-        String myConnectionString = "jdbc:mysql://localhost:3306/restaurant_system?useSSL=false&serverTimezone=UTC";
         try {
             myConn = dataSource.getConnection();
-            String sql = "select fi.id, fi.name, fi.price,fi.image,category_id, c.name as category from food_item as fi" +
+            String sql = "select fi.id, fi.name, fi.price,fi.image,category_id, c.name as category " +
+                    "from food_item as fi" +
                     " inner join category as c on fi.category_id=c.id";
             myStmt = myConn.createStatement();
             myRs = myStmt.executeQuery(sql);
@@ -65,6 +64,8 @@ public class FoodJDBCDAO {
                 foodItems.add(foodItem);
             }
             return foodItems;
+        } catch (SQLException throwables) {
+            throw new DBException("Cannot get food items from database", throwables);
         } finally {
             close(myConn, myStmt, myRs);
         }
@@ -90,7 +91,7 @@ public class FoodJDBCDAO {
     }
 
 
-    public void addFoodItem(FoodItem foodItem) throws Exception {
+/*    public void addFoodItem(FoodItem foodItem) throws Exception {
         Connection myConn = null;
         PreparedStatement myStmt = null;
         try {
@@ -107,10 +108,10 @@ public class FoodJDBCDAO {
         } finally {
             close(myConn, myStmt, null);
         }
-    }
+    }*/
 
 
-    public FoodItem getFoodItem(String theFoodItemId) throws Exception {
+    public FoodItem getFoodItem(String theFoodItemId) throws DBException {
         FoodItem foodItem = null;
         Connection myConn = null;
         PreparedStatement myStmt = null;
@@ -119,8 +120,10 @@ public class FoodJDBCDAO {
         try {
             foodId = Integer.parseInt(theFoodItemId);
             myConn = dataSource.getConnection();
-            String sql = "select fi.id, fi.name, fi.price,fi.image,category_id, c.name as category from food_item as fi" +
-                    " inner join category as c on fi.category_id=c.id where fi.id=? ";
+            String sql = "select fi.id, fi.name, fi.price,fi.image,category_id, c.name as category" +
+                    " from food_item as fi" +
+                    " inner join category as c on fi.category_id=c.id " +
+                    "where fi.id=? ";
             myStmt = myConn.prepareStatement(sql);
             myStmt.setInt(1, foodId);
             myRs = myStmt.executeQuery();
@@ -134,16 +137,18 @@ public class FoodJDBCDAO {
                 Category category = new Category(categoryId, categoryName);
                 foodItem = new FoodItem(id, name, price, image, category);
             } else {
-                throw new Exception("Could not find student id: " + foodId);
+                throw new DBException("Could not find food item with id: " + theFoodItemId);
             }
             return foodItem;
+        } catch (SQLException throwables) {
+            throw new DBException("Cannot get food item with id" + theFoodItemId + " from database", throwables);
         } finally {
             close(myConn, myStmt, myRs);
         }
     }
 
 
-    public void updateFoodItem(FoodItem foodItem) throws Exception {
+   /* public void updateFoodItem(FoodItem foodItem) throws DBException {
         Connection myConn = null;
         PreparedStatement myStmt = null;
         try {
@@ -157,13 +162,15 @@ public class FoodJDBCDAO {
             myStmt.setString(3, foodItem.getImage());
             myStmt.setInt(4, foodItem.getCategory().getId());
             myStmt.execute();
-        } finally {
+        } catch (SQLException throwables) {
+            throw new DBException("Cannot update food item in the database",throwables);
+        }  finally {
             close(myConn, myStmt, null);
         }
-    }
+    }*/
 
 
-    public void deleteFoodItem(String foodItemId) throws Exception {
+   /* public void deleteFoodItem(String foodItemId) throws DBException {
         Connection myConn = null;
         PreparedStatement myStmt = null;
         try {
@@ -173,12 +180,14 @@ public class FoodJDBCDAO {
             myStmt = myConn.prepareStatement(sql);
             myStmt.setInt(1, foodId);
             myStmt.execute();
+        }  catch (SQLException throwables) {
+            throw new DBException("Cannot delete food item from the database",throwables);
         } finally {
             close(myConn, myStmt, null);
         }
-    }
+    }*/
 
-    public List<Category> getCategories() {
+    public List<Category> getCategories() throws DBException {
         List<Category> categories = new ArrayList<>();
         Connection myConn = null;
         Statement myStmt = null;
@@ -196,11 +205,10 @@ public class FoodJDBCDAO {
             }
             return categories;
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            throw new DBException("Cannot get all categories from database", throwables);
         } finally {
             close(myConn, myStmt, myRs);
         }
-        return null;
     }
 }
 

@@ -61,7 +61,7 @@
     </nav>
 </div>
 <div id="header">
-    <h2>Gratitude</h2>
+    <h2><fmt:message key="thanks.message.gratitude"/></h2>
 </div>
 <div id="container">
     <h4><fmt:message key="thanks.message.first_line"/></h4>

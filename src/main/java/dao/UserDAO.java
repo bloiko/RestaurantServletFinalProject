@@ -1,15 +1,13 @@
 package dao;
 
 import entity.*;
+import exception.DBException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,20 +15,19 @@ public class UserDAO {
     private DataSource dataSource;
     private static volatile UserDAO instance;
 
-    private UserDAO() {
+    private UserDAO() throws DBException {
         Context initContext = null;
         try {
             initContext = new InitialContext();
             Context envContext = (Context) initContext.lookup("java:/comp/env");
             this.dataSource = (DataSource) envContext.lookup("jdbc/restaurant_system");
 
-        } catch (
-                NamingException e) {
-            e.printStackTrace();
+        } catch (NamingException e) {
+            throw new DBException("Cannot connect to the database", e);
         }
     }
 
-    public static UserDAO getInstance() {
+    public static UserDAO getInstance() throws DBException {
         UserDAO localInstance = instance;
         if (localInstance == null) {
             synchronized (UserDAO.class) {
@@ -43,33 +40,22 @@ public class UserDAO {
         return localInstance;
     }
 
-    public boolean isCorrectUser(String userName, String password) {
+/*    public boolean isCorrectUser(String userName, String password) throws DBException {
         User user = null;
-        try {
-            user = getUserByUserName(userName);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        user = getUserByUserName(userName);
         if (user != null && user.getUserName().equals(userName) && user.getPassword().equals(password)) {
             return true;
         }
         return false;
-    }
+    }*/
 
-    public boolean isCorrectAdmin(String userName, String password) {
+    public boolean isCorrectAdmin(String userName, String password) throws DBException {
         User user = null;
-        try {
-            user = getUserByUserName(userName);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (user != null && user.getUserName().equals(userName) && user.getPassword().equals(password) && user.getRole().equals("ADMIN")) {
-            return true;
-        }
-        return false;
+        user = getUserByUserName(userName);
+        return user != null && user.getUserName().equals(userName) && user.getPassword().equals(password) && user.getRole().equals("ADMIN");
     }
 
-    public List<User> getUsers() throws Exception {
+   /* public List<User> getUsers() throws Exception {
         List<User> list = new ArrayList<>();
         Connection myConn = null;
         Statement myStmt = null;
@@ -100,9 +86,9 @@ public class UserDAO {
             close(myConn, myStmt, myRs);
         }
 
-    }
+    }*/
 
-    private void close(Connection myConn, Statement myStmt, ResultSet myRs) {
+    private void close(Connection myConn, Statement myStmt, ResultSet myRs) throws DBException {
 
         try {
             if (myRs != null) {
@@ -116,12 +102,12 @@ public class UserDAO {
             if (myConn != null) {
                 myConn.close();
             }
-        } catch (Exception exc) {
-            exc.printStackTrace();
+        } catch (SQLException throwables) {
+            throw new DBException("Cannot close all conections to the database", throwables);
         }
     }
 
-    public void addUser(User theUser) throws Exception {
+    public void addUser(User theUser) throws DBException {
         Connection myConn = null;
         PreparedStatement myStmt = null;
         try {
@@ -140,30 +126,36 @@ public class UserDAO {
             myStmt.setString(7, theUser.getPhoneNumber());
             myStmt.setInt(8, roleId);
             myStmt.execute();
+        } catch (SQLException throwables) {
+            throw new DBException("Cannot add user to the database", throwables);
         } finally {
             close(myConn, myStmt, null);
         }
     }
 
-    private int getRoleId(User theUser) throws Exception {
-        Connection myConn = dataSource.getConnection();
-        String sql;
-        ResultSet resultSet;
-        PreparedStatement myStmtRole;
-        sql = "select role_id from role where name= ? ;";
-        myStmtRole = myConn.prepareStatement(sql);
-        myStmtRole.setString(1, theUser.getRole());
-        resultSet = myStmtRole.executeQuery();
-        int roleId = 0;
-        if (resultSet.next()) {
-            roleId = resultSet.getInt("role_id");
-        } else {
-            throw new Exception("Could not find user id: " + roleId);
+    private int getRoleId(User theUser) throws DBException {
+        try {
+            Connection myConn = dataSource.getConnection();
+            String sql;
+            ResultSet resultSet;
+            PreparedStatement myStmtRole;
+            sql = "select role_id from role where name= ? ;";
+            myStmtRole = myConn.prepareStatement(sql);
+            myStmtRole.setString(1, theUser.getRole());
+            resultSet = myStmtRole.executeQuery();
+            int roleId = 0;
+            if (resultSet.next()) {
+                roleId = resultSet.getInt("role_id");
+            } else {
+                throw new DBException("Could not find user id: " + roleId);
+            }
+            return roleId;
+        } catch (SQLException throwables) {
+            throw new DBException("Cannot get role id from database", throwables);
         }
-        return roleId;
     }
 
-    public int getUserId(User theUser) throws Exception {
+    public int getUserId(User theUser) throws DBException {
         Connection myConn = null;
         PreparedStatement myStmt = null;
         try {
@@ -174,18 +166,21 @@ public class UserDAO {
             myStmtRole.setString(2, theUser.getLastName());
             myStmtRole.setString(3, theUser.getEmail());
             myStmtRole.setString(4, theUser.getAddress());
-            myStmtRole.setString(5 , theUser.getPhoneNumber());
+            myStmtRole.setString(5, theUser.getPhoneNumber());
             ResultSet resultSet = myStmtRole.executeQuery();
             int userId = -1;
             if (resultSet.next()) {
                 userId = resultSet.getInt("id");
             }
             return userId;
+        } catch (SQLException throwables) {
+            throw new DBException("Cannot get user id from database", throwables);
         } finally {
             close(myConn, myStmt, null);
         }
     }
-    public User getUserByUserId(int userId) throws Exception {
+
+    public User getUserByUserId(int userId) throws DBException {
 
         Connection myConn = null;
         PreparedStatement myStmt = null;
@@ -208,16 +203,18 @@ public class UserDAO {
                 String address = myRs.getString("address");
                 String phoneNumber = myRs.getString("phone_number");
                 String role = myRs.getString("role_name");
-                User user = new User(id, firstName, lastName, userName, password, email, address, phoneNumber, role);
-                return user;
+                return new User(id, firstName, lastName, userName, password, email, address, phoneNumber, role);
             } else {
-                throw new Exception("Could not find user userId: " + userId);
+                throw new DBException("Could not find user userId: " + userId);
             }
+        } catch (SQLException throwables) {
+            throw new DBException("Cannot get user by user id " + userId + " from database", throwables);
         } finally {
             close(myConn, myStmt, myRs);
         }
     }
-    public User getUserByUserName(String theUserName) throws Exception {
+
+    public User getUserByUserName(String theUserName) throws DBException {
 
         Connection myConn = null;
         PreparedStatement myStmt = null;
@@ -240,37 +237,16 @@ public class UserDAO {
                 String address = myRs.getString("address");
                 String phoneNumber = myRs.getString("phone_number");
                 String role = myRs.getString("role_name");
-                User user = new User(id, firstName, lastName, userName, password, email, address, phoneNumber, role);
-                return user;
+                return new User(id, firstName, lastName, userName, password, email, address, phoneNumber, role);
             } else {
-                throw new Exception("Could not find user userName: " + theUserName);
+                throw new DBException("Could not find user userName: " + theUserName);
             }
+        } catch (SQLException throwables) {
+            throw new DBException("Cannot get user by username " + theUserName + " from database", throwables);
         } finally {
             close(myConn, myStmt, myRs);
         }
     }
-
-//    public void updateUser(User theUser) throws Exception {
-//        for (User User : userList) {
-//            if (User.getId() == theUser.getId()) {
-//                User = theUser;
-//            }
-//        }
-//
-//    }
-//
-//    public void deleteUser(String theUserId) throws Exception {
-//        int id = Integer.parseInt(theUserId);
-//        User userToDelete = null;
-//        for (User user : userList) {
-//            if (user.getId() == id) {
-//                userToDelete = user;
-//            }
-//        }
-//        if (userToDelete != null) {
-//            userList.remove(userToDelete);
-//        }
-//    }
 }
 
 

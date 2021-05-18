@@ -1,6 +1,7 @@
 package controller;
 
 import dao.*;
+import exception.DBException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -27,14 +28,18 @@ public class LoginController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        if (userListDAO.isCorrectAdmin(username,password)) {
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/AdminController");
-            HttpSession session = request.getSession();
-            session.setAttribute("username",username);
-            requestDispatcher.include(request, response);
-        } else {
-            request.setAttribute("message","Account's Invalid");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+        try {
+            if (userListDAO.isCorrectAdmin(username,password)) {
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/AdminController");
+                HttpSession session = request.getSession();
+                session.setAttribute("username",username);
+                requestDispatcher.include(request, response);
+            } else {
+                request.setAttribute("message","Account's Invalid");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+            }
+        } catch (DBException e) {
+            e.printStackTrace();
         }
     }
 
