@@ -3,7 +3,6 @@ package controller;
 import dao.OrderJDBCDAO;
 import dao.UserDAO;
 import entity.Order;
-import entity.OrderStatus;
 import entity.User;
 
 import javax.servlet.RequestDispatcher;
@@ -16,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 @WebServlet("/MyOrdersController")
 public class MyOrdersController extends HttpServlet {
     private OrderJDBCDAO orderListDAO;

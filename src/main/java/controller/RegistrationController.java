@@ -61,7 +61,7 @@ public class RegistrationController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Order order = new Order();
-        User user = getUserIfCorrectData(request, response);
+        User user = getUserIfCorrectData(request);
         if (user == null) {
             request.setAttribute("first_name", request.getParameter("first_name"));
             request.setAttribute("last_name", request.getParameter("last_name"));
@@ -142,7 +142,7 @@ public class RegistrationController extends HttpServlet {
         return counter;
     }
 
-    private User getUserIfCorrectData(HttpServletRequest request, HttpServletResponse response) {
+    private User getUserIfCorrectData(HttpServletRequest request) {
         boolean isCorrect = true;
         String firstName = request.getParameter("first_name");
         String lastName = request.getParameter("last_name");
