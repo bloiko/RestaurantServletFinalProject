@@ -27,6 +27,8 @@ public class CharsetFilter implements Filter {
         next.doFilter(request, response);
     }
 
+    @Override
     public void destroy() {
+        //empty
     }
 }

@@ -30,7 +30,6 @@ public class RegistrationControllerTest {
         orderJDBCDAO = mock(OrderJDBCDAO.class);
         userDAO = mock(UserDAO.class);
         servlet = new RegistrationController();
-        servlet.setUserDAO(userDAO);
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);
     }

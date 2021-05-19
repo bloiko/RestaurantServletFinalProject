@@ -24,7 +24,7 @@ public class OrderService {
         order.setUser(user);
         order.setOrderDate(new Timestamp(new Date().getTime()));
         order.setStatus(OrderStatus.WAITING);
-        if (cart != null && cart.size() != 0) {
+        if (cart != null && !cart.isEmpty()) {
             order.setItems(cart);
             orderDAO.addOrder(order);
         }

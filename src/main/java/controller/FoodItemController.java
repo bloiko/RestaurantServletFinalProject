@@ -2,6 +2,8 @@ package controller;
 
 import entity.FoodItem;
 import entity.Item;
+import exception.CannotFetchItemsException;
+import exception.DBException;
 import service.FoodItemService;
 
 import javax.servlet.RequestDispatcher;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -61,7 +64,7 @@ public class FoodItemController extends HttpServlet {
         return cart;
     }
 
-    private void listFoodItems(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    private void listFoodItems(HttpServletRequest request, HttpServletResponse response) throws CannotFetchItemsException, DBException, ServletException, IOException {
         HttpSession session = request.getSession();
         String filterBy = request.getParameter("filter");
         List<FoodItem> foodItems = foodItemService.getFoodItems();
@@ -114,7 +117,7 @@ public class FoodItemController extends HttpServlet {
         session.setAttribute("page", page);
         request.setAttribute("categories", foodItemService.getCategories());
 
-        List<FoodItem> shortFoodItems = foodItems.stream().skip((page - 1) * NUMBER_ITEMS_ON_PAGE).limit(NUMBER_ITEMS_ON_PAGE).collect(Collectors.toList());
+        List<FoodItem> shortFoodItems = foodItems.stream().skip((long) (page - 1) * NUMBER_ITEMS_ON_PAGE).limit(NUMBER_ITEMS_ON_PAGE).collect(Collectors.toList());
 
         int modOfTheDivision = foodItems.size() % NUMBER_ITEMS_ON_PAGE;
         int incorrectNumOfPages = foodItems.size() / NUMBER_ITEMS_ON_PAGE;

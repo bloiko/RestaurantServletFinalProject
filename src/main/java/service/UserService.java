@@ -8,6 +8,8 @@ import exception.DBException;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UserService {
     private UserDAO userDAO;
@@ -43,5 +45,19 @@ public class UserService {
             userDAO.addUser(user);
         }
         return userId;
+    }
+    public boolean isCorrectPhoneNumber(String phoneNumber){
+        String patterns = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$"
+                + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"
+                + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$";
+        Pattern pattern = Pattern.compile(patterns);
+        Matcher matcher = pattern.matcher(phoneNumber);
+        return matcher.matches();
+    }
+    public boolean isCorrectEmail(String email){
+        String patterns = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+        Pattern pattern = Pattern.compile(patterns);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 }

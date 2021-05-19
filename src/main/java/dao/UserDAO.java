@@ -139,16 +139,15 @@ public class UserDAO {
         try {
             String sql = "select id from user where first_name= ? && last_name= ? && email= ? && address= ? && phone_number= ? ;";
             connection = dataSource.getConnection();
-            PreparedStatement myStmtRole = connection.prepareStatement(sql);
-            myStmtRole.setString(1, user.getFirstName());
-            myStmtRole.setString(2, user.getLastName());
-            myStmtRole.setString(3, user.getEmail());
-            myStmtRole.setString(4, user.getAddress());
-            myStmtRole.setString(5, user.getPhoneNumber());
-            resultSet = myStmtRole.executeQuery();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, user.getFirstName());
+            preparedStatement.setString(2, user.getLastName());
+            preparedStatement.setString(3, user.getEmail());
+            preparedStatement.setString(4, user.getAddress());
+            preparedStatement.setString(5, user.getPhoneNumber());
+            resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                int userId = resultSet.getInt("id");
-                return userId;
+                return resultSet.getInt("id");
             } else {
                 return -1;
             }

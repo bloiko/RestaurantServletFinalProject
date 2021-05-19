@@ -1,7 +1,6 @@
 package controller;
 
 import entity.*;
-import dao.*;
 import exception.DBException;
 import service.OrderService;
 import service.UserService;
@@ -13,12 +12,10 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @WebServlet("/RegistrationController")
 public class RegistrationController extends HttpServlet {
-    private UserDAO userDAO;
+    private static final int CORRECT_NEMBER_OF_USER_COOKIES = 5;
     private UserService userService;
     private OrderService orderService;
 
@@ -28,8 +25,7 @@ public class RegistrationController extends HttpServlet {
         try {
             orderService = new OrderService();
             userService = new UserService();
-            userDAO = UserDAO.getInstance();
-        } catch (Exception exc) {
+        } catch (DBException exc) {
             throw new ServletException(exc);
         }
     }
@@ -38,7 +34,7 @@ public class RegistrationController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Cookie[] cookies = request.getCookies();
         int number = getNumberOfParametersInCookies(cookies);
-        if (number == 5) {
+        if (number == CORRECT_NEMBER_OF_USER_COOKIES) {
             setCookiesToRequestParameters(request, cookies);
         }
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("registration.jsp");
@@ -65,7 +61,8 @@ public class RegistrationController extends HttpServlet {
                 user.setId(userId);
                 List<Item> cart = (List<Item>) session.getAttribute("cart");
                 session.setAttribute("user", user);
-                request.setAttribute("orderId", orderService.addOrderAndGetId(cart, user));
+                int orderId = orderService.addOrderAndGetId(cart, user);
+                request.setAttribute("orderId", orderId);
             } catch (DBException e) {
                 e.printStackTrace();
             }
@@ -143,22 +140,11 @@ public class RegistrationController extends HttpServlet {
             request.setAttribute("error_message", "The data can not be empty!");
             isCorrect = false;
         }
-        //validate phone number
-        String patterns = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$"
-                + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"
-                + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$";
-        Pattern pattern = Pattern.compile(patterns);
-        Matcher matcher = pattern.matcher(phoneNumber);
-        if (!matcher.matches()) {
+        if (!userService.isCorrectPhoneNumber(phoneNumber)) {
             request.setAttribute("phone_number_error_message", "Incorrect phone number format!");
             isCorrect = false;
         }
-
-        //validate email
-        patterns = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
-        pattern = Pattern.compile(patterns);
-        matcher = pattern.matcher(email);
-        if (!matcher.matches()) {
+        if (!userService.isCorrectEmail(email)) {
             request.setAttribute("email_error_message", "Incorrect email format!");
             isCorrect = false;
         }
@@ -167,10 +153,6 @@ public class RegistrationController extends HttpServlet {
         } else {
             return null;
         }
-    }
-
-    public void setUserDAO(UserDAO userDAO) {
-        this.userDAO = userDAO;
     }
 }
 
