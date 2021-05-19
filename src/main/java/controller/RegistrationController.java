@@ -2,29 +2,32 @@ package controller;
 
 import entity.*;
 import dao.*;
+import exception.DBException;
+import service.OrderService;
+import service.UserService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @WebServlet("/RegistrationController")
 public class RegistrationController extends HttpServlet {
-    private OrderJDBCDAO orderListDAO;
     private UserDAO userDAO;
+    private UserService userService;
+    private OrderService orderService;
 
     @Override
     public void init() throws ServletException {
         super.init();
         try {
-            orderListDAO = OrderJDBCDAO.getInstance();
+            orderService = new OrderService();
+            userService = new UserService();
             userDAO = UserDAO.getInstance();
         } catch (Exception exc) {
             throw new ServletException(exc);
@@ -36,23 +39,7 @@ public class RegistrationController extends HttpServlet {
         Cookie[] cookies = request.getCookies();
         int number = getNumberOfParametersInCookies(cookies);
         if (number == 5) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("first_name")) {
-                    request.setAttribute("first_name", cookie.getValue());
-                }
-                if (cookie.getName().equals("last_name")) {
-                    request.setAttribute("last_name", cookie.getValue());
-                }
-                if (cookie.getName().equals("email")) {
-                    request.setAttribute("email", cookie.getValue());
-                }
-                if (cookie.getName().equals("address")) {
-                    request.setAttribute("address", cookie.getValue());
-                }
-                if (cookie.getName().equals("phoneNumber")) {
-                    request.setAttribute("phoneNumber", cookie.getValue());
-                }
-            }
+            setCookiesToRequestParameters(request, cookies);
         }
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("registration.jsp");
         requestDispatcher.include(request, response);
@@ -60,7 +47,7 @@ public class RegistrationController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Order order = new Order();
+        HttpSession session = request.getSession();
         User user = getUserIfCorrectData(request);
         if (user == null) {
             request.setAttribute("first_name", request.getParameter("first_name"));
@@ -72,52 +59,55 @@ public class RegistrationController extends HttpServlet {
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("registration.jsp");
             requestDispatcher.include(request, response);
         } else {
-            Cookie cookieFirstName = new Cookie("first_name", request.getParameter("first_name"));
-            Cookie cookieLastName = new Cookie("last_name", request.getParameter("last_name"));
-            Cookie cookieEmail = new Cookie("email", request.getParameter("email"));
-            Cookie cookieAddress = new Cookie("address", request.getParameter("address"));
-            Cookie cookiePhoneNumber = new Cookie("phoneNumber", request.getParameter("phoneNumber"));
-            response.addCookie(cookieFirstName);
-            response.addCookie(cookieLastName);
-            response.addCookie(cookieEmail);
-            response.addCookie(cookieAddress);
-            response.addCookie(cookiePhoneNumber);
             try {
-                int userId = userDAO.getUserId(user);
-                if (userId !=-1) {
-                    user.setId(userId);
-                } else {
-                    userDAO.addUser(user);
-                }
-            } catch (Exception e) {
+                getUserCookiesAndSetToResponse(request, response);
+                int userId = userService.addUserIfNotExistsAndReturnId(user);
+                user.setId(userId);
+                List<Item> cart = (List<Item>) session.getAttribute("cart");
+                session.setAttribute("user", user);
+                request.setAttribute("orderId", orderService.addOrderAndGetId(cart, user));
+            } catch (DBException e) {
                 e.printStackTrace();
             }
-            HttpSession session = request.getSession();
-            List<Item> cart = (List<Item>) session.getAttribute("cart");
-            session.setAttribute("user", user);
-            try {
-                order.setId(0);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            order.setUser(user);
-            order.setOrderDate(new Timestamp(new Date().getTime()));
-            order.setStatus(OrderStatus.WAITING);
-            if (cart != null && cart.size() != 0) {
-                order.setItems(cart);
-                try {
-                    orderListDAO.addOrder(order);
-                    request.setAttribute("orderId",orderListDAO.getOrderId(order));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            session.setAttribute("cart", new ArrayList<Item>());
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("thanks-page.jsp");
-            requestDispatcher.forward(request, response);
         }
 
+        session.setAttribute("cart", new ArrayList<Item>());
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("thanks-page.jsp");
+        requestDispatcher.forward(request, response);
+    }
+
+    private void setCookiesToRequestParameters(HttpServletRequest request, Cookie[] cookies) {
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("first_name")) {
+                request.setAttribute("first_name", cookie.getValue());
+            }
+            if (cookie.getName().equals("last_name")) {
+                request.setAttribute("last_name", cookie.getValue());
+            }
+            if (cookie.getName().equals("email")) {
+                request.setAttribute("email", cookie.getValue());
+            }
+            if (cookie.getName().equals("address")) {
+                request.setAttribute("address", cookie.getValue());
+            }
+            if (cookie.getName().equals("phoneNumber")) {
+                request.setAttribute("phoneNumber", cookie.getValue());
+            }
+        }
+    }
+
+
+    private void getUserCookiesAndSetToResponse(HttpServletRequest request, HttpServletResponse response) {
+        Cookie cookieFirstName = new Cookie("first_name", request.getParameter("first_name"));
+        Cookie cookieLastName = new Cookie("last_name", request.getParameter("last_name"));
+        Cookie cookieEmail = new Cookie("email", request.getParameter("email"));
+        Cookie cookieAddress = new Cookie("address", request.getParameter("address"));
+        Cookie cookiePhoneNumber = new Cookie("phoneNumber", request.getParameter("phoneNumber"));
+        response.addCookie(cookieFirstName);
+        response.addCookie(cookieLastName);
+        response.addCookie(cookieEmail);
+        response.addCookie(cookieAddress);
+        response.addCookie(cookiePhoneNumber);
     }
 
     private int getNumberOfParametersInCookies(Cookie[] cookies) {
@@ -154,8 +144,7 @@ public class RegistrationController extends HttpServlet {
             isCorrect = false;
         }
         //validate phone number
-        String patterns
-                = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$"
+        String patterns = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$"
                 + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"
                 + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$";
         Pattern pattern = Pattern.compile(patterns);
@@ -167,7 +156,6 @@ public class RegistrationController extends HttpServlet {
 
         //validate email
         patterns = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
-
         pattern = Pattern.compile(patterns);
         matcher = pattern.matcher(email);
         if (!matcher.matches()) {
@@ -179,10 +167,6 @@ public class RegistrationController extends HttpServlet {
         } else {
             return null;
         }
-    }
-
-    public void setOrderListDAO(OrderJDBCDAO orderListDAO) {
-        this.orderListDAO = orderListDAO;
     }
 
     public void setUserDAO(UserDAO userDAO) {

@@ -1,6 +1,5 @@
 package controller;
 
-import dao.FoodJDBCDAO;
 import dao.OrderJDBCDAO;
 import dao.UserDAO;
 import entity.Item;
@@ -31,7 +30,6 @@ public class RegistrationControllerTest {
         orderJDBCDAO = mock(OrderJDBCDAO.class);
         userDAO = mock(UserDAO.class);
         servlet = new RegistrationController();
-        servlet.setOrderListDAO(orderJDBCDAO);
         servlet.setUserDAO(userDAO);
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);

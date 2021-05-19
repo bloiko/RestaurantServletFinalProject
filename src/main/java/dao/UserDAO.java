@@ -146,11 +146,12 @@ public class UserDAO {
             myStmtRole.setString(4, user.getAddress());
             myStmtRole.setString(5, user.getPhoneNumber());
             resultSet = myStmtRole.executeQuery();
-            int userId = -1;
             if (resultSet.next()) {
-                userId = resultSet.getInt("id");
+                int userId = resultSet.getInt("id");
+                return userId;
+            } else {
+                return -1;
             }
-            return userId;
         } catch (SQLException throwables) {
             throw new DBException("Cannot get user id from database", throwables);
         } finally {
