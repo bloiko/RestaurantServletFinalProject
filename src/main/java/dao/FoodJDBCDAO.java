@@ -70,6 +70,145 @@ public class FoodJDBCDAO {
             close(myConn, myStmt, myRs);
         }
     }
+    public List<FoodItem> getFoodItemsWithSkipAndLimit(int limit, int offset) throws DBException {
+        List<FoodItem> foodItems = new ArrayList<>();
+        Connection myConn = null;
+        PreparedStatement myStmt = null;
+        ResultSet myRs = null;
+        try {
+            myConn = dataSource.getConnection();
+            String sql = "select fi.id, fi.name, fi.price,fi.image,category_id, c.name as category  " +
+                    " from food_item as fi " +
+                    " inner join category as c on fi.category_id=c.id" +
+                    " LIMIT ? OFFSET ?";
+            myStmt = myConn.prepareStatement(sql);
+            myStmt.setInt(1, limit);
+            myStmt.setInt(2, offset);
+            myRs = myStmt.executeQuery();
+            while (myRs.next()) {
+                int id = myRs.getInt("id");
+                String name = myRs.getString("name");
+                int price = myRs.getInt("price");
+                String image = myRs.getString("image");
+                int categoryId = myRs.getInt("category_id");
+                String categoryName = myRs.getString("category");
+                Category category = new Category(categoryId, categoryName);
+                FoodItem foodItem = new FoodItem(id, name, price, image, category);
+                foodItems.add(foodItem);
+            }
+            return foodItems;
+        } catch (SQLException throwables) {
+            throw new DBException("Cannot get food items from database", throwables);
+        } finally {
+            close(myConn, myStmt, myRs);
+        }
+    }
+    public List<FoodItem> getFoodItemsWithSkipLimitFilter(int limit, int offset,String filter) throws DBException {
+        List<FoodItem> foodItems = new ArrayList<>();
+        Connection myConn = null;
+        PreparedStatement myStmt = null;
+        ResultSet myRs = null;
+        try {
+            myConn = dataSource.getConnection();
+            String sql = "select fi.id, fi.name, fi.price,fi.image,category_id, c.name as category  " +
+                    " from food_item as fi " +
+                    " inner join category as c on fi.category_id=c.id" +
+                    " WHERE c.name = ? " +
+                    " LIMIT ? OFFSET ?";
+            myStmt = myConn.prepareStatement(sql);
+            myStmt.setString(1, filter);
+            myStmt.setInt(2, limit);
+            myStmt.setInt(3, offset);
+            myRs = myStmt.executeQuery();
+            while (myRs.next()) {
+                int id = myRs.getInt("id");
+                String name = myRs.getString("name");
+                int price = myRs.getInt("price");
+                String image = myRs.getString("image");
+                int categoryId = myRs.getInt("category_id");
+                String categoryName = myRs.getString("category");
+                Category category = new Category(categoryId, categoryName);
+                FoodItem foodItem = new FoodItem(id, name, price, image, category);
+                foodItems.add(foodItem);
+            }
+            return foodItems;
+        } catch (SQLException throwables) {
+            throw new DBException("Cannot get food items from database", throwables);
+        } finally {
+            close(myConn, myStmt, myRs);
+        }
+    }
+    public List<FoodItem> getFoodItemsWithSkipLimitAndOrder(int limit, int offset, String sortBy, String order) throws DBException {
+        List<FoodItem> foodItems = new ArrayList<>();
+        Connection myConn = null;
+        PreparedStatement myStmt = null;
+        ResultSet myRs = null;
+        try {
+            myConn = dataSource.getConnection();
+            String sql = "select fi.id, fi.name as name, fi.price as price,fi.image,category_id, c.name as category  " +
+                    " from food_item as fi " +
+                    " inner join category as c on fi.category_id=c.id" +
+                    " ORDER BY " +sortBy+" "+order+
+                    " LIMIT ? OFFSET ?";
+            myStmt = myConn.prepareStatement(sql);
+          /*  myStmt.setString(1, sortBy);*/
+            myStmt.setInt(1, limit);
+            myStmt.setInt(2, offset);
+            myRs = myStmt.executeQuery();
+            while (myRs.next()) {
+                int id = myRs.getInt("id");
+                String name = myRs.getString("name");
+                int price = myRs.getInt("price");
+                String image = myRs.getString("image");
+                int categoryId = myRs.getInt("category_id");
+                String categoryName = myRs.getString("category");
+                Category category = new Category(categoryId, categoryName);
+                FoodItem foodItem = new FoodItem(id, name, price, image, category);
+                foodItems.add(foodItem);
+            }
+            return foodItems;
+        } catch (SQLException throwables) {
+            throw new DBException("Cannot get food items from database", throwables);
+        } finally {
+            close(myConn, myStmt, myRs);
+        }
+    }
+    public List<FoodItem> getFoodItemsWithFilterSkipLimitAndOrder(String filter, int limit, int offset, String sortBy, String order) throws DBException {
+        List<FoodItem> foodItems = new ArrayList<>();
+        Connection myConn = null;
+        PreparedStatement myStmt = null;
+        ResultSet myRs = null;
+        try {
+            myConn = dataSource.getConnection();
+            String sql = "select fi.id, fi.name, fi.price,fi.image,category_id, c.name as category  " +
+                    " from food_item as fi " +
+                    " inner join category as c on fi.category_id=c.id" +
+                    " WHERE c.name = ? " +
+                    " ORDER BY "+sortBy+" "+order+
+                    " LIMIT ? OFFSET ?";
+            myStmt = myConn.prepareStatement(sql);
+            myStmt.setString(1, filter);
+            myStmt.setInt(2, limit);
+            myStmt.setInt(3, offset);
+            myRs = myStmt.executeQuery();
+            while (myRs.next()) {
+                int id = myRs.getInt("id");
+                String name = myRs.getString("name");
+                int price = myRs.getInt("price");
+                String image = myRs.getString("image");
+                int categoryId = myRs.getInt("category_id");
+                String categoryName = myRs.getString("category");
+                Category category = new Category(categoryId, categoryName);
+                FoodItem foodItem = new FoodItem(id, name, price, image, category);
+                foodItems.add(foodItem);
+            }
+            return foodItems;
+        } catch (SQLException throwables) {
+            throw new DBException("Cannot get food items from database", throwables);
+        } finally {
+            close(myConn, myStmt, myRs);
+        }
+    }
 
     private void close(Connection myConn, Statement myStmt, ResultSet myRs) {
 
@@ -89,7 +228,6 @@ public class FoodJDBCDAO {
             exc.printStackTrace();
         }
     }
-
 
 
     public FoodItem getFoodItem(String theFoodItemId) throws DBException {
@@ -152,6 +290,8 @@ public class FoodJDBCDAO {
             close(myConn, myStmt, myRs);
         }
     }
+
+
 }
 
 

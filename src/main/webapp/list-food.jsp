@@ -65,7 +65,7 @@
 <div id="container">
     <div id="content">
 
-        <a href="/FoodItemController?filter=allCategories">
+        <a href="/FoodItemController">
             <button type="button" class="btn btn-light">All categories</button>
         </a>
         <c:forEach var="category" items="${categories}">
@@ -78,9 +78,9 @@
             <thead>
             <tr>
                 <th scope="col"><fmt:message key="list_food.image"/></th>
-                <th scope="col"><fmt:message key="list_food.name"/><a href="/FoodItemController?sort=NAME" style="color:red;">&#8597;</a></th>
-                <th scope="col"><fmt:message key="list_food.price"/><a href="/FoodItemController?sort=PRICE" style="color:red;">&#8597;</a></th>
-                <th scope="col"><fmt:message key="list_food.category"/><a href="/FoodItemController?sort=CATEGORY" style="color:red;">&#8597;</a></th>
+                <th scope="col"><fmt:message key="list_food.name"/><a href="/FoodItemController?sort=name" style="color:red;">&#8597;</a></th>
+                <th scope="col"><fmt:message key="list_food.price"/><a href="/FoodItemController?sort=price" style="color:red;">&#8597;</a></th>
+                <th scope="col"><fmt:message key="list_food.category"/><a href="/FoodItemController?sort=category" style="color:red;">&#8597;</a></th>
                 <th scope="col"></th>
             </tr>
             </thead>

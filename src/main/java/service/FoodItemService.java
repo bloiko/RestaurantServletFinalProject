@@ -7,7 +7,9 @@ import entity.Item;
 import exception.CannotFetchItemsException;
 import exception.DBException;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FoodItemService {
     private FoodJDBCDAO foodItemDAO;
@@ -40,11 +42,29 @@ public class FoodItemService {
     public List<Category> getCategories() throws DBException {
         return foodItemDAO.getCategories();
     }
+
     public List<FoodItem> getFoodItems() throws CannotFetchItemsException {
         try {
             return foodItemDAO.getFoodItems();
         } catch (DBException e) {
             throw new CannotFetchItemsException("Items fetch failed");
         }
+    }
+
+    public List<FoodItem> getFoodItems(int page, int number, String sortBy, String order, String filter) throws DBException {
+
+        int offset = (page - 1) * number;
+        int itemsLimit = number;
+
+
+        if (sortBy == null && filter != null) {
+            return foodItemDAO.getFoodItemsWithSkipLimitFilter(itemsLimit, offset, filter);
+        } else if (sortBy == null && filter == null) {
+            return foodItemDAO.getFoodItemsWithSkipAndLimit(itemsLimit, offset);
+        } else if (filter == null && sortBy != null) {
+            return foodItemDAO.getFoodItemsWithSkipLimitAndOrder( itemsLimit, offset, sortBy, order);
+        } else if (filter != null) {
+            return foodItemDAO.getFoodItemsWithFilterSkipLimitAndOrder(filter, itemsLimit, offset, sortBy, order);
+        } else  return foodItemDAO.getFoodItemsWithSkipLimitAndOrder(itemsLimit, offset, sortBy, order);
     }
 }
