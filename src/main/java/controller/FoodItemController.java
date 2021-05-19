@@ -67,13 +67,16 @@ public class FoodItemController extends HttpServlet {
     private void listFoodItems(HttpServletRequest request, HttpServletResponse response) throws DBException, ServletException, IOException, CannotFetchItemsException {
         HttpSession session = request.getSession();
         String filterBy = request.getParameter("filter");
-        if(filterBy==null){
+        if (filterBy == null) {
             filterBy = (String) session.getAttribute("filter");
+        }
+        if (filterBy != null && filterBy.equals("all_categories")) {
+            filterBy = null;
         }
         if (filterBy != null && !filterBy.isEmpty()) {
             session.setAttribute("page", 1);
         }
-        session.setAttribute("filter",filterBy);
+        session.setAttribute("filter", filterBy);
 
         String sort = request.getParameter("sort");
         String sessionSort = (String) session.getAttribute("sort");
@@ -84,40 +87,14 @@ public class FoodItemController extends HttpServlet {
             } else {
                 order = "ASC";
             }
+        } else if (sort == null && sessionSort != null) {
+            sort = sessionSort;
         }
         if (order == null) {
             order = "ASC";
         }
         session.setAttribute("order", order);
         session.setAttribute("sort", sort);
-     /*   if (sort != null) {
-            if (sort.equals("name")) {
-                if ("name".equals(sessionSort) && "ASC".equals(order)) {
-                    foodItems.sort(Comparator.comparing(FoodItem::getName).reversed());
-                    session.setAttribute("order", "DESC");
-                } else {
-                    foodItems.sort(Comparator.comparing(FoodItem::getName));
-                    session.setAttribute("order", "ASC");
-                }
-            } else if (sort.equals("price")) {
-                if ("price".equals(sessionSort) && "ASC".equals(order)) {
-                    foodItems.sort(Comparator.comparing(FoodItem::getPrice).reversed());
-                    session.setAttribute("order", "DESC");
-                } else {
-                    foodItems.sort(Comparator.comparing(FoodItem::getPrice));
-                    session.setAttribute("order", "ASC");
-                }
-            } else if (sort.equals("category")) {
-                if ("category".equals(sessionSort) && "ASC".equals(order)) {
-                    foodItems.sort(Comparator.comparing(FoodItem::getCategory).reversed());
-                    session.setAttribute("order", "DESC");
-                } else {
-                    foodItems.sort(Comparator.comparing(FoodItem::getCategory));
-                    session.setAttribute("order", "ASC");
-                }
-            }
-            session.setAttribute("sort", sort);
-        }*/
         int page;
         if (request.getParameter("page") != null) {
             page = Integer.parseInt(request.getParameter("page"));
@@ -127,8 +104,8 @@ public class FoodItemController extends HttpServlet {
             page = 1;
         }
         List<FoodItem> foodItems = foodItemService.getFoodItems(page, NUMBER_ITEMS_ON_PAGE, sort, order, filterBy);
-        int numOfPages = filterBy == null || filterBy.isEmpty()? getNumOfPages(foodItemService.getFoodItems()) : getNumOfPages(foodItems);
-        request.setAttribute("numberOfPages",numOfPages );
+        int numOfPages = filterBy == null || filterBy.isEmpty() ? getNumOfPages(foodItemService.getFoodItems()) : getNumOfPages(foodItems);
+        request.setAttribute("numberOfPages", numOfPages);
         session.setAttribute("page", page);
         request.setAttribute("categories", foodItemService.getCategories());
         request.setAttribute("FOOD_LIST", foodItems);

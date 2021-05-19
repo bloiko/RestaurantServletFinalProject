@@ -65,7 +65,7 @@
 <div id="container">
     <div id="content">
 
-        <a href="/FoodItemController">
+        <a href="/FoodItemController?filter=all_categories">
             <button type="button" class="btn btn-light">All categories</button>
         </a>
         <c:forEach var="category" items="${categories}">
