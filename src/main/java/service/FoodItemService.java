@@ -7,15 +7,21 @@ import entity.Item;
 import exception.CannotFetchItemsException;
 import exception.DBException;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class FoodItemService {
     private FoodJDBCDAO foodItemDAO;
 
+    public void setFoodItemDAO(FoodJDBCDAO foodItemDAO) {
+        this.foodItemDAO = foodItemDAO;
+    }
+
     public FoodItemService() throws DBException {
         foodItemDAO = FoodJDBCDAO.getInstance();
+    }
+
+    public FoodItemService(FoodJDBCDAO foodItemDAO) {
+        this.foodItemDAO = foodItemDAO;
     }
 
     public List<Item> addFoodItemToCart(List<Item> cart, String foodId) throws DBException {
@@ -29,7 +35,7 @@ public class FoodItemService {
         return cart;
     }
 
-    private int isExisting(String id, List<Item> cart) {
+    public int isExisting(String id, List<Item> cart) {
         int foodId = Integer.parseInt(id);
         for (int i = 0; i < cart.size(); i++) {
             if (cart.get(i).getFoodItem().getId() == foodId) {
@@ -62,9 +68,9 @@ public class FoodItemService {
         } else if (sortBy == null && filter == null) {
             return foodItemDAO.getFoodItemsWithSkipAndLimit(itemsLimit, offset);
         } else if (filter == null && sortBy != null) {
-            return foodItemDAO.getFoodItemsWithSkipLimitAndOrder( itemsLimit, offset, sortBy, order);
+            return foodItemDAO.getFoodItemsWithSkipLimitAndOrder(itemsLimit, offset, sortBy, order);
         } else if (filter != null) {
             return foodItemDAO.getFoodItemsWithFilterSkipLimitAndOrder(filter, itemsLimit, offset, sortBy, order);
-        } else  return foodItemDAO.getFoodItemsWithSkipLimitAndOrder(itemsLimit, offset, sortBy, order);
+        } else return foodItemDAO.getFoodItemsWithSkipLimitAndOrder(itemsLimit, offset, sortBy, order);
     }
 }

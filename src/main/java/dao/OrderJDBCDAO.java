@@ -71,7 +71,70 @@ public class OrderJDBCDAO {
             close(connection, myStmt, myRs);
         }
     }
-
+    public List<Order> getDoneOrders() throws DBException {
+        List<Order> orders = new ArrayList<>();
+        int foodOrderId;
+        Connection connection = null;
+        Statement myStmt = null;
+        ResultSet myRs = null;
+        try {
+            connection = dataSource.getConnection();
+            String sql = "select * from food_order" +
+                    " join user u on u.id = food_order.user_id" +
+                    " join status s on s.id = food_order.status_id" +
+                    " where status_name ='DONE'";
+            myStmt = connection.createStatement();
+            myRs = myStmt.executeQuery(sql);
+            while (myRs.next()) {
+                foodOrderId = myRs.getInt("food_order.id");
+                Timestamp orderDate = myRs.getTimestamp("order_date");
+                int userId = myRs.getInt("user_id");
+                String statusName = myRs.getString("status_name");
+                UserDAO userDAO = UserDAO.getInstance();
+                User user = userDAO.getUserByUserId(userId);
+                List<Item> items = getOrderItems(foodOrderId);
+                Order order = new Order(foodOrderId, orderDate, user, items, OrderStatus.getOrderStatus(statusName));
+                orders.add(order);
+            }
+            return orders;
+        } catch (SQLException throwables) {
+            throw new DBException("Cannot get all orders from database", throwables);
+        } finally {
+            close(connection, myStmt, myRs);
+        }
+    }
+    public List<Order> getNotDoneOrders() throws DBException {
+        List<Order> orders = new ArrayList<>();
+        int foodOrderId;
+        Connection connection = null;
+        Statement myStmt = null;
+        ResultSet myRs = null;
+        try {
+            connection = dataSource.getConnection();
+            String sql = "select * from food_order " +
+                    " join user u on u.id = food_order.user_id " +
+                    " join status s on s.id = food_order.status_id " +
+                    " where status_name !='DONE'";
+            myStmt = connection.createStatement();
+            myRs = myStmt.executeQuery(sql);
+            while (myRs.next()) {
+                foodOrderId = myRs.getInt("food_order.id");
+                Timestamp orderDate = myRs.getTimestamp("order_date");
+                int userId = myRs.getInt("user_id");
+                String statusName = myRs.getString("status_name");
+                UserDAO userDAO = UserDAO.getInstance();
+                User user = userDAO.getUserByUserId(userId);
+                List<Item> items = getOrderItems(foodOrderId);
+                Order order = new Order(foodOrderId, orderDate, user, items, OrderStatus.getOrderStatus(statusName));
+                orders.add(order);
+            }
+            return orders;
+        } catch (SQLException throwables) {
+            throw new DBException("Cannot get all orders from database", throwables);
+        } finally {
+            close(connection, myStmt, myRs);
+        }
+    }
     public List<Order> getOrdersByUserId(int theUserId) throws DBException {
         List<Order> orders = new ArrayList<>();
         int foodOrderId;

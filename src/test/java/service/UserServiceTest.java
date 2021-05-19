@@ -1,44 +1,164 @@
-package controller;
+package service;
 
-import dao.FoodJDBCDAO;
-import entity.FoodItem;
-import entity.Item;
+import dao.OrderJDBCDAO;
+import dao.UserDAO;
+import entity.*;
+import exception.DBException;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
-import service.FoodItemService;
+import org.junit.runner.RunWith;
+import org.powermock.modules.junit4.PowerMockRunner;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 
 import java.util.ArrayList;
-import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class FoodItemControllerTest {
+@RunWith(PowerMockRunner.class)
+public class UserServiceTest {
 
-    private FoodItemController servlet;
+    private UserService service;
     private HttpServletRequest request;
     private HttpServletResponse response;
-    private FoodItemService foodItemService;
+    private OrderJDBCDAO orderJDBCDAO;
+    private UserDAO userDAO;
 
     @Before
-    public void setUp() {
-        foodItemService = mock(FoodItemService.class);
-        servlet = new FoodItemController();
-        servlet.setFoodItemService(foodItemService);
+    public void setUp() throws DBException {
+        orderJDBCDAO = mock(OrderJDBCDAO.class);
+        userDAO = mock(UserDAO.class);
+        service = new UserService(userDAO, orderJDBCDAO);
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);
     }
 
     @Test
-    public void testServletWithoutCart_AddOneItem() throws Exception {
-        FoodItemController foodItemControllerSpy = Mockito.spy(servlet);
+    public void testService_isCorrectAdmin_ShouldReturnTrue() throws Exception {
+        User user = new User(1, "first", "last", "username", "password", "email", "address", "+380981180662", "ADMIN");
+        when(userDAO.getUserByUserName("username")).thenReturn(user);
+        boolean shouldBeTrue = service.isCorrectAdmin("username", "password");
+        Assert.assertTrue(shouldBeTrue);
+    }
+
+    @Test
+    public void testService_getUserOrdersSortByOrderDateReversed_ShouldReturnList() throws Exception {
+        User user = new User(1, "first", "last", "user", "pass", "email", "address", "+380981180662", "ADMIN");
+        when(userDAO.getUserId(any(User.class))).thenReturn(1);
+        when(orderJDBCDAO.getOrdersByUserId(1)).thenReturn(new ArrayList<>());
+        service.getUserOrdersSortByOrderDateReversed(user);
+        verify(userDAO, times(1)).getUserId(any(User.class));
+        verify(orderJDBCDAO, times(1)).getOrdersByUserId(anyInt());
+    }
+
+    @Test
+    public void testService_addUserIfNotExistsAndReturnId_ShouldReturnUserId() throws Exception {
+        User user = new User(1, "first", "last", "user", "pass", "email", "address", "+380981180662", "ADMIN");
+        when(userDAO.getUserId(any(User.class))).thenReturn(1);
+        int shoulBeOne = service.addUserIfNotExistsAndReturnId(user);
+        //verify(userDAO, times(1)).addUser(any(User.class));
+        Assert.assertEquals(1, shoulBeOne);
+    }
+    @Test
+    public void testService_addUserIfNotExistsAndReturnId_ShouldReturnMinusOne() throws Exception {
+        User user = new User(1, "first", "last", "user", "pass", "email", "address", "+380981180662", "ADMIN");
+        when(userDAO.getUserId(any(User.class))).thenReturn(-1);
+        int shoulBeOne = service.addUserIfNotExistsAndReturnId(user);
+        verify(userDAO, times(1)).addUser(any(User.class));
+        Assert.assertEquals(-1, shoulBeOne);
+    }
+    @Test
+    public void testService_isCorrectAdmin_ShouldReturnFalse() throws Exception {
+        User user = new User(1, "first", "last", "user", "pass", "email", "address", "+380981180662", "ADMIN");
+        when(userDAO.getUserByUserName("user")).thenReturn(user);
+        boolean shouldBeFalse = service.isCorrectAdmin("username", "password");
+        Assert.assertFalse(shouldBeFalse);
+    }
+
+    @Test
+    public void testService_isCorrectPhoneNumber_ShouldReturnTrue() throws Exception {
+        boolean shouldBeTrue = service.isCorrectPhoneNumber("+380976655443");
+        Assert.assertTrue(shouldBeTrue);
+    }
+
+    @Test
+    public void testService_isCorrectPhoneNumber_ShouldReturnTrue3() throws Exception {
+        boolean shouldBeTrue = service.isCorrectPhoneNumber("0976655443");
+        Assert.assertTrue(shouldBeTrue);
+    }
+
+    @Test
+    public void testService_isCorrectPhoneNumber_ShouldReturnFalse() throws Exception {
+        boolean shouldBeFalse = service.isCorrectPhoneNumber("380976655443");
+        Assert.assertFalse(shouldBeFalse);
+    }
+
+    @Test
+    public void testService_isCorrectPhoneNumber_ShouldReturnFalse2() throws Exception {
+        boolean shouldBeFalse = service.isCorrectPhoneNumber("666565976655443");
+        Assert.assertFalse(shouldBeFalse);
+    }
+
+
+    @Test
+    public void testService_isCorrectEmail_ShouldReturnTrue() throws Exception {
+        boolean shouldBeTrue = service.isCorrectEmail("firstlast@gmail.com");
+        Assert.assertTrue(shouldBeTrue);
+    }
+
+    @Test
+    public void testService_isCorrectEmail_ShouldReturnTrue3() throws Exception {
+        boolean shouldBeTrue = service.isCorrectEmail("firstlast@gmail.com.com");
+        Assert.assertTrue(shouldBeTrue);
+    }
+
+    @Test
+    public void testService_isCorrectEmail_ShouldReturnFalse() throws Exception {
+        boolean shouldBeFalse = service.isCorrectEmail("firstlast@gmailcom");
+        Assert.assertFalse(shouldBeFalse);
+    }
+
+    @Test
+    public void testService_isCorrectEmail_ShouldReturnFalse2() throws Exception {
+        boolean shouldBeFalse = service.isCorrectEmail("firstlastgmail.com");
+        Assert.assertFalse(shouldBeFalse);
+    }
+  /*  @Test
+    public void testService_isExisting_ShouldReturnMinusOne() throws Exception {
+        List<Item> cart = new ArrayList<>();
+        int was = service.isExisting("1",cart);
+        Assert.assertEquals(-1,was);
+    }
+   @Test
+    public void testService_addFoodItemToCart_ShouldAddOneMoreItem() throws Exception {
+        List<Item> cart = new ArrayList<>();
+        Item item = new Item(1,new FoodItem(1,"name",1,"image", new Category(1,"")),1);
+        Item item2 = new Item(2,new FoodItem(2,"name2",1,"image2", new Category(1,"")),1);
+
+        cart.add(item);
+        when(foodJDBCDAO.getFoodItem("2")).thenReturn(item2.getFoodItem());
+        cart = service.addFoodItemToCart(cart,"2");
+        Assert.assertEquals(2,cart.size());
+    }
+    @Test
+    public void testService_addFoodItemToCart_ShouldTheSameFoodItem() throws Exception {
+        List<Item> cart = new ArrayList<>();
+        Item item = new Item(1,new FoodItem(1,"name",1,"image", new Category(1,"")),1);
+
+        cart.add(item);
+        when(foodJDBCDAO.getFoodItem("1")).thenReturn(item.getFoodItem());
+        cart = service.addFoodItemToCart(cart,"1");
+        Assert.assertEquals(1,cart.size());
+    }*/
+  /*  @Test
+    public void testService_isExisting_() throws Exception {
+        FoodItemService foodItemControllerSpy = Mockito.spy(service);
         HttpSession session = mock(HttpSession.class);
-        doNothing().when(foodItemControllerSpy).init();
+        doNothing().when(new FoodItemService());
 
         when(request.getSession()).thenReturn(session);
         when(request.getParameter("command")).thenReturn("ORDER");
@@ -47,7 +167,7 @@ public class FoodItemControllerTest {
 
         verify(foodItemService, times(1)).addFoodItemToCart(anyList(), eq("1"));
         verify(session, atLeast(1)).setAttribute(eq("cart"), anyList());
-    }
+    }*/
 /*
     @Test
     public void testServletWithCart_AddOneItem() throws Exception {

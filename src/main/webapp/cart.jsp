@@ -94,7 +94,7 @@
 </div>
 <div class="order" style="position: relative;">
     <h2>Sum: ${sum}</h2>
-    <a href="/RegistrationController">
+    <a href="/CartController?command=ORDER">
         <button type="button" class="btn btn-danger order-button" style="position: absolute; right: 10%"><fmt:message key="cart.order"/></button>
     </a>
 </div>

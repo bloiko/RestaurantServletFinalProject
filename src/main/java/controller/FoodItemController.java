@@ -25,6 +25,10 @@ public class FoodItemController extends HttpServlet {
     private static final int NUMBER_ITEMS_ON_PAGE = 5;
     private FoodItemService foodItemService;
 
+    public void setFoodItemService(FoodItemService foodItemService) {
+        this.foodItemService = foodItemService;
+    }
+
     @Override
     public void init() throws ServletException {
         super.init();

@@ -48,6 +48,10 @@
                     <a class="dropdown-item" href="/FoodItemController?sessionLocale=en"><span class="flag-icon flag-icon-us"> </span><fmt:message key="list_food.english"/></a>
                 </div>
             </div>
+            <div class="navbar-nav">
+                <a href="/RegistrationController" class="nav-item nav-link active">Registration</a>
+                <a href="login-main.jsp" class="nav-item nav-link">Login</a>
+            </div>
             <a href="cart.jsp">
             <span class="fa-stack fa-2x has-badge" data-count="${sessionScope.cart.size()}">
                     <i class="fa fa-circle fa-stack-2x fa-inverse"></i>

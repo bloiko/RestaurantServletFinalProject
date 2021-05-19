@@ -30,9 +30,22 @@
         </div>
         <div class="form-group input-group">
             <div class="input-group-prepend">
-                <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+                <span class="input-group-text"> <i class="fa fa-user"></i> </span>
             </div>
             <input name="last_name" class="form-control" placeholder="<fmt:message key="registration.last_name"/>" type="text" value="${last_name}">
+        </div>
+        <div class="form-group input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+            </div>
+            <input name="username" class="form-control" placeholder="Username" type="text">
+        </div>
+        <label class="errorMessage">${password_error_message}</label>
+        <div class="form-group input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+            </div>
+            <input name="password" class="form-control" placeholder="Create password" type="password">
         </div>
         <label class="errorMessage">${email_error_message}</label>
         <div class="form-group input-group">

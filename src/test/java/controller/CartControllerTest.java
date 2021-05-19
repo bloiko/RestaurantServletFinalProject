@@ -7,6 +7,8 @@ import entity.Item;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import service.CartService;
+import service.FoodItemService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -22,11 +24,13 @@ public class CartControllerTest {
     private CartController servlet;
     private HttpServletRequest request;
     private HttpServletResponse response;
-    private FoodJDBCDAO foodJDBCDAO;
+    private CartService cartService;
 
     @Before
     public void setUp() {
         servlet = new CartController();
+        cartService = mock(CartService.class);
+        servlet.setCartService(cartService);
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);
     }
@@ -48,10 +52,12 @@ public class CartControllerTest {
 
         servlet.doGet(request, response);
 
+        verify(cartService, times(1)).removeItemFromCart(anyList(),eq("0"));
+
         verify(requestDispatcher, times(1)).forward(request, response);
         verify(session, times(1)).setAttribute(eq("cart"), anyList());
     }
-    @Test(expected = IndexOutOfBoundsException.class)
+   /* @Test(expected = IndexOutOfBoundsException.class)
     public void testServletIsExisting_ThrowIndexOutOfBoundsException() throws Exception {
         List<Item> itemList = new ArrayList<Item>();
         itemList.add(new Item(1, new FoodItem(1,"name",12,"image",new Category()), 1));
@@ -68,5 +74,5 @@ public class CartControllerTest {
 
         servlet.doGet(request, response);
 
-    }
+    }*/
 }

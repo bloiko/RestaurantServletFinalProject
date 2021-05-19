@@ -10,6 +10,7 @@ import exception.DBException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class OrderService {
     private OrderJDBCDAO orderDAO;
@@ -29,5 +30,17 @@ public class OrderService {
             orderDAO.addOrder(order);
         }
         return orderDAO.getOrderId(order);
+    }
+    public void deleteOrder(String orderId) throws DBException {
+        orderDAO.deleteOrder(orderId);
+    }
+    public List<OrderStatus> getStatuses() throws DBException {
+        return orderDAO.getStatuses();
+    }
+   public List<Order> getDoneOrders() throws DBException {
+        return orderDAO.getDoneOrders();
+    }
+    public List<Order> getNotDoneOrders() throws DBException {
+        return orderDAO.getNotDoneOrders();
     }
 }

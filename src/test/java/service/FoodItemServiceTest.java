@@ -1,44 +1,79 @@
-package controller;
+package service;
 
 import dao.FoodJDBCDAO;
+import entity.Category;
 import entity.FoodItem;
 import entity.Item;
+import exception.DBException;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.MockedConstruction;
 import org.mockito.Mockito;
-import service.FoodItemService;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.mockito.Mockito.*;
+import org.powermock.modules.junit4.PowerMockRunner;
 
-public class FoodItemControllerTest {
+@RunWith(PowerMockRunner.class)
+public class FoodItemServiceTest {
 
-    private FoodItemController servlet;
+    private FoodItemService service;
     private HttpServletRequest request;
     private HttpServletResponse response;
-    private FoodItemService foodItemService;
+    private FoodJDBCDAO foodJDBCDAO;
 
     @Before
-    public void setUp() {
-        foodItemService = mock(FoodItemService.class);
-        servlet = new FoodItemController();
-        servlet.setFoodItemService(foodItemService);
+    public void setUp() throws DBException {
+        foodJDBCDAO = mock(FoodJDBCDAO.class);
+        service = new FoodItemService(foodJDBCDAO);
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);
     }
-
     @Test
-    public void testServletWithoutCart_AddOneItem() throws Exception {
-        FoodItemController foodItemControllerSpy = Mockito.spy(servlet);
+    public void testService_isExisting_ShouldReturnCoorectIndex() throws Exception {
+        List<Item> cart = new ArrayList<>();
+        Item item = new Item(1,new FoodItem(1,"name",1,"image", new Category(1,"")),1);
+        cart.add(item);
+        int was = service.isExisting("1",cart);
+        Assert.assertEquals(0,was);
+    }
+    @Test
+    public void testService_isExisting_ShouldReturnMinusOne() throws Exception {
+        List<Item> cart = new ArrayList<>();
+        int was = service.isExisting("1",cart);
+        Assert.assertEquals(-1,was);
+    }
+    @Test
+    public void testService_addFoodItemToCart_ShouldAddOneMoreItem() throws Exception {
+        List<Item> cart = new ArrayList<>();
+        Item item = new Item(1,new FoodItem(1,"name",1,"image", new Category(1,"")),1);
+        Item item2 = new Item(2,new FoodItem(2,"name2",1,"image2", new Category(1,"")),1);
+
+        cart.add(item);
+        when(foodJDBCDAO.getFoodItem("2")).thenReturn(item2.getFoodItem());
+        cart = service.addFoodItemToCart(cart,"2");
+        Assert.assertEquals(2,cart.size());
+    }
+    @Test
+    public void testService_addFoodItemToCart_ShouldTheSameFoodItem() throws Exception {
+        List<Item> cart = new ArrayList<>();
+        Item item = new Item(1,new FoodItem(1,"name",1,"image", new Category(1,"")),1);
+
+        cart.add(item);
+        when(foodJDBCDAO.getFoodItem("1")).thenReturn(item.getFoodItem());
+        cart = service.addFoodItemToCart(cart,"1");
+        Assert.assertEquals(1,cart.size());
+    }
+  /*  @Test
+    public void testService_isExisting_() throws Exception {
+        FoodItemService foodItemControllerSpy = Mockito.spy(service);
         HttpSession session = mock(HttpSession.class);
-        doNothing().when(foodItemControllerSpy).init();
+        doNothing().when(new FoodItemService());
 
         when(request.getSession()).thenReturn(session);
         when(request.getParameter("command")).thenReturn("ORDER");
@@ -47,7 +82,7 @@ public class FoodItemControllerTest {
 
         verify(foodItemService, times(1)).addFoodItemToCart(anyList(), eq("1"));
         verify(session, atLeast(1)).setAttribute(eq("cart"), anyList());
-    }
+    }*/
 /*
     @Test
     public void testServletWithCart_AddOneItem() throws Exception {

@@ -19,6 +19,10 @@ import java.util.List;
 public class MyOrdersController extends HttpServlet {
     private UserService userService;
 
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
     @Override
     public void init() throws ServletException {
         super.init();

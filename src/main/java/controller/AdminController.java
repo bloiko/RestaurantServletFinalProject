@@ -3,6 +3,8 @@ package controller;
 import dao.OrderJDBCDAO;
 import entity.Order;
 import entity.OrderStatus;
+import exception.DBException;
+import service.OrderService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,11 +20,13 @@ import java.util.stream.Collectors;
 @WebServlet("/AdminController")
 public class AdminController extends HttpServlet {
     private OrderJDBCDAO orderListDAO;
+    private OrderService orderService;
 
     @Override
     public void init() throws ServletException {
         super.init();
         try {
+            orderService = new OrderService();
             orderListDAO = OrderJDBCDAO.getInstance();
         } catch (Exception exc) {
             throw new ServletException(exc);
@@ -35,25 +39,21 @@ public class AdminController extends HttpServlet {
         if ("DELETE".equals(command)) {
             String orderIdString = request.getParameter("orderId");
             try {
-                orderListDAO.deleteOrder(orderIdString);
-            } catch (Exception e) {
+                orderService.deleteOrder(orderIdString);
+            } catch (DBException e) {
                 e.printStackTrace();
             }
         }
+
         try {
-            List<Order> orders = orderListDAO.getOrders();
             List<OrderStatus> orderStatuses = orderListDAO.getStatuses();
+            List<Order> notDoneOrders = orderService.getNotDoneOrders();
+            List<Order> doneOrders = orderService.getDoneOrders();
+
             request.setAttribute("statusList", orderStatuses);
-            List<Order> notDoneOrders = orders.stream()
-                    .filter(order -> !order.getStatus().equals(OrderStatus.DONE))
-                    .sorted(Comparator.comparing(Order::getId).reversed())
-                    .collect(Collectors.toList());
             request.setAttribute("NOT_DONE_ORDERS_LIST", notDoneOrders);
-            List<Order> doneOrders = orders.stream()
-                    .filter(order -> order.getStatus().equals(OrderStatus.DONE))
-                    .collect(Collectors.toList());
             request.setAttribute("DONE_ORDERS_LIST", doneOrders);
-        } catch (Exception e) {
+        } catch (DBException e) {
             e.printStackTrace();
         }
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("admin.jsp");

@@ -15,6 +15,11 @@ public class UserService {
     private UserDAO userDAO;
     private OrderJDBCDAO orderListDAO;
 
+    public UserService(UserDAO userDAO, OrderJDBCDAO orderListDAO) {
+        this.userDAO = userDAO;
+        this.orderListDAO = orderListDAO;
+    }
+
     public UserService() throws DBException {
         this.userDAO = UserDAO.getInstance();
         orderListDAO = OrderJDBCDAO.getInstance();
@@ -44,7 +49,8 @@ public class UserService {
         if (userId == -1) {
             userDAO.addUser(user);
         }
-        return userId;
+        return userDAO.getUserId(user);
+
     }
     public boolean isCorrectPhoneNumber(String phoneNumber){
         String patterns = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$"
@@ -59,5 +65,14 @@ public class UserService {
         Pattern pattern = Pattern.compile(patterns);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
+    }
+
+    public boolean isCorrectUser(String userName, String password) throws DBException {
+        User user = userDAO.getUserByUserName(userName);
+        return user != null && user.getUserName().equals(userName) && user.getPassword().equals(password)
+                && (user.getRole().equals("USER")||user.getRole().equals("ADMIN"));
+    }
+    public User getUserByUserName(String username) throws DBException {
+        return userDAO.getUserByUserName(username);
     }
 }

@@ -1,6 +1,5 @@
 package controller;
 
-import dao.*;
 import exception.DBException;
 import service.UserService;
 
@@ -13,9 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet("/LoginController")
-public class LoginController extends HttpServlet {
+@WebServlet("/LoginMainController")
+public class LoginMainController extends HttpServlet {
     private UserService userService;
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public void init() throws ServletException {
@@ -29,17 +32,28 @@ public class LoginController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("command",request.getAttribute("command"));
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("login-main.jsp");
+        requestDispatcher.forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         try {
-            if (userService.isCorrectAdmin(username, password)) {
+            if (userService.isCorrectUser(username, password)) {
                 HttpSession session = request.getSession();
                 session.setAttribute("username", username);
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/AdminController");
-                requestDispatcher.include(request, response);
+                RequestDispatcher requestDispatcher;
+                if ("ORDER".equals(request.getParameter("command"))) {
+                    response.sendRedirect("/CartController");
+                } else {
+                    response.sendRedirect("/FoodItemController");
+                }
             } else {
                 request.setAttribute("message", "Account's Invalid");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
+                response.sendRedirect("/LoginMainController");
             }
         } catch (DBException e) {
             e.printStackTrace();
