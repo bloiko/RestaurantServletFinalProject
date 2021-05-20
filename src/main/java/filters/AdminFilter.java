@@ -3,6 +3,7 @@ package filters;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
@@ -17,9 +18,9 @@ public class AdminFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest servletRequest = (HttpServletRequest) request;
         HttpSession session = servletRequest.getSession();
-        if (session.getAttribute("username") == null &&
+        if (session.getAttribute("username_admin") == null &&
                 servletRequest.getRequestURI().endsWith("/AdminController")) {
-            servletRequest.getRequestDispatcher("/LoginAdminController").forward(request, response);
+            ((HttpServletResponse)response).sendRedirect("/LoginAdminController");
         } else chain.doFilter(request, response);
     }
 

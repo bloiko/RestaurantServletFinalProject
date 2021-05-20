@@ -94,8 +94,10 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav">
                 <a href="FoodItemController" class="nav-item nav-link"><fmt:message key="thanks.menu"/></a>
-                <a href="cart.jsp" class="nav-item nav-link"><fmt:message key="thanks.cart"/></a>
-                <a href="/MyOrdersController" class="nav-item nav-link"><fmt:message key="thanks.my_orders"/></a>
+                <c:if test="${sessionScope.get('username')!=null}">
+                    <a href="cart.jsp" class="nav-item nav-link"><fmt:message key="list_food.cart"/></a>
+                    <a href="/MyOrdersController" class="nav-item nav-link"><fmt:message key="list_food.my_orders"/></a>
+                </c:if>
             </div>
             <div class="nav-item dropdown ml-auto">
                 <a class="nav-link dropdown-toggle" href="" id="dropdown09" data-toggle="dropdown" aria-haspopup="true"
@@ -108,16 +110,23 @@
                             class="flag-icon flag-icon-us"> </span> <fmt:message key="thanks.english"/></a>
                 </div>
             </div>
-            <div class="navbar-nav">
-                <a href="/RegistrationController" class="nav-item nav-link">Registration</a>
-                <a href="login-main.jsp" class="nav-item nav-link">Login</a>
-            </div>
+            <c:if test="${sessionScope.get('username')==null}">
+                <div class="navbar-nav">
+                    <a href="/RegistrationController" class="nav-item nav-link">Registration</a>
+                    <a href="login-main.jsp" class="nav-item nav-link">Login</a>
+                </div>
+            </c:if>
+            <c:if test="${sessionScope.get('username')!=null}">
+                <div class="navbar-nav">
+                    <a href="/LogoutController" class="nav-item nav-link">Logout</a>
+                </div>
             <a href="cart.jsp">
             <span class="fa-stack fa-2x has-badge" data-count="${sessionScope.cart.size()}">
                     <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
                     <i style="" class="fa fa-shopping-cart fa-stack-2x red-cart"></i>
                 </span>
             </a>
+            </c:if>
         </div>
     </nav>
 </div>

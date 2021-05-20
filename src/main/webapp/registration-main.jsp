@@ -14,14 +14,14 @@
     <!------ Include the above in your HEAD tag ---------->
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
-    <title>Input person information</title>
+    <title>Registrtion</title>
     <style>
         <%@include file="/WEB-INF/css/styles.css" %>
     </style>
 </head>
 <body>
 <article class="card-body mx-auto" style="max-width: 400px;">
-    <h4 class="card-title mt-3 text-center"><fmt:message key="registration.write_information"/></h4>
+    <h4 class="card-title mt-3 text-center">Registrtion</h4>
     <form action="/RegistrationController" method="post">
         <label class="errorMessage">${error_message}</label>
         <div class="form-group input-group">
@@ -65,14 +65,14 @@
             <div class="input-group-prepend">
                 <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
             </div>
-            <input class="form-control" placeholder="Username" type="username">
+            <input class="form-control" placeholder="Username" type="username" value="${username}">
         </div>
         <label class="errorMessage">${password_error_message}</label>
         <div class="form-group input-group">
             <div class="input-group-prepend">
                 <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
             </div>
-            <input class="form-control" placeholder="Create password" type="password">
+            <input class="form-control" placeholder="Create password" type="password" value="${password}">
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-primary btn-block"><fmt:message key="registration.submit"/></button>

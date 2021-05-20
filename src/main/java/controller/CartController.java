@@ -75,7 +75,7 @@ public class CartController extends HttpServlet {
                 e.printStackTrace();
             }
         }
-        request.getRequestDispatcher("cart.jsp").forward(request, response);
+        request.getRequestDispatcher("/CartController").forward(request, response);
 
     }
 }

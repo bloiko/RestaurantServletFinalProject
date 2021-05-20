@@ -1,9 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
+<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page isELIgnored="false" %>
 <%@ page session="true" %>
-
 
 
 <fmt:setLocale value="${sessionScope.lang}"/>
@@ -21,7 +20,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <title>Cart</title>
-    <style><%@include file="/WEB-INF/css/styles.css"%></style>
+    <style>
+        <%@include file="/WEB-INF/css/styles.css" %>
+    </style>
 </head>
 <body>
 <div class="bs-example">
@@ -38,27 +39,40 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav">
                 <a href="FoodItemController" class="nav-item nav-link"><fmt:message key="cart.menu"/></a>
-                <a href="cart.jsp" class="nav-item nav-link active"><fmt:message key="cart.cart"/></a>
-                <a href="/MyOrdersController" class="nav-item nav-link"><fmt:message key="cart.my_orders"/></a>
+                <c:if test="${sessionScope.get('username')!=null}">
+                    <a href="cart.jsp" class="nav-item nav-link"><fmt:message key="list_food.cart"/></a>
+                    <a href="/MyOrdersController" class="nav-item nav-link"><fmt:message key="list_food.my_orders"/></a>
+                </c:if>
             </div>
             <div class="nav-item dropdown ml-auto">
-                <a class="nav-link dropdown-toggle" style="color:black;" href="" id="dropdown09" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="flag-icon flag-icon-${sessionScope.lang}" > </span> <fmt:message key="cart.language"/></a>
+                <a class="nav-link dropdown-toggle" style="color:black;" href="" id="dropdown09" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    <span class="flag-icon flag-icon-${sessionScope.lang}"> </span> <fmt:message
+                        key="cart.language"/></a>
                 <div class="dropdown-menu" aria-labelledby="dropdown09">
-                    <a class="dropdown-item" href="/CartController?sessionLocale=ua"><span class="flag-icon flag-icon-ua"> </span>  <fmt:message key="cart.ukrainian"/></a>
-                    <a class="dropdown-item" href="/CartController?sessionLocale=en"><span class="flag-icon flag-icon-us"> </span>  <fmt:message key="cart.english"/></a>
+                    <a class="dropdown-item" href="/CartController?sessionLocale=ua"><span
+                            class="flag-icon flag-icon-ua"> </span> <fmt:message key="cart.ukrainian"/></a>
+                    <a class="dropdown-item" href="/CartController?sessionLocale=en"><span
+                            class="flag-icon flag-icon-us"> </span> <fmt:message key="cart.english"/></a>
                 </div>
             </div>
-            <div class="navbar-nav">
-                <a href="/RegistrationController" class="nav-item nav-link">Registration</a>
-                <a href="login-main.jsp" class="nav-item nav-link">Login</a>
-            </div>
+            <c:if test="${sessionScope.get('username')==null}">
+                <div class="navbar-nav">
+                    <a href="/RegistrationController" class="nav-item nav-link">Registration</a>
+                    <a href="login-main.jsp" class="nav-item nav-link">Login</a>
+                </div>
+            </c:if>
+            <c:if test="${sessionScope.get('username')!=null}">
+                <div class="navbar-nav">
+                    <a href="/LogoutController" class="nav-item nav-link">Logout</a>
+                </div>
             <a href="cart.jsp">
             <span class="fa-stack fa-2x has-badge" data-count="${sessionScope.cart.size()}">
                     <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
                     <i style="" class="fa fa-shopping-cart fa-stack-2x red-cart"></i>
                 </span>
             </a>
+            </c:if>
         </div>
     </nav>
 </div>
@@ -87,7 +101,9 @@
                     <td> ${item.foodItem.price}</td>
                     <td> ${item.quantity} </td>
                     <td align="left"><a href="/CartController?command=DELETE&itemId=${item.foodItem.id}"
-                                          onclick="return confirm('Are you sure?')"><button type="button" class="btn btn-dark"><fmt:message key="cart.delete"/></button></a></td>
+                                        onclick="return confirm('Are you sure?')">
+                        <button type="button" class="btn btn-dark"><fmt:message key="cart.delete"/></button>
+                    </a></td>
                     >
                     <td>${item.foodItem.price*item.quantity}</td>
                 </tr>
@@ -99,7 +115,8 @@
 <div class="order" style="position: relative;">
     <h2>Sum: ${sum}</h2>
     <a href="/CartController?command=ORDER">
-        <button type="button" class="btn btn-danger order-button" style="position: absolute; right: 10%"><fmt:message key="cart.order"/></button>
+        <button type="button" class="btn btn-danger order-button" style="position: absolute; right: 10%"><fmt:message
+                key="cart.order"/></button>
     </a>
 </div>
 <br/><br/>

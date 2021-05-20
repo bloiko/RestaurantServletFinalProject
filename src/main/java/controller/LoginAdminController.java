@@ -44,7 +44,7 @@ public class LoginAdminController extends HttpServlet {
         try {
             if (userService.isCorrectAdmin(username, password)) {
                 HttpSession session = request.getSession();
-                session.setAttribute("username", username);
+                session.setAttribute("username_admin", username);
                 response.sendRedirect("/AdminController");
             } else {
                 request.setAttribute("message", "Account's Invalid");

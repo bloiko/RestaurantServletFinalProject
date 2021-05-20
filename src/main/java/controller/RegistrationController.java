@@ -54,26 +54,15 @@ public class RegistrationController extends HttpServlet {
             request.setAttribute("username", request.getParameter("username"));
             request.setAttribute("password", request.getParameter("password"));
             request.setAttribute("command", "REDIRECT");
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("registration.jsp");
-            requestDispatcher.include(request, response);
+            doGet(request, response);
         } else {
             try {
-               // getUserCookiesAndSetToResponse(request, response);
                 int userId = userService.addUserIfNotExistsAndReturnId(user);
-               /* user.setId(userId);
-                List<Item> cart = (List<Item>) session.getAttribute("cart");
-                session.setAttribute("user", user);
-                int orderId = orderService.addOrderAndGetId(cart, user);
-                request.setAttribute("orderId", orderId);*/
             } catch (DBException e) {
                 e.printStackTrace();
             }
+            response.sendRedirect("login-main.jsp");
         }
-
-        //session.setAttribute("cart", new ArrayList<Item>());
-      /*  RequestDispatcher requestDispatcher = response.getRequestDispatcher();
-        requestDispatcher.include(request, response);*/
-        response.sendRedirect("login-main.jsp");
     }
 
     private void setCookiesToRequestParameters(HttpServletRequest request, Cookie[] cookies) {
