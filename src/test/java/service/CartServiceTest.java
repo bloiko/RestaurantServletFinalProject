@@ -4,114 +4,71 @@ import dao.FoodJDBCDAO;
 import entity.Category;
 import entity.FoodItem;
 import entity.Item;
-import exception.CannotFetchItemsException;
 import exception.DBException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.*;
-
-import org.powermock.modules.junit4.PowerMockRunner;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
-public class FoodItemServiceTest {
+public class CartServiceTest {
 
-    private FoodItemService service;
+    private CartService service;
     private HttpServletRequest request;
     private HttpServletResponse response;
-    private FoodJDBCDAO foodJDBCDAO;
 
     @Before
     public void setUp() throws DBException {
-        foodJDBCDAO = mock(FoodJDBCDAO.class);
-        service = new FoodItemService(foodJDBCDAO);
+        service = new CartService();
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);
     }
-
     @Test
     public void testService_isExisting_ShouldReturnCoorectIndex() throws Exception {
         List<Item> cart = new ArrayList<>();
-        Item item = new Item(1, new FoodItem(1, "name", 1, "image", new Category(1, "")), 1);
+        Item item = new Item(1,new FoodItem(1,"name",1,"image", new Category(1,"")),1);
         cart.add(item);
-        int was = service.isExisting("1", cart);
-        Assert.assertEquals(0, was);
+        int was = service.isExisting(1,cart);
+        Assert.assertEquals(0,was);
     }
-
     @Test
     public void testService_isExisting_ShouldReturnMinusOne() throws Exception {
         List<Item> cart = new ArrayList<>();
-        int was = service.isExisting("1", cart);
-        Assert.assertEquals(-1, was);
+        int was = service.isExisting(1,cart);
+        Assert.assertEquals(-1,was);
     }
-
     @Test
-    public void testService_addFoodItemToCart_ShouldAddOneMoreItem() throws Exception {
+    public void testService_removeItemFromCart_ShouldRemoveOneItem() throws Exception {
         List<Item> cart = new ArrayList<>();
-        Item item = new Item(1, new FoodItem(1, "name", 1, "image", new Category(1, "")), 1);
-        Item item2 = new Item(2, new FoodItem(2, "name2", 1, "image2", new Category(1, "")), 1);
+        Item item = new Item(1,new FoodItem(1,"name",1,"image", new Category(1,"")),1);
+        Item item2 = new Item(2,new FoodItem(2,"name2",1,"image2", new Category(1,"")),1);
 
         cart.add(item);
-        when(foodJDBCDAO.getFoodItem("2")).thenReturn(item2.getFoodItem());
-        cart = service.addFoodItemToCart(cart, "2");
-        Assert.assertEquals(2, cart.size());
-    }
+        cart.add(item2);
 
+        cart = service.removeItemFromCart(cart,"2");
+        Assert.assertEquals(1,cart.size());
+    }
     @Test
-    public void testService_addFoodItemToCart_ShouldTheSameFoodItem() throws Exception {
+    public void testService_removeItemFromCart_ShouldNotRemoveAnything() throws Exception {
         List<Item> cart = new ArrayList<>();
-        Item item = new Item(1, new FoodItem(1, "name", 1, "image", new Category(1, "")), 1);
+        Item item = new Item(1,new FoodItem(1,"name",1,"image", new Category(1,"")),1);
+        Item item2 = new Item(2,new FoodItem(2,"name2",1,"image2", new Category(1,"")),1);
 
         cart.add(item);
-        when(foodJDBCDAO.getFoodItem("1")).thenReturn(item.getFoodItem());
-        cart = service.addFoodItemToCart(cart, "1");
-        Assert.assertEquals(1, cart.size());
-    }
-    @Test(expected = CannotFetchItemsException.class)
-    public void testService_getFoodItems_ShouldThrowException() throws Exception {
-        when(foodJDBCDAO.getFoodItems()).thenThrow(DBException.class);
-        service.getFoodItems();
-        //verify(foodJDBCDAO, times(1)).getFoodItems();
-    }
-    @Test
-    public void testService_getFoodItems_ShouldGetAllFoodItems() throws Exception {
-        service.getFoodItems();
-        verify(foodJDBCDAO, times(1)).getFoodItems();
-    }
-    @Test
-    public void testService_getCategories_ShouldGetAllCategories() throws Exception {
-        service.getCategories();
-        verify(foodJDBCDAO, times(1)).getCategories();
-    }
-    @Test
-    public void testService_getFoodItems_ShouldGetAllFoodItemsWithoutSort() throws Exception {
-        service.getFoodItems(1, 5, null, null, "Desserts");
-        verify(foodJDBCDAO, times(1)).getFoodItemsWithSkipLimitFilter(anyInt(), anyInt(), eq("Desserts"));
-    }
+        cart.add(item2);
 
-    @Test
-    public void testService_getFoodItems_ShouldGetAllFoodItemsWithoutSortAndFilter() throws Exception {
-        service.getFoodItems(1, 5, null, null, null);
-        verify(foodJDBCDAO, times(1)).getFoodItemsWithSkipAndLimit(anyInt(), anyInt());
-    }
-
-    @Test
-    public void testService_getFoodItems_ShouldGetAllFoodItemsWithoutFilter() throws Exception {
-        service.getFoodItems(1, 5, "price", "ASC", null);
-        verify(foodJDBCDAO, times(1)).getFoodItemsWithSkipLimitAndOrder(anyInt(), anyInt(), eq("price"), eq("ASC"));
-    }
-
-    @Test
-    public void testService_getFoodItems_ShouldGetAllFoodItemsWithAllParameters() throws Exception {
-        service.getFoodItems(1, 5, "price", "ASC", "Desserts");
-        verify(foodJDBCDAO, times(1)).getFoodItemsWithFilterSkipLimitAndOrder(eq("Desserts"), anyInt(), anyInt(), eq("price"), eq("ASC"));
+        cart = service.removeItemFromCart(cart,"3");
+        Assert.assertEquals(2,cart.size());
     }
   /*  @Test
     public void testService_isExisting_() throws Exception {

@@ -14,6 +14,10 @@ import java.util.List;
 public class OrderService {
     private OrderJDBCDAO orderDAO;
 
+    public OrderService(OrderJDBCDAO orderDAO) {
+        this.orderDAO = orderDAO;
+    }
+
     public OrderService() throws DBException {
         orderDAO = OrderJDBCDAO.getInstance();
     }

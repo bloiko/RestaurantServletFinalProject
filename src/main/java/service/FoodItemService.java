@@ -12,10 +12,6 @@ import java.util.List;
 public class FoodItemService {
     private FoodJDBCDAO foodItemDAO;
 
-    public void setFoodItemDAO(FoodJDBCDAO foodItemDAO) {
-        this.foodItemDAO = foodItemDAO;
-    }
-
     public FoodItemService() throws DBException {
         foodItemDAO = FoodJDBCDAO.getInstance();
     }
@@ -34,7 +30,6 @@ public class FoodItemService {
         }
         return cart;
     }
-
     public int isExisting(String id, List<Item> cart) {
         int foodId = Integer.parseInt(id);
         for (int i = 0; i < cart.size(); i++) {
@@ -56,21 +51,17 @@ public class FoodItemService {
             throw new CannotFetchItemsException("Items fetch failed");
         }
     }
-
     public List<FoodItem> getFoodItems(int page, int number, String sortBy, String order, String filter) throws DBException {
-
         int offset = (page - 1) * number;
         int itemsLimit = number;
-
-
         if (sortBy == null && filter != null) {
             return foodItemDAO.getFoodItemsWithSkipLimitFilter(itemsLimit, offset, filter);
         } else if (sortBy == null && filter == null) {
             return foodItemDAO.getFoodItemsWithSkipAndLimit(itemsLimit, offset);
         } else if (filter == null && sortBy != null) {
             return foodItemDAO.getFoodItemsWithSkipLimitAndOrder(itemsLimit, offset, sortBy, order);
-        } else if (filter != null) {
+        } else {
             return foodItemDAO.getFoodItemsWithFilterSkipLimitAndOrder(filter, itemsLimit, offset, sortBy, order);
-        } else return foodItemDAO.getFoodItemsWithSkipLimitAndOrder(itemsLimit, offset, sortBy, order);
+        }
     }
 }
