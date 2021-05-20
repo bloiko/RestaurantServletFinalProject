@@ -8,11 +8,9 @@ import service.UserService;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 @WebServlet("/MyOrdersController")
@@ -35,16 +33,19 @@ public class MyOrdersController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Cookie[] cookies = request.getCookies();
-        User user = getUserFromCookies(cookies);
-        try {
-            List<Order> orders = userService.getUserOrdersSortByOrderDateReversed(user);
-            request.setAttribute("ORDERS_LIST", orders);
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("my-orders.jsp");
-            requestDispatcher.forward(request, response);
-        } catch (DBException e) {
-            e.printStackTrace();
+        HttpSession session = request.getSession();
+        String username = (String) session.getAttribute("username");
+        List<Order> orders = new LinkedList<>();
+        if(username!=null) {
+            try {
+                orders = userService.getUserOrdersSortByOrderDateReversed(username);
+            } catch (DBException e) {
+                e.printStackTrace();
+            }
         }
+        request.setAttribute("ORDERS_LIST", orders);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("my-orders.jsp");
+        requestDispatcher.forward(request, response);
     }
 
     private User getUserFromCookies(Cookie[] cookies) {

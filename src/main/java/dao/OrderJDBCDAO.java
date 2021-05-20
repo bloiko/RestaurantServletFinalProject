@@ -103,7 +103,7 @@ public class OrderJDBCDAO {
             close(connection, myStmt, myRs);
         }
     }
-    public List<Order> getNotDoneOrders() throws DBException {
+    public List<Order> getNotDoneOrdersSortById() throws DBException {
         List<Order> orders = new ArrayList<>();
         int foodOrderId;
         Connection connection = null;
@@ -114,7 +114,8 @@ public class OrderJDBCDAO {
             String sql = "select * from food_order " +
                     " join user u on u.id = food_order.user_id " +
                     " join status s on s.id = food_order.status_id " +
-                    " where status_name !='DONE'";
+                    " where status_name !='DONE'"+
+                    " order by food_order.id DESC ";
             myStmt = connection.createStatement();
             myRs = myStmt.executeQuery(sql);
             while (myRs.next()) {

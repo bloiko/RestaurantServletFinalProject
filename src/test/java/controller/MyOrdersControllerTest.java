@@ -49,7 +49,7 @@ public class MyOrdersControllerTest {
 
         when(request.getCookies()).thenReturn(cookies);
 
-        when(userService.getUserOrdersSortByOrderDateReversed(any(User.class))).thenReturn(new ArrayList<Order>());
+        when(userService.getUserOrdersSortByOrderDateReversed(anyString())).thenReturn(new ArrayList<Order>());
 
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
         when(request.getSession()).thenReturn(session);

@@ -19,7 +19,7 @@ public class AdminFilter implements Filter {
         HttpSession session = servletRequest.getSession();
         if (session.getAttribute("username") == null &&
                 servletRequest.getRequestURI().endsWith("/AdminController")) {
-            servletRequest.getRequestDispatcher("login-admin.jsp").forward(request, response);
+            servletRequest.getRequestDispatcher("/LoginAdminController").forward(request, response);
         } else chain.doFilter(request, response);
     }
 

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/CartController")
@@ -57,8 +58,8 @@ public class CartController extends HttpServlet {
                     e.printStackTrace();
                 }
             } else {
-                request.setAttribute("command", "ORDER");
-                request.getRequestDispatcher("login-main.jsp").forward(request, response);
+                session.setAttribute("command", "ORDER_IN_CART");
+                response.sendRedirect("/LoginMainController?command=ORDER");
                 return;
             }
             // int userId = userService.addUserIfNotExistsAndReturnId(user);
@@ -68,6 +69,7 @@ public class CartController extends HttpServlet {
             try {
                 int orderId = orderService.addOrderAndGetId(cart, user);
                 request.setAttribute("orderId", orderId);
+                session.setAttribute("cart", new ArrayList<Order>());
                 request.getRequestDispatcher("thanks-page.jsp").forward(request, response);
             } catch (DBException e) {
                 e.printStackTrace();

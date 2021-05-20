@@ -33,17 +33,22 @@ public class LoginAdminController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("login-admin.jsp");
+        requestDispatcher.forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         try {
             if (userService.isCorrectAdmin(username, password)) {
                 HttpSession session = request.getSession();
                 session.setAttribute("username", username);
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/AdminController");
-                requestDispatcher.include(request, response);
+                response.sendRedirect("/AdminController");
             } else {
                 request.setAttribute("message", "Account's Invalid");
-                request.getRequestDispatcher("login-admin.jsp").forward(request, response);
+                response.sendRedirect("login-admin.jsp");
             }
         } catch (DBException e) {
             e.printStackTrace();

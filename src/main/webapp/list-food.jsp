@@ -49,7 +49,7 @@
                 </div>
             </div>
             <div class="navbar-nav">
-                <a href="/RegistrationController" class="nav-item nav-link active">Registration</a>
+                <a href="/RegistrationController" class="nav-item nav-link">Registration</a>
                 <a href="login-main.jsp" class="nav-item nav-link">Login</a>
             </div>
             <a href="cart.jsp">

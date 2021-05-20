@@ -38,8 +38,8 @@ public class UserService {
                 && user.getRole().equals("ADMIN");
     }
 
-    public List<Order> getUserOrdersSortByOrderDateReversed(User user) throws DBException {
-        int userId = userDAO.getUserId(user);
+    public List<Order> getUserOrdersSortByOrderDateReversed(String username) throws DBException {
+        int userId = userDAO.getUserByUserName(username).getId();
         List<Order> orders = orderListDAO.getOrdersByUserId(userId);
         orders.sort(Comparator.comparing(Order::getOrderDate).reversed());
         return orders;

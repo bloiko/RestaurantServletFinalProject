@@ -46,8 +46,9 @@ public class LoginMainController extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.setAttribute("username", username);
                 RequestDispatcher requestDispatcher;
-                if ("ORDER".equals(request.getParameter("command"))) {
-                    response.sendRedirect("/CartController");
+                if ("ORDER_IN_CART".equals(session.getAttribute("command"))) {
+                    response.sendRedirect("/CartController?command=ORDER");
+                    session.removeAttribute("command");
                 } else {
                     response.sendRedirect("/FoodItemController");
                 }

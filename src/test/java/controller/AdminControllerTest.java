@@ -1,6 +1,5 @@
 package controller;
 
-import dao.FoodJDBCDAO;
 import dao.OrderJDBCDAO;
 import entity.*;
 import org.junit.Before;
@@ -13,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.Mockito.*;
 

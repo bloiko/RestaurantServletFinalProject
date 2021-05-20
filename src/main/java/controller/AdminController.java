@@ -13,9 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @WebServlet("/AdminController")
 public class AdminController extends HttpServlet {
@@ -47,7 +45,7 @@ public class AdminController extends HttpServlet {
 
         try {
             List<OrderStatus> orderStatuses = orderListDAO.getStatuses();
-            List<Order> notDoneOrders = orderService.getNotDoneOrders();
+            List<Order> notDoneOrders = orderService.getNotDoneOrdersSortById();
             List<Order> doneOrders = orderService.getDoneOrders();
 
             request.setAttribute("statusList", orderStatuses);
