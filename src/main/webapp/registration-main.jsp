@@ -21,7 +21,7 @@
 </head>
 <body>
 <article class="card-body mx-auto" style="max-width: 400px;">
-    <h4 class="card-title mt-3 text-center">Registrtion</h4>
+    <h4 class="card-title mt-3 text-center"><fmt:message key="registration.registration"/></h4>
     <form action="/RegistrationController" method="post">
         <label class="errorMessage">${error_message}</label>
         <div class="form-group input-group">
@@ -65,14 +65,14 @@
             <div class="input-group-prepend">
                 <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
             </div>
-            <input class="form-control" placeholder="Username" type="username" value="${username}">
+            <input class="form-control" placeholder="<fmt:message key="registration.username"/>" type="username" value="${username}">
         </div>
         <label class="errorMessage">${password_error_message}</label>
         <div class="form-group input-group">
             <div class="input-group-prepend">
                 <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
             </div>
-            <input class="form-control" placeholder="Create password" type="password" value="${password}">
+            <input class="form-control" placeholder="<fmt:message key="registration.password"/>" type="password" value="${password}">
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-primary btn-block"><fmt:message key="registration.submit"/></button>

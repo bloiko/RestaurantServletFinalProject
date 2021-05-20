@@ -1,3 +1,4 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <%--<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1" %>--%>
 <!DOCTYPE html <%--PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"--%>>
@@ -23,14 +24,14 @@
             <div class="input-group-prepend">
                 <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
             </div>
-            <input name="username" class="form-control" placeholder="Username" type="username" value="${username}">
+            <input name="username" class="form-control" placeholder="<fmt:message key="login.username"/>" type="username" value="${username}">
         </div>
         <label class="errorMessage">${password_error_message}</label>
         <div class="form-group input-group">
             <div class="input-group-prepend">
                 <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
             </div>
-            <input name="password" class="form-control" placeholder="Create password" type="password" value="${password}">
+            <input name="password" class="form-control" placeholder="<fmt:message key="login.password"/>" type="password" value="${password}">
         </div>
         <div class="form-group">
             <button style="height: 50px" type="submit" class="btn btn-primary btn-block">Login</button>

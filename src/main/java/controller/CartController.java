@@ -62,8 +62,8 @@ public class CartController extends HttpServlet {
                 response.sendRedirect("/LoginMainController?command=ORDER");
                 return;
             }
-            List<Item> cart = (List<Item>) session.getAttribute("cart");
             try {
+                List<Item> cart = (List<Item>) session.getAttribute("cart");
                 int orderId = orderService.addOrderAndGetId(cart, user);
                 request.setAttribute("orderId", orderId);
                 session.setAttribute("cart", new ArrayList<Order>());

@@ -76,6 +76,7 @@ public class FoodItemController extends HttpServlet {
         String sessionSort = (String) session.getAttribute("sort");
         String order = (String) session.getAttribute("order");
         order = getOppositeOrder(sort, sessionSort, order);
+
         if (sort == null && sessionSort != null) {
             sort = sessionSort;
         }
@@ -93,6 +94,7 @@ public class FoodItemController extends HttpServlet {
         session.setAttribute("page", page);
         request.setAttribute("categories", foodItemService.getCategories());
         request.setAttribute("FOOD_LIST", foodItems);
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("/list-food.jsp");
         dispatcher.forward(request, response);
     }
@@ -140,72 +142,6 @@ public class FoodItemController extends HttpServlet {
         int numOfPages = modOfTheDivision == 0 ? incorrectNumOfPages : incorrectNumOfPages + 1;
         return numOfPages;
     }
- /*   private void listFoodItems(HttpServletRequest request, HttpServletResponse response) throws CannotFetchItemsException, DBException, ServletException, IOException {
-        HttpSession session = request.getSession();
-        String filterBy = request.getParameter("filter");
-        List<FoodItem> foodItems = foodItemService.getFoodItems();
-        if (filterBy != null ) {
-            foodItems = foodItems.stream().filter(foodItem -> foodItem.getCategory().getName().equals(filterBy)).collect(Collectors.toList());
-            session.setAttribute("page", 1);//
-        }
-        session.setAttribute("menu", foodItems);
-
-        String sort = request.getParameter("sort");
-        String sessionSort = (String) session.getAttribute("sort");
-        String order = (String) session.getAttribute("order");
-        if (sort != null) {
-            if (sort.equals("name")) {
-                if ("name".equals(sessionSort) && "ASC".equals(order)) {
-                    foodItems.sort(Comparator.comparing(FoodItem::getName).reversed());
-                    session.setAttribute("order", "DESC");
-                } else {
-                    foodItems.sort(Comparator.comparing(FoodItem::getName));
-                    session.setAttribute("order", "ASC");
-                }
-            } else if (sort.equals("price")) {
-                if ("price".equals(sessionSort) && "ASC".equals(order)) {
-                    foodItems.sort(Comparator.comparing(FoodItem::getPrice).reversed());
-                    session.setAttribute("order", "DESC");
-                } else {
-                    foodItems.sort(Comparator.comparing(FoodItem::getPrice));
-                    session.setAttribute("order", "ASC");
-                }
-            } else if (sort.equals("category")) {
-                if ("category".equals(sessionSort) && "ASC".equals(order)) {
-                    foodItems.sort(Comparator.comparing(FoodItem::getCategory).reversed());
-                    session.setAttribute("order", "DESC");
-                } else {
-                    foodItems.sort(Comparator.comparing(FoodItem::getCategory));
-                    session.setAttribute("order", "ASC");
-                }
-            }
-            session.setAttribute("menu", foodItems);
-            session.setAttribute("sort", sort);
-        }
-        int page;
-        if (request.getParameter("page") != null) {
-            page = Integer.parseInt(request.getParameter("page"));
-        } else if (session.getAttribute("page") != null) {
-            page = (int) session.getAttribute("page");
-        } else {
-            page = 1;
-        }
-        session.setAttribute("page", page);
-        request.setAttribute("categories", foodItemService.getCategories());
-
-        List<FoodItem> shortFoodItems = foodItems.stream().skip((long) (page - 1) * NUMBER_ITEMS_ON_PAGE).limit(NUMBER_ITEMS_ON_PAGE).collect(Collectors.toList());
-
-        int modOfTheDivision = foodItems.size() % NUMBER_ITEMS_ON_PAGE;
-        int incorrectNumOfPages = foodItems.size() / NUMBER_ITEMS_ON_PAGE;
-        int numOfPages = modOfTheDivision == 0 ? incorrectNumOfPages : incorrectNumOfPages + 1;
-
-        request.setAttribute("numberOfPages", numOfPages);
-
-        request.setAttribute("FOOD_LIST", shortFoodItems);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/list-food.jsp");
-        dispatcher.forward(request, response);
-    }*/
-
 }
 
 
