@@ -1,6 +1,8 @@
 package controller;
 
 import exception.DBException;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import service.UserService;
 
 import javax.servlet.RequestDispatcher;
@@ -14,15 +16,21 @@ import java.io.IOException;
 
 @WebServlet("/LogoutController")
 public class LogoutController extends HttpServlet {
-
+    private static final Logger LOGGER = LogManager.getLogger(LogoutController.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        LOGGER.debug("Controller starts");
         HttpSession session = request.getSession();
         session.removeAttribute("username");
+        LOGGER.trace("Session atribute was removed : username");
         session.removeAttribute("cart");
+        LOGGER.trace("Session atribute was removed : cart");
+
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/FoodItemController");
         requestDispatcher.forward(request, response);
+        LOGGER.debug("Controller finished");
+
     }
 
 

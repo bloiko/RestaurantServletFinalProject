@@ -15,11 +15,6 @@ import java.io.IOException;
 @WebServlet("/LoginMainController")
 public class LoginMainController extends HttpServlet {
     private UserService userService;
-
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
     @Override
     public void init() throws ServletException {
         super.init();

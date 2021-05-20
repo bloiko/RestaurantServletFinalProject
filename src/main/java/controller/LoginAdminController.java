@@ -1,6 +1,5 @@
 package controller;
 
-import dao.*;
 import exception.DBException;
 import service.UserService;
 

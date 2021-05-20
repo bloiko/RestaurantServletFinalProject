@@ -3,6 +3,8 @@ package controller;
 import entity.Order;
 import entity.User;
 import exception.DBException;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import service.UserService;
 
 import javax.servlet.RequestDispatcher;
@@ -16,6 +18,7 @@ import java.util.List;
 @WebServlet("/MyOrdersController")
 public class MyOrdersController extends HttpServlet {
     private UserService userService;
+    private static final Logger LOGGER = LogManager.getLogger(MyOrdersController.class);
 
     public void setUserService(UserService userService) {
         this.userService = userService;
@@ -33,8 +36,11 @@ public class MyOrdersController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        LOGGER.debug("Controller starts");
         HttpSession session = request.getSession();
         String username = (String) session.getAttribute("username");
+        LOGGER.trace("Session atribute : username"+ username);
+
         List<Order> orders = new LinkedList<>();
         if(username!=null) {
             try {
@@ -44,11 +50,13 @@ public class MyOrdersController extends HttpServlet {
             }
         }
         request.setAttribute("ORDERS_LIST", orders);
+        LOGGER.trace("Session atribute : username"+ username);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("my-orders.jsp");
         requestDispatcher.forward(request, response);
+        LOGGER.debug("Controller finished");
     }
 
-    private User getUserFromCookies(Cookie[] cookies) {
+    /*private User getUserFromCookies(Cookie[] cookies) {
         User user = new User();
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("first_name")) {
@@ -68,5 +76,5 @@ public class MyOrdersController extends HttpServlet {
             }
         }
         return user;
-    }
+    }*/
 }

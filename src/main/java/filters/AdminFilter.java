@@ -18,8 +18,8 @@ public class AdminFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest servletRequest = (HttpServletRequest) request;
         HttpSession session = servletRequest.getSession();
-        if (session.getAttribute("username_admin") == null &&
-                servletRequest.getRequestURI().endsWith("/AdminController")) {
+        String username = (String) session.getAttribute("username_admin");
+        if ( username== null && servletRequest.getRequestURI().endsWith("/AdminController")) {
             ((HttpServletResponse)response).sendRedirect("/LoginAdminController");
         } else chain.doFilter(request, response);
     }

@@ -10,20 +10,16 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @WebServlet("/RegistrationController")
 public class RegistrationController extends HttpServlet {
-    private static final int CORRECT_NEMBER_OF_USER_COOKIES = 7;
     private UserService userService;
-    private OrderService orderService;
 
     @Override
     public void init() throws ServletException {
         super.init();
         try {
-            orderService = new OrderService();
             userService = new UserService();
         } catch (DBException exc) {
             throw new ServletException(exc);
@@ -32,18 +28,12 @@ public class RegistrationController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-/*        Cookie[] cookies = request.getCookies();
-        int number = getNumberOfParametersInCookies(cookies);
-        if (number == CORRECT_NEMBER_OF_USER_COOKIES) {
-            setCookiesToRequestParameters(request, cookies);
-        }*/
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("registration.jsp");
         requestDispatcher.include(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
         User user = getUserIfCorrectData(request);
         if (user == null) {
             request.setAttribute("first_name", request.getParameter("first_name"));
@@ -57,85 +47,12 @@ public class RegistrationController extends HttpServlet {
             doGet(request, response);
         } else {
             try {
-                int userId = userService.addUserIfNotExistsAndReturnId(user);
+                userService.addUserIfNotExistsAndReturnId(user);
             } catch (DBException e) {
                 e.printStackTrace();
             }
             response.sendRedirect("login-main.jsp");
         }
-    }
-
-    private void setCookiesToRequestParameters(HttpServletRequest request, Cookie[] cookies) {
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("first_name")) {
-                request.setAttribute("first_name", cookie.getValue());
-            }
-            if (cookie.getName().equals("last_name")) {
-                request.setAttribute("last_name", cookie.getValue());
-            }
-            if (cookie.getName().equals("email")) {
-                request.setAttribute("email", cookie.getValue());
-            }
-            if (cookie.getName().equals("address")) {
-                request.setAttribute("address", cookie.getValue());
-            }
-            if (cookie.getName().equals("phoneNumber")) {
-                request.setAttribute("phoneNumber", cookie.getValue());
-            }
-            if (cookie.getName().equals("username")) {
-                request.setAttribute("username", cookie.getValue());
-            }
-            if (cookie.getName().equals("password")) {
-                request.setAttribute("password", cookie.getValue());
-            }
-        }
-    }
-
-
-    private void getUserCookiesAndSetToResponse(HttpServletRequest request, HttpServletResponse response) {
-        Cookie cookieFirstName = new Cookie("first_name", request.getParameter("first_name"));
-        Cookie cookieLastName = new Cookie("last_name", request.getParameter("last_name"));
-        Cookie cookieEmail = new Cookie("email", request.getParameter("email"));
-        Cookie cookieAddress = new Cookie("address", request.getParameter("address"));
-        Cookie cookiePhoneNumber = new Cookie("phoneNumber", request.getParameter("phoneNumber"));
-        Cookie cookieUsername = new Cookie("username", request.getParameter("username"));
-        Cookie cookiePassword = new Cookie("password", request.getParameter("password"));
-
-        response.addCookie(cookieFirstName);
-        response.addCookie(cookieLastName);
-        response.addCookie(cookieEmail);
-        response.addCookie(cookieAddress);
-        response.addCookie(cookiePhoneNumber);
-        response.addCookie(cookieUsername);
-        response.addCookie(cookiePassword);
-    }
-
-    private int getNumberOfParametersInCookies(Cookie[] cookies) {
-        int counter = 0;
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("first_name")) {
-                counter++;
-            }
-            if (cookie.getName().equals("last_name")) {
-                counter++;
-            }
-            if (cookie.getName().equals("email")) {
-                counter++;
-            }
-            if (cookie.getName().equals("address")) {
-                counter++;
-            }
-            if (cookie.getName().equals("phoneNumber")) {
-                counter++;
-            }
-            if (cookie.getName().equals("username")) {
-                counter++;
-            }
-            if (cookie.getName().equals("password")) {
-                counter++;
-            }
-        }
-        return counter;
     }
 
     private User getUserIfCorrectData(HttpServletRequest request) {
@@ -169,5 +86,80 @@ public class RegistrationController extends HttpServlet {
             return null;
         }
     }
+
+/*
+    private void setCookiesToRequestParameters(HttpServletRequest request, Cookie[] cookies) {
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("first_name")) {
+                request.setAttribute("first_name", cookie.getValue());
+            }
+            if (cookie.getName().equals("last_name")) {
+                request.setAttribute("last_name", cookie.getValue());
+            }
+            if (cookie.getName().equals("email")) {
+                request.setAttribute("email", cookie.getValue());
+            }
+            if (cookie.getName().equals("address")) {
+                request.setAttribute("address", cookie.getValue());
+            }
+            if (cookie.getName().equals("phoneNumber")) {
+                request.setAttribute("phoneNumber", cookie.getValue());
+            }
+            if (cookie.getName().equals("username")) {
+                request.setAttribute("username", cookie.getValue());
+            }
+            if (cookie.getName().equals("password")) {
+                request.setAttribute("password", cookie.getValue());
+            }
+        }
+    }
+*/
+
+
+    /*private void getUserCookiesAndSetToResponse(HttpServletRequest request, HttpServletResponse response) {
+        Cookie cookieFirstName = new Cookie("first_name", request.getParameter("first_name"));
+        Cookie cookieLastName = new Cookie("last_name", request.getParameter("last_name"));
+        Cookie cookieEmail = new Cookie("email", request.getParameter("email"));
+        Cookie cookieAddress = new Cookie("address", request.getParameter("address"));
+        Cookie cookiePhoneNumber = new Cookie("phoneNumber", request.getParameter("phoneNumber"));
+        Cookie cookieUsername = new Cookie("username", request.getParameter("username"));
+        Cookie cookiePassword = new Cookie("password", request.getParameter("password"));
+
+        response.addCookie(cookieFirstName);
+        response.addCookie(cookieLastName);
+        response.addCookie(cookieEmail);
+        response.addCookie(cookieAddress);
+        response.addCookie(cookiePhoneNumber);
+        response.addCookie(cookieUsername);
+        response.addCookie(cookiePassword);
+    }*/
+
+   /* private int getNumberOfParametersInCookies(Cookie[] cookies) {
+        int counter = 0;
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("first_name")) {
+                counter++;
+            }
+            if (cookie.getName().equals("last_name")) {
+                counter++;
+            }
+            if (cookie.getName().equals("email")) {
+                counter++;
+            }
+            if (cookie.getName().equals("address")) {
+                counter++;
+            }
+            if (cookie.getName().equals("phoneNumber")) {
+                counter++;
+            }
+            if (cookie.getName().equals("username")) {
+                counter++;
+            }
+            if (cookie.getName().equals("password")) {
+                counter++;
+            }
+        }
+        return counter;
+    }*/
 }
 

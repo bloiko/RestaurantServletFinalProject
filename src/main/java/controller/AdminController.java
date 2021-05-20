@@ -42,7 +42,6 @@ public class AdminController extends HttpServlet {
                 e.printStackTrace();
             }
         }
-
         try {
             List<OrderStatus> orderStatuses = orderListDAO.getStatuses();
             List<Order> notDoneOrders = orderService.getNotDoneOrdersSortById();

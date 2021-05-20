@@ -62,10 +62,7 @@ public class CartController extends HttpServlet {
                 response.sendRedirect("/LoginMainController?command=ORDER");
                 return;
             }
-            // int userId = userService.addUserIfNotExistsAndReturnId(user);
-            //user.setId(userId);
             List<Item> cart = (List<Item>) session.getAttribute("cart");
-            //session.setAttribute("user", user);
             try {
                 int orderId = orderService.addOrderAndGetId(cart, user);
                 request.setAttribute("orderId", orderId);
@@ -76,6 +73,5 @@ public class CartController extends HttpServlet {
             }
         }
         request.getRequestDispatcher("/CartController").forward(request, response);
-
     }
 }

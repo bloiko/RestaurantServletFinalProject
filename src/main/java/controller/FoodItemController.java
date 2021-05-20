@@ -15,9 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @WebServlet("/FoodItemController")
@@ -70,6 +68,47 @@ public class FoodItemController extends HttpServlet {
 
     private void listFoodItems(HttpServletRequest request, HttpServletResponse response) throws DBException, ServletException, IOException, CannotFetchItemsException {
         HttpSession session = request.getSession();
+
+        String filterBy = getFilter(request, session);
+        session.setAttribute("filter", filterBy);
+
+        String sort = request.getParameter("sort");
+        String sessionSort = (String) session.getAttribute("sort");
+        String order = (String) session.getAttribute("order");
+        order = getOppositeOrder(sort, sessionSort, order);
+        if (sort == null && sessionSort != null) {
+            sort = sessionSort;
+        }
+        if (order == null) {
+            order = "ASC";
+        }
+        session.setAttribute("order", order);
+        session.setAttribute("sort", sort);
+
+        int page = getPageNumber(request, session);
+        List<FoodItem> foodItems = foodItemService.getFoodItems(page, NUMBER_ITEMS_ON_PAGE, sort, order, filterBy);
+        int numOfPages = filterBy == null || filterBy.isEmpty() ? getNumOfPages(foodItemService.getFoodItems()) : getNumOfPages(foodItems);
+
+        request.setAttribute("numberOfPages", numOfPages);
+        session.setAttribute("page", page);
+        request.setAttribute("categories", foodItemService.getCategories());
+        request.setAttribute("FOOD_LIST", foodItems);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/list-food.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private String getOppositeOrder(String sort, String sessionSort, String order) {
+        if (sort != null && sort.equals(sessionSort)) {
+            if ("ASC".equals(order)) {
+                order = "DESC";
+            } else {
+                order = "ASC";
+            }
+        }
+        return order;
+    }
+
+    private String getFilter(HttpServletRequest request, HttpSession session) {
         String filterBy = request.getParameter("filter");
         if (filterBy == null) {
             filterBy = (String) session.getAttribute("filter");
@@ -80,25 +119,10 @@ public class FoodItemController extends HttpServlet {
         if (filterBy != null && !filterBy.isEmpty()) {
             session.setAttribute("page", 1);
         }
-        session.setAttribute("filter", filterBy);
+        return filterBy;
+    }
 
-        String sort = request.getParameter("sort");
-        String sessionSort = (String) session.getAttribute("sort");
-        String order = (String) session.getAttribute("order");
-        if (sort != null && sort.equals(sessionSort)) {
-            if ("ASC".equals(order)) {
-                order = "DESC";
-            } else {
-                order = "ASC";
-            }
-        } else if (sort == null && sessionSort != null) {
-            sort = sessionSort;
-        }
-        if (order == null) {
-            order = "ASC";
-        }
-        session.setAttribute("order", order);
-        session.setAttribute("sort", sort);
+    private int getPageNumber(HttpServletRequest request, HttpSession session) {
         int page;
         if (request.getParameter("page") != null) {
             page = Integer.parseInt(request.getParameter("page"));
@@ -107,14 +131,7 @@ public class FoodItemController extends HttpServlet {
         } else {
             page = 1;
         }
-        List<FoodItem> foodItems = foodItemService.getFoodItems(page, NUMBER_ITEMS_ON_PAGE, sort, order, filterBy);
-        int numOfPages = filterBy == null || filterBy.isEmpty() ? getNumOfPages(foodItemService.getFoodItems()) : getNumOfPages(foodItems);
-        request.setAttribute("numberOfPages", numOfPages);
-        session.setAttribute("page", page);
-        request.setAttribute("categories", foodItemService.getCategories());
-        request.setAttribute("FOOD_LIST", foodItems);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/list-food.jsp");
-        dispatcher.forward(request, response);
+        return page;
     }
 
     private int getNumOfPages(List<FoodItem> foodItems) {
