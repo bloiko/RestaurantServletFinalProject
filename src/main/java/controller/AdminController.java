@@ -14,7 +14,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-
+/**
+ * Admin controller.
+ *
+ * @author B.Loiko
+ *
+ */
 @WebServlet("/AdminController")
 public class AdminController extends HttpServlet {
     private OrderDAO orderListDAO;
@@ -33,15 +38,6 @@ public class AdminController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-  /*      String command = request.getParameter("command");
-       if ("DELETE".equals(command)) {
-            String orderIdString = request.getParameter("orderId");
-            try {
-                orderService.deleteOrder(orderIdString);
-            } catch (DBException e) {
-                e.printStackTrace();
-            }
-        }*/
         try {
             List<OrderStatus> orderStatuses = orderListDAO.getStatuses();
             List<Order> notDoneOrders = orderService.getNotDoneOrdersSortById();

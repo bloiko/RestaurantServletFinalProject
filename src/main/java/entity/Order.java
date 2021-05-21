@@ -7,7 +7,12 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 import java.util.List;
-
+/**
+ * Order entity.
+ *
+ * @author B.Loiko
+ *
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

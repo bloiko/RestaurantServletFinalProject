@@ -7,7 +7,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
+/**
+ * Thanks controller.
+ * This controller simply shows thanks-page.jsp after succesful food ordering.
+ *
+ * @author B.Loiko
+ *
+ */
 @WebServlet("/ThanksController")
 public class ThanksController extends HttpServlet {
 

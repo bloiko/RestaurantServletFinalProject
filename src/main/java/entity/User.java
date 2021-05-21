@@ -3,7 +3,12 @@ package entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+/**
+ * User entity.
+ *
+ * @author B.Loiko
+ *
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

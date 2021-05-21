@@ -11,7 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-
+/**
+ * Login Main controller.
+ * This login is used main part of the program. Also, after registration.
+ *
+ * @author B.Loiko
+ *
+ */
 @WebServlet("/LoginMainController")
 public class LoginMainController extends HttpServlet {
     private UserService userService;

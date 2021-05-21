@@ -11,7 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-
+/**
+ * Login Admin controller.
+ * This login is used in AdminFilter that goes before showing admin.jsp
+ *
+ * @author B.Loiko
+ *
+ */
 @WebServlet("/LoginAdminController")
 public class LoginAdminController extends HttpServlet {
     private UserService userService;

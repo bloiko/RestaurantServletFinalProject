@@ -28,6 +28,11 @@ public class FoodDAO {
 
     }
 
+    /**
+     * Returns data access object. Using Singleton pattern (Double Checked Locking & volatile)
+     *
+     * @return data access object of the FoodDAO class .
+     */
     public static FoodDAO getInstance() throws DBException {
         FoodDAO localInstance = instance;
         if (localInstance == null) {
@@ -41,6 +46,11 @@ public class FoodDAO {
         return localInstance;
     }
 
+    /**
+     * Returns list of food items from the database.
+     *
+     * @return list of all food items  .
+     */
     public List<FoodItem> getFoodItems() throws DBException {
         List<FoodItem> foodItems = new ArrayList<>();
         Connection myConn = null;
@@ -66,6 +76,13 @@ public class FoodDAO {
         }
     }
 
+    /**
+     * Returns list of food items from the database using skip and limit .
+     *
+     * @param limit  shows how many food items to take
+     * @param offset shows how many food items need to skip
+     * @return list of food items  .
+     */
     public List<FoodItem> getFoodItemsWithSkipAndLimit(int limit, int offset) throws DBException {
         List<FoodItem> foodItems = new ArrayList<>();
         Connection myConn = null;
@@ -94,6 +111,14 @@ public class FoodDAO {
         }
     }
 
+    /**
+     * Returns list of food items from the database using skip, limit and filter .
+     *
+     * @param limit  shows how many food items to take
+     * @param offset shows how many food items need to skip
+     * @param filter shows wich category use to filter data
+     * @return list of food items  .
+     */
     public List<FoodItem> getFoodItemsWithSkipLimitFilter(int limit, int offset, String filter) throws DBException {
         List<FoodItem> foodItems = new ArrayList<>();
         Connection myConn = null;
@@ -124,6 +149,16 @@ public class FoodDAO {
         }
     }
 
+    /**
+     * Returns list of food items from the database using skip and limit. Also
+     * data should be in sorted in specified order.
+     *
+     * @param limit  shows how many food items to take
+     * @param offset shows how many food items need to skip
+     * @param sortBy shows wich entity field use to sort data
+     * @param order  shows in wich way data should be sorted ASC or DESC
+     * @return list of food items  .
+     */
     public List<FoodItem> getFoodItemsWithSkipLimitAndOrder(int limit, int offset, String sortBy, String order) throws DBException {
         List<FoodItem> foodItems = new ArrayList<>();
         Connection myConn = null;
@@ -137,7 +172,6 @@ public class FoodDAO {
                     " ORDER BY " + sortBy + " " + order +
                     " LIMIT ? OFFSET ?";
             myStmt = myConn.prepareStatement(sql);
-            /*  myStmt.setString(1, sortBy);*/
             myStmt.setInt(1, limit);
             myStmt.setInt(2, offset);
             myRs = myStmt.executeQuery();
@@ -154,6 +188,17 @@ public class FoodDAO {
         }
     }
 
+    /**
+     * Returns list of food items from the database using skip, limit and filter . Also
+     * data should be in sorted in specified order.
+     *
+     * @param limit  shows how many food items to take
+     * @param offset shows how many food items need to skip
+     * @param filter shows wich category use to filter data
+     * @param sortBy shows wich entity field use to sort data
+     * @param order  shows in wich way data should be sorted ASC or DESC
+     * @return list of food items  .
+     */
     public List<FoodItem> getFoodItemsWithFilterSkipLimitAndOrder(String filter, int limit, int offset, String sortBy, String order) throws DBException {
         List<FoodItem> foodItems = new ArrayList<>();
         Connection myConn = null;
@@ -205,7 +250,12 @@ public class FoodDAO {
         }
     }
 
-
+    /**
+     * Returns food item with given identifier from database.
+     *
+     * @param theFoodItemId is food item identifier
+     * @return food item that was found.
+     */
     public FoodItem getFoodItem(String theFoodItemId) throws DBException {
         FoodItem foodItem = null;
         Connection myConn = null;
@@ -236,7 +286,11 @@ public class FoodDAO {
         }
     }
 
-
+    /**
+     * Returns list of all categories from database.
+     *
+     * @return list of all categories.
+     */
     public List<Category> getCategories() throws DBException {
         List<Category> categories = new ArrayList<>();
         Connection myConn = null;
@@ -260,6 +314,7 @@ public class FoodDAO {
             close(myConn, myStmt, myRs);
         }
     }
+
     /**
      * Extracts a food item from the result set row.
      */

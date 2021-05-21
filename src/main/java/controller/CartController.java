@@ -1,7 +1,6 @@
 package controller;
 
 import entity.*;
-import dao.*;
 import exception.DBException;
 import service.CartService;
 import service.OrderService;
@@ -16,7 +15,12 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Cart controller.
+ *
+ * @author B.Loiko
+ *
+ */
 @WebServlet("/CartController")
 public class CartController extends HttpServlet {
     private CartService cartService;

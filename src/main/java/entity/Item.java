@@ -1,7 +1,12 @@
 package entity;
 
 import lombok.*;
-
+/**
+ * Item entity.
+ *
+ * @author B.Loiko
+ *
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

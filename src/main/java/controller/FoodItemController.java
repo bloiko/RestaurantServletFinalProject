@@ -17,7 +17,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Food Item controller.
+ *
+ * @author B.Loiko
+ *
+ */
 @WebServlet("/FoodItemController")
 public class FoodItemController extends HttpServlet {
     private static final int NUMBER_ITEMS_ON_PAGE = 5;

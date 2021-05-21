@@ -1,5 +1,10 @@
 package entity;
-
+/**
+ * Order status entity.
+ *
+ * @author B.Loiko
+ *
+ */
 public enum OrderStatus {
     WAITING("WAITING"),
     PREPARING("PREPARING"),

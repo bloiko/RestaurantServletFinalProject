@@ -14,7 +14,13 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-
+/**
+ * My Orders controller.
+ * This controller show to the user his orders
+ *
+ * @author B.Loiko
+ *
+ */
 @WebServlet("/MyOrdersController")
 public class MyOrdersController extends HttpServlet {
     private UserService userService;

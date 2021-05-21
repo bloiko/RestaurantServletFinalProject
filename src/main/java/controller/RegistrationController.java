@@ -11,7 +11,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 
-
+/**
+ * Registration controller.
+ * This controller show registration page and proccess dota from the registration form.
+ *
+ * @author B.Loiko
+ *
+ */
 @WebServlet("/RegistrationController")
 public class RegistrationController extends HttpServlet {
     private UserService userService;
