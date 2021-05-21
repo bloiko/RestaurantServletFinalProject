@@ -1,6 +1,6 @@
 package service;
 
-import dao.FoodJDBCDAO;
+import dao.FoodDAO;
 import entity.Category;
 import entity.FoodItem;
 import entity.Item;
@@ -10,13 +10,13 @@ import exception.DBException;
 import java.util.List;
 
 public class FoodItemService {
-    private FoodJDBCDAO foodItemDAO;
+    private FoodDAO foodItemDAO;
 
     public FoodItemService() throws DBException {
-        foodItemDAO = FoodJDBCDAO.getInstance();
+        foodItemDAO = FoodDAO.getInstance();
     }
 
-    public FoodItemService(FoodJDBCDAO foodItemDAO) {
+    public FoodItemService(FoodDAO foodItemDAO) {
         this.foodItemDAO = foodItemDAO;
     }
 

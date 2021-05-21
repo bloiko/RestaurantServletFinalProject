@@ -1,6 +1,5 @@
 package service;
 
-import dao.FoodJDBCDAO;
 import entity.Category;
 import entity.FoodItem;
 import entity.Item;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
 public class CartServiceTest {

@@ -1,6 +1,5 @@
 package controller;
 
-import dao.FoodJDBCDAO;
 import entity.FoodItem;
 import entity.Item;
 import org.junit.Before;

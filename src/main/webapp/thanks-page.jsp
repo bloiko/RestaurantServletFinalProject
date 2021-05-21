@@ -104,9 +104,9 @@
                    aria-expanded="false" style="color:black;">
                     <span class="flag-icon flag-icon-${sessionScope.lang}"> </span> <fmt:message key="header.language"/></a>
                 <div class="dropdown-menu" aria-labelledby="dropdown09">
-                    <a class="dropdown-item" href="/CartController?sessionLocale=ua"><span
+                    <a class="dropdown-item" href="/ThanksController?sessionLocale=ua"><span
                             class="flag-icon flag-icon-ua"> </span> <fmt:message key="header.ukrainian"/></a>
-                    <a class="dropdown-item" href="/CartController?sessionLocale=en"><span
+                    <a class="dropdown-item" href="/ThanksController?sessionLocale=en"><span
                             class="flag-icon flag-icon-us"> </span> <fmt:message key="header.english"/></a>
                 </div>
             </div>

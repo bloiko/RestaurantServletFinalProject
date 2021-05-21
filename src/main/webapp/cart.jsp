@@ -50,15 +50,16 @@
                     <span class="flag-icon flag-icon-${sessionScope.lang}"> </span> <fmt:message
                         key="header.language"/></a>
                 <div class="dropdown-menu" aria-labelledby="dropdown09">
-                    <a class="dropdown-item" href="/FoodItemController?sessionLocale=ua"><span
+                    <a class="dropdown-item" href="/CartController?sessionLocale=ua"><span
                             class="flag-icon flag-icon-ua"> </span> <fmt:message key="header.ukrainian"/></a>
-                    <a class="dropdown-item" href="/FoodItemController?sessionLocale=en"><span
+                    <a class="dropdown-item" href="/CartController?sessionLocale=en"><span
                             class="flag-icon flag-icon-us"> </span><fmt:message key="header.english"/></a>
                 </div>
             </div>
             <c:if test="${sessionScope.get('username')==null}">
                 <div class="navbar-nav">
-                    <a href="/RegistrationController" class="nav-item nav-link"></span><fmt:message key="header.registration"/></a>
+                    <a href="/RegistrationController" class="nav-item nav-link"></span><fmt:message
+                            key="header.registration"/></a>
                     <a href="login-main.jsp" class="nav-item nav-link"></span><fmt:message key="header.login"/></a>
                 </div>
             </c:if>
@@ -113,7 +114,7 @@
     </div>
 </div>
 <div class="order" style="position: relative;">
-    <h2>Sum: ${sum}</h2>
+    <h2><fmt:message key="cart.sum"/>: ${sum}</h2>
     <a href="/CartController?command=ORDER">
         <button type="button" class="btn btn-danger order-button" style="position: absolute; right: 10%"><fmt:message
                 key="cart.order"/></button>

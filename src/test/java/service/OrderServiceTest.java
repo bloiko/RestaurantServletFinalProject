@@ -1,7 +1,6 @@
 package service;
 
-import dao.OrderJDBCDAO;
-import dao.UserDAO;
+import dao.OrderDAO;
 import entity.*;
 import exception.DBException;
 import org.junit.Assert;
@@ -25,52 +24,52 @@ public class OrderServiceTest {
     private OrderService service;
     private HttpServletRequest request;
     private HttpServletResponse response;
-    private OrderJDBCDAO orderJDBCDAO;
+    private OrderDAO orderDAO;
 
     @Before
     public void setUp() throws DBException {
-        orderJDBCDAO = mock(OrderJDBCDAO.class);
-        service = new OrderService(orderJDBCDAO);
+        orderDAO = mock(OrderDAO.class);
+        service = new OrderService(orderDAO);
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);
     }
 
     @Test
     public void testService_addOrderAndGetId_ShouldAddOneOrder() throws Exception {
-        doNothing().when(orderJDBCDAO).addOrder(any(Order.class));
-        when(orderJDBCDAO.getOrderId(any(Order.class))).thenReturn(1);
+        doNothing().when(orderDAO).addOrder(any(Order.class));
+        when(orderDAO.getOrderId(any(Order.class))).thenReturn(1);
         List<Item> cart = new ArrayList<>();
         Item item = new Item(1,new FoodItem(1,"name",1,"image", new Category(1,"")),1);
         cart.add(item);
 
         int orderId = service.addOrderAndGetId(cart, new User());
-        //verify(orderJDBCDAO, times(1)).addOrder(any(Order.class));
-        verify(orderJDBCDAO, times(1)).getOrderId(any(Order.class));
+        //verify(orderDAO, times(1)).addOrder(any(Order.class));
+        verify(orderDAO, times(1)).getOrderId(any(Order.class));
         Assert.assertEquals(1, orderId);
     }
 
     @Test
     public void testService_deleteOrder_ShouldDeleteOrder() throws Exception {
         service.deleteOrder("1");
-        verify(orderJDBCDAO, times(1)).deleteOrder(eq("1"));
+        verify(orderDAO, times(1)).deleteOrder(eq("1"));
     }
 
     @Test
     public void testService_getStatuses_ShouldGetAllStatuses() throws Exception {
         service.getStatuses();
-        verify(orderJDBCDAO, times(1)).getStatuses();
+        verify(orderDAO, times(1)).getStatuses();
     }
 
     @Test
     public void testService_getDoneOrders_ShouldGetDoneOrders() throws Exception {
         service.getDoneOrders();
-        verify(orderJDBCDAO, times(1)).getDoneOrders();
+        verify(orderDAO, times(1)).getDoneOrders();
     }
 
     @Test
     public void testService_getNotDoneOrdersSortById_ShouldGetNotDoneOrdersAndSort() throws Exception {
         service.getNotDoneOrdersSortById();
-        verify(orderJDBCDAO, times(1)).getNotDoneOrdersSortById();
+        verify(orderDAO, times(1)).getNotDoneOrdersSortById();
     }
    /* @Test
     public void testService_addUserIfNotExistsAndReturnId_ShouldReturnUserId() throws Exception {

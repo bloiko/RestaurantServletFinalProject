@@ -1,6 +1,6 @@
 package service;
 
-import dao.OrderJDBCDAO;
+import dao.OrderDAO;
 import dao.UserDAO;
 import entity.Order;
 import entity.User;
@@ -13,16 +13,16 @@ import java.util.regex.Pattern;
 
 public class UserService {
     private UserDAO userDAO;
-    private OrderJDBCDAO orderListDAO;
+    private OrderDAO orderListDAO;
 
-    public UserService(UserDAO userDAO, OrderJDBCDAO orderListDAO) {
+    public UserService(UserDAO userDAO, OrderDAO orderListDAO) {
         this.userDAO = userDAO;
         this.orderListDAO = orderListDAO;
     }
 
     public UserService() throws DBException {
         this.userDAO = UserDAO.getInstance();
-        orderListDAO = OrderJDBCDAO.getInstance();
+        orderListDAO = OrderDAO.getInstance();
     }
 
     /**

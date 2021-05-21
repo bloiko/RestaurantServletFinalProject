@@ -1,6 +1,6 @@
 package service;
 
-import dao.OrderJDBCDAO;
+import dao.OrderDAO;
 import dao.UserDAO;
 import entity.*;
 import exception.DBException;
@@ -14,8 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-import java.util.ArrayList;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -25,14 +23,14 @@ public class UserServiceTest {
     private UserService service;
     private HttpServletRequest request;
     private HttpServletResponse response;
-    private OrderJDBCDAO orderJDBCDAO;
+    private OrderDAO orderDAO;
     private UserDAO userDAO;
 
     @Before
     public void setUp() throws DBException {
-        orderJDBCDAO = mock(OrderJDBCDAO.class);
+        orderDAO = mock(OrderDAO.class);
         userDAO = mock(UserDAO.class);
-        service = new UserService(userDAO, orderJDBCDAO);
+        service = new UserService(userDAO, orderDAO);
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);
     }
@@ -49,10 +47,10 @@ public class UserServiceTest {
     public void testService_getUserOrdersSortByOrderDateReversed_ShouldReturnList() throws Exception {
         User user = new User(1, "first", "last", "user", "pass", "email", "address", "+380981180662", "ADMIN");
         when(userDAO.getUserId(any(User.class))).thenReturn(1);
-        when(orderJDBCDAO.getOrdersByUserId(1)).thenReturn(new ArrayList<>());
+        when(orderDAO.getOrdersByUserId(1)).thenReturn(new ArrayList<>());
         service.getUserOrdersSortByOrderDateReversed(user.getUserName());
         verify(userDAO, times(1)).getUserId(any(User.class));
-        verify(orderJDBCDAO, times(1)).getOrdersByUserId(anyInt());
+        verify(orderDAO, times(1)).getOrdersByUserId(anyInt());
     }*/
 
     @Test

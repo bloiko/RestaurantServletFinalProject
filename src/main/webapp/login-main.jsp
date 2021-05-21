@@ -1,8 +1,11 @@
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
-<%--<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-         pageEncoding="ISO-8859-1" %>--%>
-<!DOCTYPE html <%--PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"--%>>
-<html>
+<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+
+<fmt:setLocale value="${sessionScope.lang}"/>
+<fmt:setBundle basename="resources"/>
+
+<html lang="${sessionScope.lang}">
 <head>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
@@ -17,7 +20,6 @@
 </head>
 <body>
 <article class="card-body mx-auto" style="max-width: 400px;">
-    <h4 class="card-title mt-3 text-center"><fmt:message key="registration.write_information"/></h4>
     <form action="/LoginMainController" method="post">
         <label class="errorMessage">${message}</label>
         <div class="form-group input-group">
@@ -34,7 +36,7 @@
             <input name="password" class="form-control" placeholder="<fmt:message key="login.password"/>" type="password" value="${password}">
         </div>
         <div class="form-group">
-            <button style="height: 50px" type="submit" class="btn btn-primary btn-block">Login</button>
+            <button style="height: 50px" type="submit" class="btn btn-primary btn-block"><fmt:message key="login.login"/></button>
         </div>
     </form>
 </article>

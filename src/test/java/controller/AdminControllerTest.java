@@ -1,6 +1,6 @@
 package controller;
 
-import dao.OrderJDBCDAO;
+import dao.OrderDAO;
 import entity.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,13 +20,13 @@ public class AdminControllerTest {
     private AdminController servlet;
     private HttpServletRequest request;
     private HttpServletResponse response;
-    private OrderJDBCDAO orderJDBCDAO;
+    private OrderDAO orderDAO;
 
     @Before
     public void setUp() {
         servlet = new AdminController();
-        orderJDBCDAO = mock(OrderJDBCDAO.class);
-        servlet.setOrderListDAO(orderJDBCDAO);
+        orderDAO = mock(OrderDAO.class);
+        servlet.setOrderListDAO(orderDAO);
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);
     }
@@ -39,7 +39,7 @@ public class AdminControllerTest {
 
         doNothing().when(adminControllerSpy).init();
 
-        when(orderJDBCDAO.getOrders()).thenReturn(new ArrayList<>());
+        when(orderDAO.getOrders()).thenReturn(new ArrayList<>());
         when(request.getParameter("command")).thenReturn(null);
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
         when(request.getSession()).thenReturn(session);
@@ -61,16 +61,16 @@ public class AdminControllerTest {
 
         doNothing().when(adminControllerSpy).init();
 
-        when(orderJDBCDAO.getOrders()).thenReturn(new ArrayList<>());
+        when(orderDAO.getOrders()).thenReturn(new ArrayList<>());
         when(request.getParameter("orderId")).thenReturn("1");
-        doNothing().when(orderJDBCDAO).deleteOrder(eq("1"));
+        doNothing().when(orderDAO).deleteOrder(eq("1"));
         when(request.getParameter("command")).thenReturn("DELETE");
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
         when(request.getSession()).thenReturn(session);
         doNothing().when(requestDispatcher).forward(request, response);
 
         adminControllerSpy.doGet(request, response);
-        verify(orderJDBCDAO, times(1)).deleteOrder(eq("1"));
+        verify(orderDAO, times(1)).deleteOrder(eq("1"));
         verify(request, times(1)).setAttribute(eq("statusList"), anyList());
         verify(request, times(1)).setAttribute(eq("NOT_DONE_ORDERS_LIST"), anyList());
         verify(request, times(1)).setAttribute(eq("DONE_ORDERS_LIST"), anyList());
@@ -84,13 +84,13 @@ public class AdminControllerTest {
         doNothing().when(adminControllerSpy).init();
 
         when(request.getParameter("orderId")).thenReturn("1");
-        when(orderJDBCDAO.getOrder(eq("1"))).thenReturn(new Order(1, new Timestamp(10L), new User(), new ArrayList<>(), OrderStatus.WAITING));
-        doNothing().when(orderJDBCDAO).updateOrder(eq(1), any(OrderStatus.class));
+        when(orderDAO.getOrder(eq("1"))).thenReturn(new Order(1, new Timestamp(10L), new User(), new ArrayList<>(), OrderStatus.WAITING));
+        doNothing().when(orderDAO).updateOrder(eq(1), any(OrderStatus.class));
         when(request.getParameter("status")).thenReturn("DONE");
         doNothing().when(adminControllerSpy).doGet(request, response);
 
         adminControllerSpy.doPost(request, response);
-        verify(orderJDBCDAO, times(1)).updateOrder(1, OrderStatus.getOrderStatus("DONE"));
+        verify(orderDAO, times(1)).updateOrder(1, OrderStatus.getOrderStatus("DONE"));
         verify(adminControllerSpy, atLeastOnce()).doGet(request,response);
     }
 }

@@ -1,6 +1,6 @@
 package controller;
 
-import dao.OrderJDBCDAO;
+import dao.OrderDAO;
 import entity.Order;
 import entity.OrderStatus;
 import exception.DBException;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @WebServlet("/AdminController")
 public class AdminController extends HttpServlet {
-    private OrderJDBCDAO orderListDAO;
+    private OrderDAO orderListDAO;
     private OrderService orderService;
 
     @Override
@@ -25,7 +25,7 @@ public class AdminController extends HttpServlet {
         super.init();
         try {
             orderService = new OrderService();
-            orderListDAO = OrderJDBCDAO.getInstance();
+            orderListDAO = OrderDAO.getInstance();
         } catch (Exception exc) {
             throw new ServletException(exc);
         }
@@ -33,15 +33,15 @@ public class AdminController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String command = request.getParameter("command");
-        if ("DELETE".equals(command)) {
+  /*      String command = request.getParameter("command");
+       if ("DELETE".equals(command)) {
             String orderIdString = request.getParameter("orderId");
             try {
                 orderService.deleteOrder(orderIdString);
             } catch (DBException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
         try {
             List<OrderStatus> orderStatuses = orderListDAO.getStatuses();
             List<Order> notDoneOrders = orderService.getNotDoneOrdersSortById();
@@ -72,7 +72,7 @@ public class AdminController extends HttpServlet {
         doGet(request, response);
     }
 
-    public void setOrderListDAO(OrderJDBCDAO orderListDAO) {
+    public void setOrderListDAO(OrderDAO orderListDAO) {
         this.orderListDAO = orderListDAO;
     }
 }

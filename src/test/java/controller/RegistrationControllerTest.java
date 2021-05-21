@@ -1,6 +1,6 @@
 package controller;
 
-import dao.OrderJDBCDAO;
+import dao.OrderDAO;
 import dao.UserDAO;
 import entity.Item;
 import entity.Order;
@@ -22,12 +22,12 @@ public class RegistrationControllerTest {
     private RegistrationController servlet;
     private HttpServletRequest request;
     private HttpServletResponse response;
-    private OrderJDBCDAO orderJDBCDAO;
+    private OrderDAO orderDAO;
     private UserDAO userDAO;
 
     @Before
     public void setUp() {
-        orderJDBCDAO = mock(OrderJDBCDAO.class);
+        orderDAO = mock(OrderDAO.class);
         userDAO = mock(UserDAO.class);
         servlet = new RegistrationController();
         request = mock(HttpServletRequest.class);
@@ -42,7 +42,7 @@ public class RegistrationControllerTest {
         doNothing().when(registrationControllerSpy).init();
 
         doNothing().when(userDAO).addUser(any(User.class));
-        doNothing().when(orderJDBCDAO).addOrder(any(Order.class));
+        doNothing().when(orderDAO).addOrder(any(Order.class));
         when(request.getSession()).thenReturn(session);
         when(request.getParameter("first_name")).thenReturn("First");
         when(request.getParameter("last_name")).thenReturn("Last");

@@ -1,5 +1,6 @@
 package dao;
 
+import dao.mapper.EntityMapper;
 import entity.*;
 import exception.DBException;
 
@@ -11,11 +12,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderJDBCDAO {
+public class OrderDAO {
     private DataSource dataSource;
-    private static volatile OrderJDBCDAO instance;
+    private static volatile OrderDAO instance;
 
-    private OrderJDBCDAO() throws DBException {
+    private OrderDAO() throws DBException {
         Context initContext;
         try {
             initContext = new InitialContext();
@@ -26,20 +27,29 @@ public class OrderJDBCDAO {
         }
     }
 
-    public static OrderJDBCDAO getInstance() throws DBException {
-        OrderJDBCDAO localInstance = instance;
+    /**
+     * Returns data access object. Using Singleton pattern (Double Checked Locking & volatile)
+     *
+     * @return data access object of the OrderDAO class .
+     */
+    public static OrderDAO getInstance() throws DBException {
+        OrderDAO localInstance = instance;
         if (localInstance == null) {
-            synchronized (OrderJDBCDAO.class) {
+            synchronized (OrderDAO.class) {
                 localInstance = instance;
                 if (localInstance == null) {
-                    instance = localInstance = new OrderJDBCDAO();
+                    instance = localInstance = new OrderDAO();
                 }
             }
         }
         return localInstance;
     }
 
-
+    /**
+     * Returns list of users from the daabase.
+     *
+     * @return list of all orders  .
+     */
     public List<Order> getOrders() throws DBException {
         List<Order> orders = new ArrayList<>();
         int foodOrderId;
@@ -54,14 +64,8 @@ public class OrderJDBCDAO {
             myStmt = connection.createStatement();
             myRs = myStmt.executeQuery(sql);
             while (myRs.next()) {
-                foodOrderId = myRs.getInt("food_order.id");
-                Timestamp orderDate = myRs.getTimestamp("order_date");
-                int userId = myRs.getInt("user_id");
-                String statusName = myRs.getString("status_name");
-                UserDAO userDAO = UserDAO.getInstance();
-                User user = userDAO.getUserByUserId(userId);
-                List<Item> items = getOrderItems(foodOrderId);
-                Order order = new Order(foodOrderId, orderDate, user, items, OrderStatus.getOrderStatus(statusName));
+                OrderMapper mapper = new OrderMapper();
+                Order order = mapper.mapRow(myRs);
                 orders.add(order);
             }
             return orders;
@@ -71,6 +75,12 @@ public class OrderJDBCDAO {
             close(connection, myStmt, myRs);
         }
     }
+
+    /**
+     * Returns list of users with DONE OrderStatus from the daabase.
+     *
+     * @return list of all orders  .
+     */
     public List<Order> getDoneOrders() throws DBException {
         List<Order> orders = new ArrayList<>();
         int foodOrderId;
@@ -86,14 +96,8 @@ public class OrderJDBCDAO {
             myStmt = connection.createStatement();
             myRs = myStmt.executeQuery(sql);
             while (myRs.next()) {
-                foodOrderId = myRs.getInt("food_order.id");
-                Timestamp orderDate = myRs.getTimestamp("order_date");
-                int userId = myRs.getInt("user_id");
-                String statusName = myRs.getString("status_name");
-                UserDAO userDAO = UserDAO.getInstance();
-                User user = userDAO.getUserByUserId(userId);
-                List<Item> items = getOrderItems(foodOrderId);
-                Order order = new Order(foodOrderId, orderDate, user, items, OrderStatus.getOrderStatus(statusName));
+                OrderMapper mapper = new OrderMapper();
+                Order order = mapper.mapRow(myRs);
                 orders.add(order);
             }
             return orders;
@@ -103,6 +107,13 @@ public class OrderJDBCDAO {
             close(connection, myStmt, myRs);
         }
     }
+
+    /**
+     * Returns list of users without DONE OrderStatus from the daabase.This list will be in
+     * sorted order.
+     *
+     * @return list of all orders .
+     */
     public List<Order> getNotDoneOrdersSortById() throws DBException {
         List<Order> orders = new ArrayList<>();
         int foodOrderId;
@@ -114,19 +125,13 @@ public class OrderJDBCDAO {
             String sql = "select * from food_order " +
                     " join user u on u.id = food_order.user_id " +
                     " join status s on s.id = food_order.status_id " +
-                    " where status_name !='DONE'"+
+                    " where status_name !='DONE'" +
                     " order by food_order.id DESC ";
             myStmt = connection.createStatement();
             myRs = myStmt.executeQuery(sql);
             while (myRs.next()) {
-                foodOrderId = myRs.getInt("food_order.id");
-                Timestamp orderDate = myRs.getTimestamp("order_date");
-                int userId = myRs.getInt("user_id");
-                String statusName = myRs.getString("status_name");
-                UserDAO userDAO = UserDAO.getInstance();
-                User user = userDAO.getUserByUserId(userId);
-                List<Item> items = getOrderItems(foodOrderId);
-                Order order = new Order(foodOrderId, orderDate, user, items, OrderStatus.getOrderStatus(statusName));
+                OrderMapper mapper = new OrderMapper();
+                Order order = mapper.mapRow(myRs);
                 orders.add(order);
             }
             return orders;
@@ -136,9 +141,15 @@ public class OrderJDBCDAO {
             close(connection, myStmt, myRs);
         }
     }
+
+    /**
+     * Returns list of orders with some user identifier.
+     *
+     * @param theUserId is user identifier
+     * @return list of all orders  .
+     */
     public List<Order> getOrdersByUserId(int theUserId) throws DBException {
         List<Order> orders = new ArrayList<>();
-        int foodOrderId;
         Connection connection = null;
         PreparedStatement myStmt = null;
         ResultSet myRs = null;
@@ -151,14 +162,8 @@ public class OrderJDBCDAO {
             myStmt.setInt(1, theUserId);
             myRs = myStmt.executeQuery();
             while (myRs.next()) {
-                foodOrderId = myRs.getInt("food_order.id");
-                Timestamp orderDate = myRs.getTimestamp("order_date");
-                int userId = myRs.getInt("user_id");
-                String statusName = myRs.getString("status_name");
-                UserDAO userDAO = UserDAO.getInstance();
-                User user = userDAO.getUserByUserId(userId);
-                List<Item> items = getOrderItems(foodOrderId);
-                Order order = new Order(foodOrderId, orderDate, user, items, OrderStatus.getOrderStatus(statusName));
+                OrderMapper mapper = new OrderMapper();
+                Order order = mapper.mapRow(myRs);
                 orders.add(order);
             }
             return orders;
@@ -169,6 +174,12 @@ public class OrderJDBCDAO {
         }
     }
 
+    /**
+     * Returns list of items with some order identifier.
+     *
+     * @param orderId is order identifier
+     * @return list of all items.
+     */
     private List<Item> getOrderItems(int orderId) throws DBException {
         List<Item> items = new ArrayList<>();
         Connection connection = null;
@@ -193,7 +204,12 @@ public class OrderJDBCDAO {
             close(connection, myStmt, resultSet);
         }
     }
-
+    /**
+     * Returns item with given identifier from database.
+     *
+     * @param itemId is item identifier
+     * @return item that was found.
+     */
     private Item getItemById(int itemId) throws DBException {
         Item item;
         Connection connection = null;
@@ -210,8 +226,8 @@ public class OrderJDBCDAO {
                 itemId = resultSet.getInt("id");
                 int foodId = resultSet.getInt("food_id");
                 int quantity = resultSet.getInt("quantity");
-                FoodJDBCDAO foodJDBCDAO = FoodJDBCDAO.getInstance();
-                FoodItem foodItem = foodJDBCDAO.getFoodItem(String.valueOf(foodId));
+                FoodDAO foodDAO = FoodDAO.getInstance();
+                FoodItem foodItem = foodDAO.getFoodItem(String.valueOf(foodId));
                 item = new Item(itemId, foodItem, quantity);
             } else {
                 throw new DBException("Could not find item by id: " + itemId);
@@ -241,7 +257,12 @@ public class OrderJDBCDAO {
             throw new DBException("Cannot close connection with database", throwables);
         }
     }
-
+    /**
+     * Add item to the specified order.
+     *
+     * @param item that should be added
+     * @param order is the object were item should be added
+     */
     public void addItemToOrder(Order order, Item item) throws DBException {
         int orderId = getOrderId(order);
         addItemToDataBase(item);
@@ -263,7 +284,12 @@ public class OrderJDBCDAO {
             close(connection, myStmt, null);
         }
     }
-
+    /**
+     * Returns order identifier from the database.
+     *
+     * @param order that should be found
+     * @return order identifier.
+     */
     public int getOrderId(Order order) throws DBException {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -288,7 +314,12 @@ public class OrderJDBCDAO {
         }
         return -1;
     }
-
+    /**
+     * Returns item identifier of some item from database .
+     *
+     * @param item that should be found
+     * @return item identifier.
+     */
     private int getItemId(Item item) throws DBException {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -312,7 +343,11 @@ public class OrderJDBCDAO {
         }
         return -1;
     }
-
+    /**
+     * Add item entity to the database.
+     *
+     * @param item that should be added
+     */
     private void addItemToDataBase(Item item) throws DBException {
         Connection connection = null;
         PreparedStatement myStmt = null;
@@ -330,7 +365,11 @@ public class OrderJDBCDAO {
             close(connection, myStmt, null);
         }
     }
-
+    /**
+     * Add order to the database .
+     *
+     * @param theOrder that should be added
+     */
     public void addOrder(Order theOrder) throws DBException {
         Connection connection = null;
         PreparedStatement myStmt = null;
@@ -355,7 +394,12 @@ public class OrderJDBCDAO {
             close(connection, myStmt, null);
         }
     }
-
+    /**
+     * Returns status identifier by specified status from database .
+     *
+     * @param status which identifier should be found
+     * @return status identifier.
+     */
     private int getStatusId(OrderStatus status) throws DBException {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -379,7 +423,12 @@ public class OrderJDBCDAO {
             close(connection, statement, resultSet);
         }
     }
-
+    /**
+     * Returns order by identifier from database.
+     *
+     * @param theOrderId order identifier
+     * @return order that was found.
+     */
     public Order getOrder(String theOrderId) throws DBException {
         int foodOrderId;
         Connection connection = null;
@@ -394,14 +443,8 @@ public class OrderJDBCDAO {
             myStmt.setInt(1, Integer.parseInt(theOrderId));
             myRs = myStmt.executeQuery();
             if (myRs.next()) {
-                foodOrderId = myRs.getInt("food_order.id");
-                Timestamp orderDate = myRs.getTimestamp("order_date");
-                int userId = myRs.getInt("user_id");
-                String statusName = myRs.getString("status_name");
-                UserDAO userDAO = UserDAO.getInstance();
-                User user = userDAO.getUserByUserId(userId);
-                List<Item> items = getOrderItems(foodOrderId);
-                Order order = new Order(foodOrderId, orderDate, user, items, OrderStatus.getOrderStatus(statusName));
+                OrderMapper mapper = new OrderMapper();
+                Order order = mapper.mapRow(myRs);
                 return order;
             }
         } catch (SQLException throwables) {
@@ -411,7 +454,12 @@ public class OrderJDBCDAO {
         }
         return null;
     }
-
+    /**
+     * Updete order to the database .
+     *
+     * @param orderId order identifier that should be changed
+     * @param orderStatus order status that should be setted
+     */
     public void updateOrder(int orderId, OrderStatus orderStatus) throws DBException {
         Connection connection = null;
         PreparedStatement myStmt = null;
@@ -430,7 +478,11 @@ public class OrderJDBCDAO {
         }
 
     }
-
+    /**
+     * Delete order from the database .
+     *
+     * @param theOrderId order identifier that should be deleted
+     */
     public void deleteOrder(String theOrderId) throws DBException {
         Connection connection = null;
         PreparedStatement myStmt = null;
@@ -451,7 +503,11 @@ public class OrderJDBCDAO {
             close(connection, myStmt, null);
         }
     }
-
+    /**
+     * Returns all statuses from the database database .
+     *
+     * @return  list of the order statuses
+     */
     public List<OrderStatus> getStatuses() throws DBException {
         List<OrderStatus> statuses = new ArrayList<>();
         Connection connection = null;
@@ -472,6 +528,29 @@ public class OrderJDBCDAO {
             throw new DBException("Cannot get all statuses from database", throwables);
         } finally {
             close(connection, myStmt, myRs);
+        }
+    }
+    /**
+     * Extracts a order from the result set row.
+     */
+    public static class OrderMapper implements EntityMapper<Order> {
+        public Order mapRow(ResultSet resultSet) throws SQLException {
+            int foodOrderId;
+            foodOrderId = resultSet.getInt("food_order.id");
+            Timestamp orderDate = resultSet.getTimestamp("order_date");
+            int userId = resultSet.getInt("user_id");
+            String statusName = resultSet.getString("status_name");
+            User user = null;
+            List<Item> items = null;
+            try {
+                UserDAO userDAO = UserDAO.getInstance();
+                user = userDAO.getUserByUserId(userId);
+                OrderDAO orderDAO = OrderDAO.getInstance();
+                items = orderDAO.getOrderItems(foodOrderId);
+            } catch (DBException e) {
+                e.printStackTrace();
+            }
+            return new Order(foodOrderId, orderDate, user, items, OrderStatus.getOrderStatus(statusName));
         }
     }
 }

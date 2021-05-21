@@ -1,6 +1,6 @@
 package service;
 
-import dao.FoodJDBCDAO;
+import dao.FoodDAO;
 import entity.Category;
 import entity.FoodItem;
 import entity.Item;
@@ -26,12 +26,12 @@ public class FoodItemServiceTest {
     private FoodItemService service;
     private HttpServletRequest request;
     private HttpServletResponse response;
-    private FoodJDBCDAO foodJDBCDAO;
+    private FoodDAO foodDAO;
 
     @Before
     public void setUp() throws DBException {
-        foodJDBCDAO = mock(FoodJDBCDAO.class);
-        service = new FoodItemService(foodJDBCDAO);
+        foodDAO = mock(FoodDAO.class);
+        service = new FoodItemService(foodDAO);
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);
     }
@@ -59,7 +59,7 @@ public class FoodItemServiceTest {
         Item item2 = new Item(2, new FoodItem(2, "name2", 1, "image2", new Category(1, "")), 1);
 
         cart.add(item);
-        when(foodJDBCDAO.getFoodItem("2")).thenReturn(item2.getFoodItem());
+        when(foodDAO.getFoodItem("2")).thenReturn(item2.getFoodItem());
         cart = service.addFoodItemToCart(cart, "2");
         Assert.assertEquals(2, cart.size());
     }
@@ -70,48 +70,47 @@ public class FoodItemServiceTest {
         Item item = new Item(1, new FoodItem(1, "name", 1, "image", new Category(1, "")), 1);
 
         cart.add(item);
-        when(foodJDBCDAO.getFoodItem("1")).thenReturn(item.getFoodItem());
+        when(foodDAO.getFoodItem("1")).thenReturn(item.getFoodItem());
         cart = service.addFoodItemToCart(cart, "1");
         Assert.assertEquals(1, cart.size());
     }
     @Test(expected = CannotFetchItemsException.class)
     public void testService_getFoodItems_ShouldThrowException() throws Exception {
-        when(foodJDBCDAO.getFoodItems()).thenThrow(DBException.class);
+        when(foodDAO.getFoodItems()).thenThrow(DBException.class);
         service.getFoodItems();
-        //verify(foodJDBCDAO, times(1)).getFoodItems();
     }
     @Test
     public void testService_getFoodItems_ShouldGetAllFoodItems() throws Exception {
         service.getFoodItems();
-        verify(foodJDBCDAO, times(1)).getFoodItems();
+        verify(foodDAO, times(1)).getFoodItems();
     }
     @Test
     public void testService_getCategories_ShouldGetAllCategories() throws Exception {
         service.getCategories();
-        verify(foodJDBCDAO, times(1)).getCategories();
+        verify(foodDAO, times(1)).getCategories();
     }
     @Test
     public void testService_getFoodItems_ShouldGetAllFoodItemsWithoutSort() throws Exception {
         service.getFoodItems(1, 5, null, null, "Desserts");
-        verify(foodJDBCDAO, times(1)).getFoodItemsWithSkipLimitFilter(anyInt(), anyInt(), eq("Desserts"));
+        verify(foodDAO, times(1)).getFoodItemsWithSkipLimitFilter(anyInt(), anyInt(), eq("Desserts"));
     }
 
     @Test
     public void testService_getFoodItems_ShouldGetAllFoodItemsWithoutSortAndFilter() throws Exception {
         service.getFoodItems(1, 5, null, null, null);
-        verify(foodJDBCDAO, times(1)).getFoodItemsWithSkipAndLimit(anyInt(), anyInt());
+        verify(foodDAO, times(1)).getFoodItemsWithSkipAndLimit(anyInt(), anyInt());
     }
 
     @Test
     public void testService_getFoodItems_ShouldGetAllFoodItemsWithoutFilter() throws Exception {
         service.getFoodItems(1, 5, "price", "ASC", null);
-        verify(foodJDBCDAO, times(1)).getFoodItemsWithSkipLimitAndOrder(anyInt(), anyInt(), eq("price"), eq("ASC"));
+        verify(foodDAO, times(1)).getFoodItemsWithSkipLimitAndOrder(anyInt(), anyInt(), eq("price"), eq("ASC"));
     }
 
     @Test
     public void testService_getFoodItems_ShouldGetAllFoodItemsWithAllParameters() throws Exception {
         service.getFoodItems(1, 5, "price", "ASC", "Desserts");
-        verify(foodJDBCDAO, times(1)).getFoodItemsWithFilterSkipLimitAndOrder(eq("Desserts"), anyInt(), anyInt(), eq("price"), eq("ASC"));
+        verify(foodDAO, times(1)).getFoodItemsWithFilterSkipLimitAndOrder(eq("Desserts"), anyInt(), anyInt(), eq("price"), eq("ASC"));
     }
   /*  @Test
     public void testService_isExisting_() throws Exception {
@@ -140,10 +139,10 @@ public class FoodItemServiceTest {
         when(session.getAttribute("cart")).thenReturn(itemList);
         when(request.getParameter("command")).thenReturn("ORDER");
         when(request.getParameter("foodId")).thenReturn("2");
-        when(foodJDBCDAO.getFoodItem(anyString())).thenReturn(new FoodItem());
+        when(foodDAO.getFoodItem(anyString())).thenReturn(new FoodItem());
         foodItemControllerSpy.doGet(request, response);
 
-        verify(foodJDBCDAO, times(1)).getFoodItem("2");
+        verify(foodDAO, times(1)).getFoodItem("2");
         verify(session, times(1)).setAttribute(eq("cart"), anyList());
         verify(response, times(1)).sendRedirect(eq("/FoodItemController"));
     }
@@ -158,7 +157,7 @@ public class FoodItemServiceTest {
         List<Item> itemList = new ArrayList<Item>();
         itemList.add(new Item(1, new FoodItem(), 1));
         when(session.getAttribute("cart")).thenReturn(itemList);
-        when(foodJDBCDAO.getFoodItem(anyString())).thenReturn(new FoodItem());
+        when(foodDAO.getFoodItem(anyString())).thenReturn(new FoodItem());
         RequestDispatcher requestDispatcher = mock(RequestDispatcher.class);
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
         doNothing().when(requestDispatcher).forward(request, response);
@@ -185,7 +184,7 @@ public class FoodItemServiceTest {
         when(request.getParameter(eq("sort"))).thenReturn("NAME");
         when(session.getAttribute(eq("menu"))).thenReturn(new ArrayList<FoodItem>());
 
-        when(foodJDBCDAO.getFoodItem(anyString())).thenReturn(new FoodItem());
+        when(foodDAO.getFoodItem(anyString())).thenReturn(new FoodItem());
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
         doNothing().when(requestDispatcher).forward(request, response);
 
@@ -216,7 +215,7 @@ public class FoodItemServiceTest {
         when(request.getParameter(eq("sort"))).thenReturn("NAME");
         when(session.getAttribute(eq("menu"))).thenReturn(new ArrayList<FoodItem>());
 
-        when(foodJDBCDAO.getFoodItem(anyString())).thenReturn(new FoodItem());
+        when(foodDAO.getFoodItem(anyString())).thenReturn(new FoodItem());
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
         doNothing().when(requestDispatcher).forward(request, response);
 
@@ -245,7 +244,7 @@ public class FoodItemServiceTest {
         when(request.getParameter(eq("sort"))).thenReturn("PRICE");
         when(session.getAttribute(eq("menu"))).thenReturn(new ArrayList<FoodItem>());
 
-        when(foodJDBCDAO.getFoodItem(anyString())).thenReturn(new FoodItem());
+        when(foodDAO.getFoodItem(anyString())).thenReturn(new FoodItem());
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
         doNothing().when(requestDispatcher).forward(request, response);
 
@@ -276,7 +275,7 @@ public class FoodItemServiceTest {
         when(request.getParameter(eq("sort"))).thenReturn("PRICE");
         when(session.getAttribute(eq("menu"))).thenReturn(new ArrayList<FoodItem>());
 
-        when(foodJDBCDAO.getFoodItem(anyString())).thenReturn(new FoodItem());
+        when(foodDAO.getFoodItem(anyString())).thenReturn(new FoodItem());
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
         doNothing().when(requestDispatcher).forward(request, response);
 
@@ -305,7 +304,7 @@ public class FoodItemServiceTest {
         when(request.getParameter(eq("sort"))).thenReturn("CATEGORY");
         when(session.getAttribute(eq("menu"))).thenReturn(new ArrayList<FoodItem>());
 
-        when(foodJDBCDAO.getFoodItem(anyString())).thenReturn(new FoodItem());
+        when(foodDAO.getFoodItem(anyString())).thenReturn(new FoodItem());
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
         doNothing().when(requestDispatcher).forward(request, response);
 
@@ -336,7 +335,7 @@ public class FoodItemServiceTest {
         when(request.getParameter(eq("sort"))).thenReturn("CATEGORY");
         when(session.getAttribute(eq("menu"))).thenReturn(new ArrayList<FoodItem>());
 
-        when(foodJDBCDAO.getFoodItem(anyString())).thenReturn(new FoodItem());
+        when(foodDAO.getFoodItem(anyString())).thenReturn(new FoodItem());
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
         doNothing().when(requestDispatcher).forward(request, response);
 
@@ -366,7 +365,7 @@ public class FoodItemServiceTest {
         when(session.getAttribute(eq("menu"))).thenReturn(new ArrayList<FoodItem>());
 
 
-        when(foodJDBCDAO.getFoodItem(anyString())).thenReturn(new FoodItem());
+        when(foodDAO.getFoodItem(anyString())).thenReturn(new FoodItem());
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
         doNothing().when(requestDispatcher).forward(request, response);
 

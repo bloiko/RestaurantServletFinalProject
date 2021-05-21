@@ -1,7 +1,6 @@
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page isELIgnored="false" %>
-<%@ page session="true" %>
+
 
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="resources"/>
@@ -19,7 +18,7 @@
 </head>
 <body>
 <article class="card-body mx-auto" style="max-width: 400px;">
-    <h4 class="card-title mt-3 text-center"><fmt:message key="registration.write_information"/></h4>
+    <h4 class="card-title mt-3 text-center"><fmt:message key="registration.registration"/></h4>
     <form action="/RegistrationController" method="post">
         <label class="errorMessage">${error_message}</label>
         <div class="form-group input-group">
@@ -38,14 +37,14 @@
             <div class="input-group-prepend">
                 <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
             </div>
-            <input name="username" class="form-control" placeholder="Username" type="text">
+            <input name="username" class="form-control" placeholder="<fmt:message key="registration.username"/>" type="text">
         </div>
         <label class="errorMessage">${password_error_message}</label>
         <div class="form-group input-group">
             <div class="input-group-prepend">
                 <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
             </div>
-            <input name="password" class="form-control" placeholder="Create password" type="password">
+            <input name="password" class="form-control" placeholder="<fmt:message key="registration.password"/>" type="password">
         </div>
         <label class="errorMessage">${email_error_message}</label>
         <div class="form-group input-group">

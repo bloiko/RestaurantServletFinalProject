@@ -1,5 +1,6 @@
 package dao;
 
+import dao.mapper.EntityMapper;
 import entity.*;
 import exception.DBException;
 
@@ -177,16 +178,8 @@ public class UserDAO {
             preparedStatement.setInt(1, userId);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String firstName = resultSet.getString("first_name");
-                String lastName = resultSet.getString("last_name");
-                String userName = resultSet.getString("username");
-                String password = resultSet.getString("password");
-                String email = resultSet.getString("email");
-                String address = resultSet.getString("address");
-                String phoneNumber = resultSet.getString("phone_number");
-                String role = resultSet.getString("role_name");
-                return new User(id, firstName, lastName, userName, password, email, address, phoneNumber, role);
+                UserMapper userMapper = new UserMapper();
+                return userMapper.mapRow(resultSet);
             } else {
                 throw new DBException("Could not find user userId: " + userId);
             }
@@ -216,16 +209,8 @@ public class UserDAO {
             preparedStatement.setString(1, theUserName);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String firstName = resultSet.getString("first_name");
-                String lastName = resultSet.getString("last_name");
-                String userName = resultSet.getString("username");
-                String password = resultSet.getString("password");
-                String email = resultSet.getString("email");
-                String address = resultSet.getString("address");
-                String phoneNumber = resultSet.getString("phone_number");
-                String role = resultSet.getString("role_name");
-                return new User(id, firstName, lastName, userName, password, email, address, phoneNumber, role);
+                UserMapper userMapper = new UserMapper();
+                return userMapper.mapRow(resultSet);
             } else {
                 throw new DBException("Could not find user userName: " + theUserName);
             }
@@ -233,6 +218,25 @@ public class UserDAO {
             throw new DBException("Cannot get user by username " + theUserName + " from database", throwables);
         } finally {
             close(connection, preparedStatement, resultSet);
+        }
+    }
+
+    /**
+     * Extracts a user from the result set row.
+     */
+    public static class UserMapper implements EntityMapper<User> {
+        @Override
+        public User mapRow(ResultSet resultSet) throws SQLException {
+            int id = resultSet.getInt("id");
+            String firstName = resultSet.getString("first_name");
+            String lastName = resultSet.getString("last_name");
+            String userName = resultSet.getString("username");
+            String password = resultSet.getString("password");
+            String email = resultSet.getString("email");
+            String address = resultSet.getString("address");
+            String phoneNumber = resultSet.getString("phone_number");
+            String role = resultSet.getString("role_name");
+            return new User(id, firstName, lastName, userName, password, email, address, phoneNumber, role);
         }
     }
 }

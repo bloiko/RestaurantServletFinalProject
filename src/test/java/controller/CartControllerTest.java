@@ -1,14 +1,10 @@
 package controller;
 
-import dao.FoodJDBCDAO;
-import entity.Category;
 import entity.FoodItem;
 import entity.Item;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import service.CartService;
-import service.FoodItemService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;

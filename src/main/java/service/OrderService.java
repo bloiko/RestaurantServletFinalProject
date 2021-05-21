@@ -1,6 +1,6 @@
 package service;
 
-import dao.OrderJDBCDAO;
+import dao.OrderDAO;
 import entity.Item;
 import entity.Order;
 import entity.OrderStatus;
@@ -12,14 +12,14 @@ import java.util.Date;
 import java.util.List;
 
 public class OrderService {
-    private OrderJDBCDAO orderDAO;
+    private OrderDAO orderDAO;
 
-    public OrderService(OrderJDBCDAO orderDAO) {
+    public OrderService(OrderDAO orderDAO) {
         this.orderDAO = orderDAO;
     }
 
     public OrderService() throws DBException {
-        orderDAO = OrderJDBCDAO.getInstance();
+        orderDAO = OrderDAO.getInstance();
     }
 
     public int addOrderAndGetId(List<Item> cart, User user) throws DBException {
@@ -34,9 +34,9 @@ public class OrderService {
         }
         return orderDAO.getOrderId(order);
     }
-    public void deleteOrder(String orderId) throws DBException {
+/*    public void deleteOrder(String orderId) throws DBException {
         orderDAO.deleteOrder(orderId);
-    }
+    }*/
     public List<OrderStatus> getStatuses() throws DBException {
         return orderDAO.getStatuses();
     }
