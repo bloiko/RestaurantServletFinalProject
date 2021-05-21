@@ -26,6 +26,7 @@ import java.util.List;
 @WebServlet("/FoodItemController")
 public class FoodItemController extends HttpServlet {
     private static final int NUMBER_ITEMS_ON_PAGE = 5;
+    public static final String FILTER = "filter";
     private FoodItemService foodItemService;
 
     public void setFoodItemService(FoodItemService foodItemService) {
@@ -75,7 +76,7 @@ public class FoodItemController extends HttpServlet {
         HttpSession session = request.getSession();
 
         String filterBy = getFilter(request, session);
-        session.setAttribute("filter", filterBy);
+        session.setAttribute(FILTER, filterBy);
 
         String sort = request.getParameter("sort");
         String sessionSort = (String) session.getAttribute("sort");
@@ -116,9 +117,9 @@ public class FoodItemController extends HttpServlet {
     }
 
     private String getFilter(HttpServletRequest request, HttpSession session) {
-        String filterBy = request.getParameter("filter");
+        String filterBy = request.getParameter(FILTER);
         if (filterBy == null) {
-            filterBy = (String) session.getAttribute("filter");
+            filterBy = (String) session.getAttribute(FILTER);
         }
         if (filterBy != null && filterBy.equals("all_categories")) {
             filterBy = null;
@@ -144,8 +145,7 @@ public class FoodItemController extends HttpServlet {
     private int getNumOfPages(List<FoodItem> foodItems) {
         int modOfTheDivision = foodItems.size() % NUMBER_ITEMS_ON_PAGE;
         int incorrectNumOfPages = foodItems.size() / NUMBER_ITEMS_ON_PAGE;
-        int numOfPages = modOfTheDivision == 0 ? incorrectNumOfPages : incorrectNumOfPages + 1;
-        return numOfPages;
+        return modOfTheDivision == 0 ? incorrectNumOfPages : incorrectNumOfPages + 1;
     }
 }
 

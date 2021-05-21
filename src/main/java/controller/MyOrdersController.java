@@ -62,25 +62,4 @@ public class MyOrdersController extends HttpServlet {
         LOGGER.debug("Controller finished");
     }
 
-    /*private User getUserFromCookies(Cookie[] cookies) {
-        User user = new User();
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("first_name")) {
-                user.setFirstName(cookie.getValue());
-            }
-            if (cookie.getName().equals("last_name")) {
-                user.setLastName(cookie.getValue());
-            }
-            if (cookie.getName().equals("email")) {
-                user.setEmail(cookie.getValue());
-            }
-            if (cookie.getName().equals("address")) {
-                user.setAddress(cookie.getValue());
-            }
-            if (cookie.getName().equals("phoneNumber")) {
-                user.setPhoneNumber(cookie.getValue());
-            }
-        }
-        return user;
-    }*/
 }

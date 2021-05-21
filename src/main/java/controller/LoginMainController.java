@@ -20,6 +20,7 @@ import java.io.IOException;
  */
 @WebServlet("/LoginMainController")
 public class LoginMainController extends HttpServlet {
+    public static final String COMMAND = "command";
     private UserService userService;
     @Override
     public void init() throws ServletException {
@@ -33,7 +34,7 @@ public class LoginMainController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("command",request.getAttribute("command"));
+        request.setAttribute(COMMAND,request.getAttribute(COMMAND));
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("login-main.jsp");
         requestDispatcher.forward(request, response);
     }
@@ -46,10 +47,9 @@ public class LoginMainController extends HttpServlet {
             if (userService.isCorrectUser(username, password)) {
                 HttpSession session = request.getSession();
                 session.setAttribute("username", username);
-                RequestDispatcher requestDispatcher;
-                if ("ORDER_IN_CART".equals(session.getAttribute("command"))) {
+                if ("ORDER_IN_CART".equals(session.getAttribute(COMMAND))) {
                     response.sendRedirect("/CartController?command=ORDER");
-                    session.removeAttribute("command");
+                    session.removeAttribute(COMMAND);
                 } else {
                     response.sendRedirect("/FoodItemController");
                 }

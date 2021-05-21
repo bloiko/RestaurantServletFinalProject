@@ -1,11 +1,14 @@
 package entity;
+
+import java.io.Serializable;
+
 /**
  * Order status entity.
  *
  * @author B.Loiko
  *
  */
-public enum OrderStatus {
+public enum OrderStatus implements Serializable {
     WAITING("WAITING"),
     PREPARING("PREPARING"),
     READY("READY"),

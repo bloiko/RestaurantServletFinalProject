@@ -3,6 +3,9 @@ package entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+
 /**
  * FoodItem entity.
  *
@@ -12,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FoodItem {
+public class FoodItem implements Serializable {
     private int id;
     private String name;
     private int price;

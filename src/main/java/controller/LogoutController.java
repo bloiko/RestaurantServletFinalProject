@@ -1,9 +1,7 @@
 package controller;
 
-import exception.DBException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import service.UserService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
