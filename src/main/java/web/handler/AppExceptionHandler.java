@@ -1,13 +1,12 @@
 package web.handler;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 @WebServlet("/AppExceptionHandler")
 public class AppExceptionHandler extends HttpServlet {
@@ -62,7 +61,7 @@ public class AppExceptionHandler extends HttpServlet {
         }
 
         out.write("<br><br>");
-        out.write("<a href=\"/FoodItemController\">Home Page</a>");
+        out.write("<a href=\"/controller?command=menuList\">Home Page</a>");
         out.write("</body></html>");
     }
 }

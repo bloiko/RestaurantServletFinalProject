@@ -38,7 +38,6 @@ public class Controller extends HttpServlet {
 	 */
 	private void process(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
-		
 		log.debug("Controller starts");
 
 		// extract web.command name from the request

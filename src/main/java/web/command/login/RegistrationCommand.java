@@ -2,6 +2,7 @@ package web.command.login;
 
 import database.entity.User;
 import exception.DBException;
+import org.apache.log4j.Logger;
 import service.UserService;
 import web.command.Command;
 
@@ -26,6 +27,8 @@ public class RegistrationCommand extends Command {
     public static final String LAST_NAME = "last_name";
     public static final String FIRST_NAME = "first_name";
     private UserService userService;
+    private static final Logger log = Logger.getLogger(RegistrationCommand.class);
+
     public RegistrationCommand() throws ServletException {
         init();
     }
@@ -40,28 +43,66 @@ public class RegistrationCommand extends Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        log.debug("Command starts");
         User user = getUserIfCorrectData(request);
         if (user == null) {
-            request.setAttribute(FIRST_NAME, request.getParameter(FIRST_NAME));
-            request.setAttribute(LAST_NAME, request.getParameter(LAST_NAME));
-            request.setAttribute(EMAIL, request.getParameter(EMAIL));
-            request.setAttribute(ADDRESS, request.getParameter(ADDRESS));
-            request.setAttribute(PHONE_NUMBER, request.getParameter(PHONE_NUMBER));
-            request.setAttribute(USERNAME, request.getParameter(USERNAME));
-            request.setAttribute(PASSWORD, request.getParameter(PASSWORD));
-            request.setAttribute("command", "REDIRECT");
+            log.info("User data is invalid");
+            prepareDataToTheRedirection(request);
+            log.trace("User data was prepared to the redirection");
+
+            log.debug("Command finished");
             return "registration.jsp";
         } else {
             try {
-                userService.addUserIfNotExistsAndReturnId(user);
+                userService.addUserAndReturnId(user);
+                log.info("User was added to the database");
             } catch (DBException e) {
+                log.error("This is DBException",e);
                 e.printStackTrace();
             }
-           return "login-main.jsp";
+
+            log.debug("Command finished");
+            return "login-main.jsp";
         }
     }
 
+    private void prepareDataToTheRedirection(HttpServletRequest request) {
+        String firstName = request.getParameter(FIRST_NAME);
+        request.setAttribute(FIRST_NAME, firstName);
+        log.trace("Set parameter to the request: FIRST_NAME --> "+ firstName);
+
+        String lastName = request.getParameter(LAST_NAME);
+        request.setAttribute(LAST_NAME, lastName);
+        log.trace("Set parameter to the request: LAST_NAME --> "+ lastName);
+
+        String email = request.getParameter(EMAIL);
+        request.setAttribute(EMAIL, email);
+        log.trace("Set parameter to the request: EMAIL --> "+ email);
+
+        String address = request.getParameter(ADDRESS);
+        request.setAttribute(ADDRESS, address);
+        log.trace("Set parameter to the request: ADDRESS --> "+ address);
+
+        String phoneNumber = request.getParameter(PHONE_NUMBER);
+        request.setAttribute(PHONE_NUMBER, phoneNumber);
+        log.trace("Set parameter to the request: PHONE_NUMBER --> "+ phoneNumber);
+
+
+        String username = request.getParameter(USERNAME);
+        request.setAttribute(USERNAME, username);
+        log.trace("Set parameter to the request: USERNAME --> "+ username);
+
+        String password = request.getParameter(PASSWORD);
+        request.setAttribute(PASSWORD, password);
+        log.trace("Set parameter to the request: PASSWORD --> "+ password);
+
+        request.setAttribute("command", "REDIRECT");
+        log.trace("Set attribute to the request: command --> "+ "REDIRECT");
+
+    }
+
     private User getUserIfCorrectData(HttpServletRequest request) {
+        log.debug("Check data on correctness");
         boolean isCorrect = true;
         String firstName = request.getParameter(FIRST_NAME);
         String lastName = request.getParameter(LAST_NAME);
@@ -101,6 +142,7 @@ public class RegistrationCommand extends Command {
             session.setAttribute("email_error_message", "Incorrect email format!");
             isCorrect = false;
         }
+        log.debug("Data was checked with result: "+isCorrect);
         if (isCorrect) {
             return new User(0, firstName, lastName, username, password, email, address, phoneNumber, "USER");
         } else {

@@ -61,7 +61,7 @@ public class RegistrationController extends HttpServlet {
             doGet(request, response);
         } else {
             try {
-                userService.addUserIfNotExistsAndReturnId(user);
+                userService.addUserAndReturnId(user);
             } catch (DBException e) {
                 e.printStackTrace();
             }

@@ -1,6 +1,7 @@
 package web.command.cart;
 
 import database.entity.Item;
+import org.apache.log4j.Logger;
 import service.CartService;
 import web.command.Command;
 
@@ -19,6 +20,8 @@ import java.util.List;
 
 public class CartDeleteItemCommand extends Command {
     private CartService cartService;
+    private static final Logger log = Logger.getLogger(CartDeleteItemCommand.class);
+
 
     public CartDeleteItemCommand() throws ServletException {
         init();
@@ -31,12 +34,21 @@ public class CartDeleteItemCommand extends Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        log.debug("Command starts");
         HttpSession session = request.getSession();
         List<Item> cart = (List<Item>) session.getAttribute("cart");
-        String itemId = request.getParameter("itemId");
-        cart = cartService.removeItemFromCart(cart, itemId);
-        session.setAttribute("cart", cart);
-        return "cart.jsp";
+        log.trace("Get attribute from the session: cart -->"+cart);
 
+        String itemId = request.getParameter("itemId");
+        log.trace("Get parameter from the request: itemId -->"+itemId);
+
+        cart = cartService.removeItemFromCart(cart, itemId);
+        log.trace("Remove item "+itemId+" from the cart using CartService");
+
+        session.setAttribute("cart", cart);
+        log.trace("Set attribute to the request: cart -->"+cart);
+
+        log.debug("Command finished");
+        return "cart.jsp";
     }
 }

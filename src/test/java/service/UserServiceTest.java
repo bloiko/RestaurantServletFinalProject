@@ -55,7 +55,7 @@ public class UserServiceTest {
     public void testService_addUserIfNotExistsAndReturnId_ShouldReturnMinusOne() throws Exception {
         User user = new User(1, "first", "last", "user", "pass", "email", "address", "+380981180662", "ADMIN");
         when(userDAO.getUserId(any(User.class))).thenReturn(-1);
-        int shoulBeOne = service.addUserIfNotExistsAndReturnId(user);
+        int shoulBeOne = service.addUserAndReturnId(user);
         verify(userDAO, times(1)).addUser(any(User.class));
         Assert.assertEquals(-1, shoulBeOne);
     }

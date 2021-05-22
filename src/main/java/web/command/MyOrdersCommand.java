@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class MyOrdersCommand extends Command {
     private UserService userService;
-    private static final Logger LOGGER = LogManager.getLogger(MyOrdersCommand.class);
+    private static final Logger log = LogManager.getLogger(MyOrdersCommand.class);
 
     public void setUserService(UserService userService) {
         this.userService = userService;
@@ -41,10 +41,10 @@ public class MyOrdersCommand extends Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        LOGGER.debug("Controller starts");
+        log.debug("Controller starts");
         HttpSession session = request.getSession();
         String username = (String) session.getAttribute("username");
-        LOGGER.trace("Session atribute : username" + username);
+        log.trace("Session atribute : username" + username);
 
         List<Order> orders = new LinkedList<>();
         if (username != null) {
@@ -55,9 +55,9 @@ public class MyOrdersCommand extends Command {
             }
         }
         request.setAttribute("ORDERS_LIST", orders);
-        LOGGER.trace("Session atribute : username" + username);
+        log.trace("Session atribute : username" + username);
 
-        LOGGER.debug("Controller finished");
+        log.debug("Controller finished");
         return "my-orders.jsp";
     }
 

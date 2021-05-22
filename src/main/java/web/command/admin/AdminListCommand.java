@@ -4,6 +4,7 @@ import database.dao.OrderDAO;
 import database.entity.Order;
 import database.entity.OrderStatus;
 import exception.DBException;
+import org.apache.log4j.Logger;
 import service.OrderService;
 import web.command.Command;
 
@@ -21,6 +22,8 @@ import java.util.List;
 public class AdminListCommand extends Command {
     private OrderDAO orderListDAO;
     private OrderService orderService;
+    private static final Logger log = Logger.getLogger(AdminListCommand.class);
+
     public AdminListCommand() throws ServletException {
         init();
     }
@@ -37,17 +40,30 @@ public class AdminListCommand extends Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        log.debug("Command starts");
         try {
             List<OrderStatus> orderStatuses = orderListDAO.getStatuses();
+            log.trace("Get statuses from Service : satuses --> " + orderStatuses);
+
             List<Order> notDoneOrders = orderService.getNotDoneOrdersSortById();
+            log.trace("Get not done orders from Service : notDoneOrders --> " + notDoneOrders);
+
             List<Order> doneOrders = orderService.getDoneOrders();
+            log.trace("Get done orders from Service : doneOrders --> " + doneOrders);
 
             request.setAttribute("statusList", orderStatuses);
+            log.trace("Set request parameter: statusList"+orderStatuses);
+
             request.setAttribute("NOT_DONE_ORDERS_LIST", notDoneOrders);
+            log.trace("Set request parameter: NOT_DONE_ORDERS_LIST"+notDoneOrders);
+
             request.setAttribute("DONE_ORDERS_LIST", doneOrders);
+            log.trace("Set request parameter: DONE_ORDERS_LIST"+doneOrders);
+
         } catch (DBException e) {
             e.printStackTrace();
         }
+        log.debug("Command finished");
         return  "admin.jsp";
     }
 

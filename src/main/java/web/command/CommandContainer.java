@@ -18,62 +18,61 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * Holder for all commands.<br/>
- * 
- * @author D.Kolesnikov
- * 
+ * Holder for all commands.
+ *
+ * @author B.Loiko
  */
 public class CommandContainer {
-	
-	private static final Logger log = Logger.getLogger(CommandContainer.class);
-	
-	private static Map<String, Command> commands = new TreeMap<String, Command>();
-	
-	static {
-		try {
-			commands.put("adminList", new AdminListCommand());
-			commands.put("changeOrderStatus", new AdminChangeOrderStatusCommand());
 
-			commands.put("cartList", new CartListCommand());
-			commands.put("cartDeleteItem", new CartDeleteItemCommand());
-			commands.put("cartOrderItem", new CartOrderItemCommand());
+    private static final Logger log = Logger.getLogger(CommandContainer.class);
 
-			commands.put("thanks", new ThanksCommand());
+    private static Map<String, Command> commands = new TreeMap<String, Command>();
 
-			commands.put("menuList", new MenuListCommand());
-			commands.put("menuOrder", new MenuOrderCommand());
+    static {
+        try {
+            commands.put("adminList", new AdminListCommand());
+            commands.put("changeOrderStatus", new AdminChangeOrderStatusCommand());
 
-			commands.put("myOrders", new MyOrdersCommand());
+            commands.put("cartList", new CartListCommand());
+            commands.put("cartDeleteItem", new CartDeleteItemCommand());
+            commands.put("cartOrderItem", new CartOrderItemCommand());
 
-			commands.put("loginMain", new LoginMainCommand());
+            commands.put("thanks", new ThanksCommand());
 
-			commands.put("loginAdmin", new LoginAdminCommand());
+            commands.put("menuList", new MenuListCommand());
+            commands.put("menuOrder", new MenuOrderCommand());
 
-			commands.put("logout", new LogoutCommand());
+            commands.put("myOrders", new MyOrdersCommand());
 
-			commands.put("registration", new RegistrationCommand());
-		} catch (ServletException e) {
-			e.printStackTrace();
-		}
+            commands.put("loginMain", new LoginMainCommand());
+            commands.put("loginAdmin", new LoginAdminCommand());
+            commands.put("logout", new LogoutCommand());
+            commands.put("registration", new RegistrationCommand());
 
-		log.debug("Command container was successfully initialized");
-		log.trace("Number of commands --> " + commands.size());
-	}
+            commands.put("noCommand", new NoCommand());
 
-	/**
-	 * Returns web.command object with the given name.
-	 * 
-	 * @param commandName
-	 *            Name of the web.command.
-	 * @return web.command.Command object.
-	 */
-	public static Command get(String commandName) {
-		if (commandName == null || !commands.containsKey(commandName)) {
-			log.trace("Command not found, name --> " + commandName);
-			return commands.get("noCommand"); 
-		}
-		
-		return commands.get(commandName);
-	}
-	
+
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
+
+        log.debug("Command container was successfully initialized");
+        log.trace("Number of commands --> " + commands.size());
+    }
+
+    /**
+     * Returns web.command object with the given name.
+     *
+     * @param commandName Name of the web.command.
+     * @return Command object.
+     */
+    public static Command get(String commandName) {
+        if (commandName == null || !commands.containsKey(commandName)) {
+            log.trace("Command not found, name --> " + commandName);
+            return commands.get("noCommand");
+        }
+
+        return commands.get(commandName);
+    }
+
 }

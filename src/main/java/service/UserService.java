@@ -45,7 +45,7 @@ public class UserService {
         orders.sort(Comparator.comparing(Order::getOrderDate).reversed());
         return orders;
     }
-    public int addUserIfNotExistsAndReturnId(User user) throws DBException {
+    public int addUserAndReturnId(User user) throws DBException {
         int userId = userDAO.getUserId(user);
         if (userId == -1) {
             userDAO.addUser(user);
