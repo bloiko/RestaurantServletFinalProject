@@ -48,11 +48,13 @@ public class OrderServiceTest {
         Assert.assertEquals(1, orderId);
     }
 
+/*
     @Test
     public void testService_deleteOrder_ShouldDeleteOrder() throws Exception {
         service.deleteOrder("1");
         verify(orderDAO, times(1)).deleteOrder(eq("1"));
     }
+*/
 
     @Test
     public void testService_getStatuses_ShouldGetAllStatuses() throws Exception {

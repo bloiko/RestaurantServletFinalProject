@@ -20,7 +20,7 @@ public class AdminFilter implements Filter {
         HttpSession session = servletRequest.getSession();
         String username = (String) session.getAttribute("username_admin");
         if ( username== null && servletRequest.getRequestURI().endsWith("/AdminController")) {
-            ((HttpServletResponse)response).sendRedirect("/LoginAdminController");
+            ((HttpServletResponse)response).sendRedirect("login-admin.jsp");
         } else chain.doFilter(request, response);
     }
 

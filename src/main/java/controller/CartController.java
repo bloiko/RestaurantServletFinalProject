@@ -6,6 +6,7 @@ import service.CartService;
 import service.OrderService;
 import service.UserService;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,11 +16,11 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * Cart controller.
  *
  * @author B.Loiko
- *
  */
 @WebServlet("/CartController")
 public class CartController extends HttpServlet {
@@ -63,7 +64,7 @@ public class CartController extends HttpServlet {
                 }
             } else {
                 session.setAttribute("command", "ORDER_IN_CART");
-                response.sendRedirect("/LoginMainController?command=ORDER");
+                request.getRequestDispatcher("login-main.jsp").forward(request, response);
                 return;
             }
             try {
@@ -76,6 +77,7 @@ public class CartController extends HttpServlet {
                 e.printStackTrace();
             }
         }
-        request.getRequestDispatcher("/CartController").forward(request, response);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("cart.jsp");
+        requestDispatcher.forward(request, response);
     }
 }

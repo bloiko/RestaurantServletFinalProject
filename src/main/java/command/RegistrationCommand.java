@@ -1,13 +1,16 @@
-package controller;
+package command;
 
-import entity.*;
+import entity.User;
 import exception.DBException;
 import service.UserService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
@@ -16,8 +19,7 @@ import java.io.IOException;
  *
  * @author B.Loiko
  */
-@WebServlet("/RegistrationController")
-public class RegistrationController extends HttpServlet {
+public class RegistrationCommand extends Command {
     public static final String PASSWORD = "password";
     public static final String USERNAME = "username";
     public static final String PHONE_NUMBER = "phoneNumber";
@@ -26,10 +28,11 @@ public class RegistrationController extends HttpServlet {
     public static final String LAST_NAME = "last_name";
     public static final String FIRST_NAME = "first_name";
     private UserService userService;
-
+    public RegistrationCommand() throws ServletException {
+        init();
+    }
     @Override
     public void init() throws ServletException {
-        super.init();
         try {
             userService = new UserService();
         } catch (DBException exc) {
@@ -38,13 +41,7 @@ public class RegistrationController extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("registration.jsp");
-        requestDispatcher.include(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user = getUserIfCorrectData(request);
         if (user == null) {
             request.setAttribute(FIRST_NAME, request.getParameter(FIRST_NAME));
@@ -55,14 +52,14 @@ public class RegistrationController extends HttpServlet {
             request.setAttribute(USERNAME, request.getParameter(USERNAME));
             request.setAttribute(PASSWORD, request.getParameter(PASSWORD));
             request.setAttribute("command", "REDIRECT");
-            doGet(request, response);
+            return "registration.jsp";
         } else {
             try {
                 userService.addUserIfNotExistsAndReturnId(user);
             } catch (DBException e) {
                 e.printStackTrace();
             }
-            response.sendRedirect("login-main.jsp");
+           return "login-main.jsp";
         }
     }
 

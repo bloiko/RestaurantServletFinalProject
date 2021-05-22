@@ -1,4 +1,4 @@
-package controller;
+package command;
 
 import dao.OrderDAO;
 import entity.Order;
@@ -14,20 +14,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+
 /**
  * Admin controller.
  *
  * @author B.Loiko
- *
  */
-@WebServlet("/AdminController")
-public class AdminController extends HttpServlet {
+public class AdminListCommand extends Command {
     private OrderDAO orderListDAO;
     private OrderService orderService;
-
+    public AdminListCommand() throws ServletException {
+        init();
+    }
     @Override
     public void init() throws ServletException {
-        super.init();
         try {
             orderService = new OrderService();
             orderListDAO = OrderDAO.getInstance();
@@ -36,8 +36,9 @@ public class AdminController extends HttpServlet {
         }
     }
 
+
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             List<OrderStatus> orderStatuses = orderListDAO.getStatuses();
             List<Order> notDoneOrders = orderService.getNotDoneOrdersSortById();
@@ -49,23 +50,7 @@ public class AdminController extends HttpServlet {
         } catch (DBException e) {
             e.printStackTrace();
         }
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("admin.jsp");
-        requestDispatcher.forward(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String statusName = request.getParameter("status");
-        String orderIdString = request.getParameter("orderId");
-        Order order;
-        try {
-            order = orderListDAO.getOrder(orderIdString);
-            OrderStatus newStatus = OrderStatus.getOrderStatus(statusName);
-            orderListDAO.updateOrder(order.getId(), newStatus);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        this.doGet(request, response);
+        return  "admin.jsp";
     }
 
     public void setOrderListDAO(OrderDAO orderListDAO) {

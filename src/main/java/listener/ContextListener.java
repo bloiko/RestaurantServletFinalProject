@@ -77,22 +77,22 @@ public class ContextListener implements ServletContextListener {
 	}
 /*
 	*//**
-	 * Initializes CommandContainer.
+	 * Initializes command.CommandContainer.
 	 * 
 	 * @param servletContext
 	 *//*
 	private void initCommandContainer() {
-		log.debug("Command container initialization started");
+		log.debug("command.Command container initialization started");
 		
 		// initialize commands container
 		// just load class to JVM
 		try {
-			Class.forName("ua.kharkov.knure.dkolesnikov.st4example.web.command.CommandContainer");
+			Class.forName("ua.kharkov.knure.dkolesnikov.st4example.web.command.command.CommandContainer");
 		} catch (ClassNotFoundException ex) {
 			throw new RuntimeException(ex);
 		}
 		
-		log.debug("Command container initialization finished");
+		log.debug("command.Command container initialization finished");
 	}
 	*/
 	private void log(String msg) {

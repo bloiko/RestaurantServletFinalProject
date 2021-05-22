@@ -45,7 +45,7 @@ public class LoginAdminControllerTest {
         when(request.getSession()).thenReturn(session);
         doNothing().when(requestDispatcher).include(request, response);
 
-        adminControllerSpy.doGet(request, response);
+       // adminControllerSpy.doGet(request, response);
         verify(session, atLeast(1)).setAttribute(eq("username"), eq("username"));
         verify(requestDispatcher, times(1)).include(request, response);
     }
@@ -67,7 +67,7 @@ public class LoginAdminControllerTest {
         when(request.getSession()).thenReturn(session);
         doNothing().when(requestDispatcher).include(request, response);
 
-        adminControllerSpy.doGet(request, response);
+       // adminControllerSpy.doGet(request, response);
 
         verify(request, times(1)).setAttribute(eq("message"), anyString());
         verify(requestDispatcher, times(1)).forward(request, response);

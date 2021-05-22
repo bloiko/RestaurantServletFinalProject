@@ -1,4 +1,4 @@
-package controller;
+package command;
 
 import entity.FoodItem;
 import entity.Item;
@@ -8,8 +8,6 @@ import service.FoodItemService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -22,19 +20,15 @@ import java.util.List;
  *
  * @author B.Loiko
  */
-@WebServlet("/FoodItemController")
-public class FoodItemController extends HttpServlet {
+public class MenuListCommand extends Command {
     private static final int NUMBER_ITEMS_ON_PAGE = 5;
     public static final String FILTER = "filter";
     private FoodItemService foodItemService;
-
-    public void setFoodItemService(FoodItemService foodItemService) {
-        this.foodItemService = foodItemService;
+    public MenuListCommand() throws ServletException {
+        init();
     }
-
     @Override
     public void init() throws ServletException {
-        super.init();
         try {
             foodItemService = new FoodItemService();
         } catch (Exception exc) {
@@ -43,34 +37,7 @@ public class FoodItemController extends HttpServlet {
     }
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            String command = request.getParameter("command");
-            HttpSession session = request.getSession();
-            List<Item> cart = getCart(session);
-            if ("ORDER".equals(command)) {
-                String foodId = request.getParameter("foodId");
-                foodItemService.addFoodItemToCart(cart, foodId);
-                session.setAttribute("cart", cart);
-            }
-            listFoodItems(request, response);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private List<Item> getCart(HttpSession session) {
-        List<Item> cart = (List<Item>) session.getAttribute("cart");
-        if (cart == null) {
-            cart = new ArrayList<>();
-            session.setAttribute("cart", cart);
-        }
-        return cart;
-    }
-
-    private void listFoodItems(HttpServletRequest request, HttpServletResponse response) throws DBException, ServletException, IOException, CannotFetchItemsException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         HttpSession session = request.getSession();
 
         String filterBy = getFilter(request, session);
@@ -91,16 +58,24 @@ public class FoodItemController extends HttpServlet {
         session.setAttribute("sort", sort);
 
         int page = getPageNumber(request, session);
-        List<FoodItem> foodItems = foodItemService.getFoodItems(page, NUMBER_ITEMS_ON_PAGE, sort, order, filterBy);
-        int numOfPages = filterBy == null || filterBy.isEmpty() ? getNumOfPages(foodItemService.getFoodItems()) : getNumOfPages(foodItems);
-
+        List<FoodItem> foodItems = null;
+        int numOfPages = 0;
+        try {
+            foodItems = foodItemService.getFoodItems(page, NUMBER_ITEMS_ON_PAGE, sort, order, filterBy);
+            numOfPages = filterBy == null || filterBy.isEmpty() ? getNumOfPages(foodItemService.getFoodItems()) : getNumOfPages(foodItems);
+        } catch (DBException e) {
+            e.printStackTrace();
+        }
         request.setAttribute("numberOfPages", numOfPages);
         session.setAttribute("page", page);
-        request.setAttribute("categories", foodItemService.getCategories());
+        try {
+            request.setAttribute("categories", foodItemService.getCategories());
+        } catch (DBException e) {
+            e.printStackTrace();
+        }
         request.setAttribute("FOOD_LIST", foodItems);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/list-food.jsp");
-        dispatcher.forward(request, response);
+        return "list-food.jsp";
     }
 
     private String getOppositeOrder(String sort, String sessionSort, String order) {

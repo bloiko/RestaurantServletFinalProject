@@ -28,7 +28,6 @@
             </div>
             <input name="username" class="form-control" placeholder="<fmt:message key="login.username"/>" type="username" value="${username}">
         </div>
-        <label class="errorMessage">${password_error_message}</label>
         <div class="form-group input-group">
             <div class="input-group-prepend">
                 <span class="input-group-text"> <i class="fa fa-lock"></i> </span>

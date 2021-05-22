@@ -44,11 +44,11 @@ public class FoodItemService {
         return foodItemDAO.getCategories();
     }
 
-    public List<FoodItem> getFoodItems() throws CannotFetchItemsException {
+    public List<FoodItem> getFoodItems() throws DBException {
         try {
             return foodItemDAO.getFoodItems();
         } catch (DBException e) {
-            throw new CannotFetchItemsException("Items fetch failed");
+            throw new DBException("Items fetch failed");
         }
     }
     public List<FoodItem> getFoodItems(int page, int number, String sortBy, String order, String filter) throws DBException {

@@ -1,4 +1,4 @@
-package controller;
+package command;
 
 import exception.DBException;
 import service.UserService;
@@ -18,14 +18,14 @@ import java.io.IOException;
  *
  * @author B.Loiko
  */
-@WebServlet("/LoginMainController")
-public class LoginMainController extends HttpServlet {
+public class LoginMainCommand extends Command {
     public static final String COMMAND = "command";
     private UserService userService;
-
+    public LoginMainCommand() throws ServletException {
+        init();
+    }
     @Override
     public void init() throws ServletException {
-        super.init();
         try {
             userService = new UserService();
         } catch (Exception exc) {
@@ -34,14 +34,7 @@ public class LoginMainController extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute(COMMAND, request.getAttribute(COMMAND));
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("login-main.jsp");
-        requestDispatcher.forward(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         HttpSession session = request.getSession();
         removePastErrorMessagesIfExist(session);
@@ -52,17 +45,16 @@ public class LoginMainController extends HttpServlet {
                 session.setAttribute("username", username);
                 if ("ORDER_IN_CART".equals(session.getAttribute(COMMAND))) {
                     session.removeAttribute(COMMAND);
-                    response.sendRedirect("/CartController");
+                    return "cart.jsp";
                 } else {
-                    response.sendRedirect("/FoodItemController");
+                    return "/controller?command=menuList";
                 }
-            } else {
-                session.setAttribute("message", "Account's Invalid");
-                response.sendRedirect("/LoginMainController");
             }
         } catch (DBException e) {
             e.printStackTrace();
         }
+        session.setAttribute("message", "Account's Invalid");
+        return "/controller?command=loginMain";
     }
 
     private void removePastErrorMessagesIfExist(HttpSession session) {
