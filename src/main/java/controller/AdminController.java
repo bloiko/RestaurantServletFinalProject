@@ -1,8 +1,9 @@
 package controller;
 
-import dao.OrderDAO;
-import entity.Order;
-import entity.OrderStatus;
+
+import database.dao.OrderDAO;
+import database.entity.Order;
+import database.entity.OrderStatus;
 import exception.DBException;
 import service.OrderService;
 

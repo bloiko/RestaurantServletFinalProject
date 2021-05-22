@@ -1,7 +1,7 @@
 package controller;
 
-import entity.FoodItem;
-import entity.Item;
+import database.entity.FoodItem;
+import database.entity.Item;
 import org.junit.Before;
 import org.junit.Test;
 import service.CartService;
@@ -41,7 +41,7 @@ public class CartControllerTest {
 
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
         when(request.getSession()).thenReturn(session);
-        when(request.getParameter("command")).thenReturn("DELETE");
+        when(request.getParameter("web/command")).thenReturn("DELETE");
         when(request.getParameter("itemId")).thenReturn("0");
         when(session.getAttribute("cart")).thenReturn(itemList);
         doNothing().when(requestDispatcher).forward(request, response);
@@ -63,7 +63,7 @@ public class CartControllerTest {
 
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
         when(request.getSession()).thenReturn(session);
-        when(request.getParameter("command")).thenReturn("DELETE");
+        when(request.getParameter("web.command")).thenReturn("DELETE");
         when(request.getParameter("itemId")).thenReturn("3");
         when(session.getAttribute("cart")).thenReturn(itemList);
         doNothing().when(requestDispatcher).forward(request, response);

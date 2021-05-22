@@ -1,7 +1,9 @@
 package controller;
 
-import dao.OrderDAO;
-import entity.*;
+import database.dao.OrderDAO;
+import database.entity.Order;
+import database.entity.OrderStatus;
+import database.entity.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -40,7 +42,7 @@ public class AdminControllerTest {
         doNothing().when(adminControllerSpy).init();
 
         when(orderDAO.getOrders()).thenReturn(new ArrayList<>());
-        when(request.getParameter("command")).thenReturn(null);
+        when(request.getParameter("web/command")).thenReturn(null);
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
         when(request.getSession()).thenReturn(session);
         doNothing().when(requestDispatcher).forward(request, response);
@@ -64,7 +66,7 @@ public class AdminControllerTest {
         when(orderDAO.getOrders()).thenReturn(new ArrayList<>());
         when(request.getParameter("orderId")).thenReturn("1");
         doNothing().when(orderDAO).deleteOrder(eq("1"));
-        when(request.getParameter("command")).thenReturn("DELETE");
+        when(request.getParameter("web/command")).thenReturn("DELETE");
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
         when(request.getSession()).thenReturn(session);
         doNothing().when(requestDispatcher).forward(request, response);

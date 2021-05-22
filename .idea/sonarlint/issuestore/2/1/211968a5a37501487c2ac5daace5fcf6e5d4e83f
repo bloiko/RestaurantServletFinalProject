@@ -1,29 +1,7 @@
 
-c
-java:S1192""FDefine a constant instead of duplicating this literal "email" 3 times.(Ù„åü8§Ô¦ˆ–/
-~
-java:S1989D"aHandle the following exceptions that could be thrown by "forward": ServletException, IOException.(ò¢ë‡8§Ô¦ˆ–/
-l
-java:S1192!"JDefine a constant instead of duplicating this literal "last_name" 3 times.(ÙÊ‘½úÿÿÿÿ8§Ô¦ˆ–/
-~
-java:S1989%"aHandle the following exceptions that could be thrown by "include": ServletException, IOException.(·ı¹Š8§Ô¦ˆ–/
-Z
-java:S1155:">Use isEmpty() to check whether the collection is empty or not.(†¸8ï–ğ²–/
-j
-java:S1192#"HDefine a constant instead of duplicating this literal "address" 3 times.(ë³‡ßùÿÿÿÿ8§Ô¦ˆ–/
-L
-java:S1172I"/Remove this unused method parameter "response".(™íÆŸ8§Ô¦ˆ–/
-m
-java:S1192 "KDefine a constant instead of duplicating this literal "first_name" 3 times.(Ú†Áºşÿÿÿÿ8§Ô¦ˆ–/
-u
-java:S2226"XRemove this misleading mutable servlet instance field or make it "static" and/or "final"(õæœõ8§Ô¦ˆ–/
-\
-java:S24410":Make "User" serializable or don't store it in the session.(£™Õàûÿÿÿÿ8ï–ğ²–/
-n
-java:S1192$"LDefine a constant instead of duplicating this literal "phoneNumber" 3 times.(›™½çşÿÿÿÿ8§Ô¦ˆ–/
 p
-java:S5843V"TSimplify this regular expression to reduce its complexity from 71 to the 20 allowed.(Şôñf8§Ô¦ˆ–/
-o
-java:S2441B"RMake "ArrayList" and its parameters serializable or don't store it in the session.(Ì¥Ñï8ï–ğ²–/
-u
-java:S2226"XRemove this misleading mutable servlet instance field or make it "static" and/or "final"(ÅÙ8§Ô¦ˆ–/
+java:S1989A"SHandle the following exception that could be thrown by "sendRedirect": IOException.(ğ¾ÚÊ8†šâö˜/
+~
+java:S1989+"aHandle the following exceptions that could be thrown by "include": ServletException, IOException.(·ı¹Š8†šâö˜/
+
+java:S1989:"_Handle the following exceptions that could be thrown by "doGet": ServletException, IOException.(®Ó‘ûÿÿÿÿÿ8†šâö˜/

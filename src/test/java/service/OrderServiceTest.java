@@ -1,7 +1,8 @@
 package service;
 
-import dao.OrderDAO;
-import entity.*;
+
+import database.dao.OrderDAO;
+import database.entity.*;
 import exception.DBException;
 import org.junit.Assert;
 import org.junit.Before;
@@ -11,7 +12,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.util.ArrayList;
 import java.util.List;
 

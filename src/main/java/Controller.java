@@ -1,5 +1,5 @@
-import command.Command;
-import command.CommandContainer;
+import web.command.Command;
+import web.command.CommandContainer;
 import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
@@ -41,15 +41,15 @@ public class Controller extends HttpServlet {
 		
 		log.debug("Controller starts");
 
-		// extract command name from the request
+		// extract web.command name from the request
 		String commandName = request.getParameter("command");
 		log.trace("Request parameter: command --> " + commandName);
 
-		// obtain command object by its name
+		// obtain web.command object by its name
 		Command command = CommandContainer.get(commandName);
 		log.trace("Obtained command --> " + command);
 
-		// execute command and get forward address
+		// execute web.command and get forward address
 		String forward = command.execute(request, response);
 		log.trace("Forward address --> " + forward);
 

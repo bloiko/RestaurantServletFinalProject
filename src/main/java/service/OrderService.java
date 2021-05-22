@@ -1,15 +1,17 @@
 package service;
 
-import dao.OrderDAO;
-import entity.Item;
-import entity.Order;
-import entity.OrderStatus;
-import entity.User;
+
+import database.dao.OrderDAO;
+import database.entity.Item;
+import database.entity.Order;
+import database.entity.OrderStatus;
+import database.entity.User;
 import exception.DBException;
 
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+
 
 public class OrderService {
     private OrderDAO orderDAO;
@@ -34,16 +36,27 @@ public class OrderService {
         }
         return orderDAO.getOrderId(order);
     }
-/*    public void deleteOrder(String orderId) throws DBException {
-        orderDAO.deleteOrder(orderId);
-    }*/
+
+    /*    public void deleteOrder(String orderId) throws DBException {
+            orderDAO.deleteOrder(orderId);
+        }*/
     public List<OrderStatus> getStatuses() throws DBException {
         return orderDAO.getStatuses();
     }
-   public List<Order> getDoneOrders() throws DBException {
+
+    public List<Order> getDoneOrders() throws DBException {
         return orderDAO.getDoneOrders();
     }
+
     public List<Order> getNotDoneOrdersSortById() throws DBException {
         return orderDAO.getNotDoneOrdersSortById();
+    }
+
+    public Order getOrder(String orderIdString) throws DBException {
+        return orderDAO.getOrder(orderIdString);
+    }
+
+    public void updateOrder(int id, OrderStatus newStatus) throws DBException {
+        orderDAO.updateOrder(id, newStatus);
     }
 }

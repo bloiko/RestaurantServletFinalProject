@@ -1,7 +1,6 @@
 package controller;
 
-import entity.Order;
-import entity.User;
+import database.entity.Order;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -12,7 +11,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import java.util.ArrayList;
 
 import static org.mockito.Mockito.*;

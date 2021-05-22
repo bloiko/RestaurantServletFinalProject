@@ -1,10 +1,9 @@
 package service;
 
-import dao.FoodDAO;
-import entity.Category;
-import entity.FoodItem;
-import entity.Item;
-import exception.CannotFetchItemsException;
+import database.dao.FoodDAO;
+import database.entity.Category;
+import database.entity.FoodItem;
+import database.entity.Item;
 import exception.DBException;
 
 import java.util.List;

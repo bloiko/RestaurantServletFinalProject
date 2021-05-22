@@ -1,15 +1,17 @@
 package service;
 
-import dao.FoodDAO;
-import entity.Category;
-import entity.FoodItem;
-import entity.Item;
+
+import database.dao.FoodDAO;
+import database.entity.Category;
+import database.entity.FoodItem;
+import database.entity.Item;
 import exception.CannotFetchItemsException;
 import exception.DBException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,8 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
-
-import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
 public class FoodItemServiceTest {
@@ -119,7 +119,7 @@ public class FoodItemServiceTest {
         doNothing().when(new FoodItemService());
 
         when(request.getSession()).thenReturn(session);
-        when(request.getParameter("command")).thenReturn("ORDER");
+        when(request.getParameter("web.command")).thenReturn("ORDER");
         when(request.getParameter("foodId")).thenReturn("1");
         foodItemControllerSpy.doGet(request, response);
 
@@ -137,7 +137,7 @@ public class FoodItemServiceTest {
         List<Item> itemList = new ArrayList<Item>();
         itemList.add(new Item(1, new FoodItem(), 1));
         when(session.getAttribute("cart")).thenReturn(itemList);
-        when(request.getParameter("command")).thenReturn("ORDER");
+        when(request.getParameter("web.command")).thenReturn("ORDER");
         when(request.getParameter("foodId")).thenReturn("2");
         when(foodDAO.getFoodItem(anyString())).thenReturn(new FoodItem());
         foodItemControllerSpy.doGet(request, response);

@@ -1,7 +1,7 @@
 package controller;
 
-import entity.FoodItem;
-import entity.Item;
+import database.entity.FoodItem;
+import database.entity.Item;
 import exception.CannotFetchItemsException;
 import exception.DBException;
 import service.FoodItemService;
@@ -45,7 +45,7 @@ public class FoodItemController extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String command = request.getParameter("command");
+            String command = request.getParameter("web/command");
             HttpSession session = request.getSession();
             List<Item> cart = getCart(session);
             if ("ORDER".equals(command)) {

@@ -20,7 +20,7 @@ import java.io.IOException;
  */
 @WebServlet("/LoginMainController")
 public class LoginMainController extends HttpServlet {
-    public static final String COMMAND = "command";
+    public static final String COMMAND = "web/command";
     private UserService userService;
 
     @Override

@@ -1,3 +1,5 @@
 
-j
-java:S1192"HDefine a constant instead of duplicating this literal "orderId" 3 times.(Îíò·şÿÿÿÿ8˜²Ô¥–/
+|
+java:S1989D"_Handle the following exceptions that could be thrown by "doGet": ServletException, IOException.(Æ¯Ü8şî”—™/
+~
+java:S19895"aHandle the following exceptions that could be thrown by "forward": ServletException, IOException.(ò¢ë‡8ŸÎŒÑ—/

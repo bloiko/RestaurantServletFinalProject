@@ -1,8 +1,9 @@
 package service;
 
-import entity.Category;
-import entity.FoodItem;
-import entity.Item;
+
+import database.entity.Category;
+import database.entity.FoodItem;
+import database.entity.Item;
 import exception.DBException;
 import org.junit.Assert;
 import org.junit.Before;
@@ -75,7 +76,7 @@ public class CartServiceTest {
         doNothing().when(new FoodItemService());
 
         when(request.getSession()).thenReturn(session);
-        when(request.getParameter("command")).thenReturn("ORDER");
+        when(request.getParameter("web.command")).thenReturn("ORDER");
         when(request.getParameter("foodId")).thenReturn("1");
         foodItemControllerSpy.doGet(request, response);
 
@@ -93,7 +94,7 @@ public class CartServiceTest {
         List<Item> itemList = new ArrayList<Item>();
         itemList.add(new Item(1, new FoodItem(), 1));
         when(session.getAttribute("cart")).thenReturn(itemList);
-        when(request.getParameter("command")).thenReturn("ORDER");
+        when(request.getParameter("web.command")).thenReturn("ORDER");
         when(request.getParameter("foodId")).thenReturn("2");
         when(foodJDBCDAO.getFoodItem(anyString())).thenReturn(new FoodItem());
         foodItemControllerSpy.doGet(request, response);

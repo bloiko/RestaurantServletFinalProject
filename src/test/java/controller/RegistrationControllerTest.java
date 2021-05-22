@@ -1,10 +1,11 @@
 package controller;
 
-import dao.OrderDAO;
-import dao.UserDAO;
-import entity.Item;
-import entity.Order;
-import entity.User;
+
+import database.dao.OrderDAO;
+import database.dao.UserDAO;
+import database.entity.Item;
+import database.entity.Order;
+import database.entity.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;

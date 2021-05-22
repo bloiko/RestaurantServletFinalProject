@@ -1,7 +1,7 @@
 package controller;
 
-import entity.FoodItem;
-import entity.Item;
+import database.entity.FoodItem;
+import database.entity.Item;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -11,7 +11,6 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class FoodItemControllerTest {
         doNothing().when(foodItemControllerSpy).init();
 
         when(request.getSession()).thenReturn(session);
-        when(request.getParameter("command")).thenReturn("ORDER");
+        when(request.getParameter("web/command")).thenReturn("ORDER");
         when(request.getParameter("foodId")).thenReturn("1");
         foodItemControllerSpy.doGet(request, response);
 

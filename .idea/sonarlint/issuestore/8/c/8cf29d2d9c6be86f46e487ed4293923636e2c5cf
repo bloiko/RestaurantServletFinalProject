@@ -1,15 +1,3 @@
 
-o
-java:S3776'"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(­¡—ž8âòŒ°–/
-J
-java:S3010$"(Remove this assignment of "foodItemDAO".(«ÍßÂùÿÿÿÿ8Â“Ò´–/
-o
-java:S3776Y"RRefactor this method to reduce its Cognitive Complexity from 25 to the 15 allowed.(–Ê¦”8âòŒ°–/
-X
-java:S2696("6Make the enclosing method "static" or remove this set.(Ÿ…ƒ–úÿÿÿÿ8ÇÃ¶´–/
-^	java:S125›"<This block of commented-out lines of code should be removed.(èÝÎÑþÿÿÿÿ8âòŒ°–/
-]	java:S125"<This block of commented-out lines of code should be removed.(Þ¶þûÿÿÿÿ8ó¯²´–/
-d
-java:S2184Œ"FCast one of the operands of this multiplication operation to a "long".(ÀÃ‚8ùÓƒ±–/
-c
-java:S1192d"FDefine a constant instead of duplicating this literal "order" 7 times.(óÀÉó8âòŒ°–/
+™
+java:S1130I"|Remove the declaration of thrown exception 'exception.CannotFetchItemsException', as it cannot be thrown from method's body.(µ¶¥ª8†¯Ù›™/

@@ -7,7 +7,7 @@
     <short-name>my</short-name>
 <tag>
     <name>looping</name>
-    <tag-class>custom.tag.MyTagHandlerForLoop</tag-class>
+    <tag-class>web.custom.tag.MyTagHandlerForLoop</tag-class>
     <body-content>JSP</body-content>
     <attribute>
         <name>start</name>

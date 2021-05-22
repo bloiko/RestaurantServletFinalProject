@@ -1,11 +1,7 @@
 
-p
-java:S1450"ZRemove the "foodItemDAO" field and declare it as a local variable in the relevant methods.(¹êú×
-t
-java:S1989$"YHandle the following exception that could be thrown by "parseInt": NumberFormatException.(Ä·Ö²øÿÿÿÿ
-|
-java:S1989'"aHandle the following exceptions that could be thrown by "forward": ServletException, IOException.(™öÜÉýÿÿÿÿ
-o
-java:S2441&"MMake "List" and its parameters serializable or don't store it in the session.(À¬ìÖýÿÿÿÿ8Ùüæ²–/
-E
-java:S1068"/Remove this unused "foodItemDAO" private field.(¹êú×
+~
+java:S1989Q"aHandle the following exceptions that could be thrown by "forward": ServletException, IOException.(ò¢ë‡8ôäÐ•™/
+ƒ
+java:S1989K"aHandle the following exceptions that could be thrown by "forward": ServletException, IOException.(‰ðÖÚüÿÿÿÿ8à¹ÖØ˜/
+~
+java:S1989C"aHandle the following exceptions that could be thrown by "forward": ServletException, IOException.(ŽÒ–®8³ª¤–™/

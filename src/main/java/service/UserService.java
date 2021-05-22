@@ -1,9 +1,10 @@
 package service;
 
-import dao.OrderDAO;
-import dao.UserDAO;
-import entity.Order;
-import entity.User;
+
+import database.dao.OrderDAO;
+import database.dao.UserDAO;
+import database.entity.Order;
+import database.entity.User;
 import exception.DBException;
 
 import java.util.Comparator;

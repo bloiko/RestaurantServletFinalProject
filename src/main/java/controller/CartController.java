@@ -1,6 +1,9 @@
 package controller;
 
-import entity.*;
+
+import database.entity.Item;
+import database.entity.Order;
+import database.entity.User;
 import exception.DBException;
 import service.CartService;
 import service.OrderService;
@@ -46,7 +49,7 @@ public class CartController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String theCommand = request.getParameter("command");
+        String theCommand = request.getParameter("web/command");
         HttpSession session = request.getSession();
         if ("DELETE".equals(theCommand)) {
             List<Item> cart = (List<Item>) session.getAttribute("cart");

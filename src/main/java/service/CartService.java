@@ -1,7 +1,6 @@
 package service;
 
-import entity.Item;
-
+import database.entity.Item;
 import java.util.List;
 
 public class CartService {
