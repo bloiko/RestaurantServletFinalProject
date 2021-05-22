@@ -38,10 +38,12 @@
 
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav">
-                <a href="FoodItemController" class="nav-item nav-link"><fmt:message key="header.menu"/></a>
+                <a href="/controller?command=menuList" class="nav-item nav-link"><fmt:message
+                        key="header.menu"/></a>
                 <c:if test="${sessionScope.get('username')!=null}">
-                    <a href="cart.jsp" class="nav-item nav-link"><fmt:message key="header.cart"/></a>
-                    <a href="/MyOrdersController" class="nav-item nav-link"><fmt:message key="header.my_orders"/></a>
+                    <a href="cart.jsp" class="nav-item nav-link active"><fmt:message key="header.cart"/></a>
+                    <a href="/controller?command=myOrders" class="nav-item nav-link"><fmt:message
+                            key="header.my_orders"/></a>
                 </c:if>
             </div>
             <div class="nav-item dropdown ml-auto">
@@ -50,22 +52,22 @@
                     <span class="flag-icon flag-icon-${sessionScope.lang}"> </span> <fmt:message
                         key="header.language"/></a>
                 <div class="dropdown-menu" aria-labelledby="dropdown09">
-                    <a class="dropdown-item" href="/CartController?sessionLocale=ua"><span
+                    <a class="dropdown-item" href="/controller?command=cartList&sessionLocale=ua"><span
                             class="flag-icon flag-icon-ua"> </span> <fmt:message key="header.ukrainian"/></a>
-                    <a class="dropdown-item" href="/CartController?sessionLocale=en"><span
+                    <a class="dropdown-item" href="/controller?command=cartList&sessionLocale=en"><span
                             class="flag-icon flag-icon-us"> </span><fmt:message key="header.english"/></a>
                 </div>
             </div>
             <c:if test="${sessionScope.get('username')==null}">
                 <div class="navbar-nav">
-                    <a href="/RegistrationController" class="nav-item nav-link"></span><fmt:message
+                    <a href="registration.jsp" class="nav-item nav-link"></span><fmt:message
                             key="header.registration"/></a>
                     <a href="login-main.jsp" class="nav-item nav-link"></span><fmt:message key="header.login"/></a>
                 </div>
             </c:if>
             <c:if test="${sessionScope.get('username')!=null}">
                 <div class="navbar-nav">
-                    <a href="/LogoutController" class="nav-item nav-link"></span><fmt:message key="header.logout"/></a>
+                    <a href="/controller?command=logout" class="nav-item nav-link"></span><fmt:message key="header.logout"/></a>
                 </div>
                 <a href="cart.jsp">
             <span class="fa-stack fa-2x has-badge" data-count="${sessionScope.cart.size()}">
@@ -101,7 +103,7 @@
                     <td> ${item.foodItem.name} </td>
                     <td> ${item.foodItem.price}</td>
                     <td> ${item.quantity} </td>
-                    <td align="left"><a href="/CartController?command=DELETE&itemId=${item.foodItem.id}"
+                    <td align="left"><a href="/controller?command=cartDeleteItem&itemId=${item.foodItem.id}"
                                         onclick="return confirm('Are you sure?')">
                         <button type="button" class="btn btn-dark"><fmt:message key="cart.delete"/></button>
                     </a></td>
@@ -115,7 +117,7 @@
 </div>
 <div class="order" style="position: relative;">
     <h2><fmt:message key="cart.sum"/>: ${sum}</h2>
-    <a href="/CartController?command=ORDER">
+    <a href="/controller?command=cartOrderItem">
         <button type="button" class="btn btn-danger order-button" style="position: absolute; right: 10%"><fmt:message
                 key="cart.order"/></button>
     </a>

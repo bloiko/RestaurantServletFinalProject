@@ -23,8 +23,11 @@ public class CommandContainer {
 			commands.put("adminList", new AdminListCommand());
 			commands.put("changeOrderStatus", new AdminChangeOrderStatusCommand());
 
+			commands.put("cartList", new CartListCommand());
 			commands.put("cartDeleteItem", new CartDeleteItemCommand());
 			commands.put("cartOrderItem", new CartOrderItemCommand());
+
+			commands.put("thanks", new ThanksCommand());
 
 			commands.put("menuList", new MenuListCommand());
 			commands.put("menuOrder", new MenuOrderCommand());
@@ -34,6 +37,8 @@ public class CommandContainer {
 			commands.put("loginMain", new LoginMainCommand());
 
 			commands.put("loginAdmin", new LoginAdminCommand());
+
+			commands.put("logout", new LogoutCommand());
 
 			commands.put("registration", new RegistrationCommand());
 		} catch (ServletException e) {

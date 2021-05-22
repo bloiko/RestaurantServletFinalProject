@@ -33,7 +33,7 @@ public class LogoutCommand extends Command {
         LOGGER.trace("Session atribute was removed : cart");
 
         LOGGER.debug("Controller finished");
-        return "menuList";
+        return "/controller?command=menuList";
     }
 
     @Override

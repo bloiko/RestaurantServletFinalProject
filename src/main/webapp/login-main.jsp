@@ -20,7 +20,7 @@
 </head>
 <body>
 <article class="card-body mx-auto" style="max-width: 400px;">
-    <form action="/LoginMainController" method="post">
+    <form action="/controller?command=loginMain" method="post">
         <label class="errorMessage">${message}</label>
         <div class="form-group input-group">
             <div class="input-group-prepend">

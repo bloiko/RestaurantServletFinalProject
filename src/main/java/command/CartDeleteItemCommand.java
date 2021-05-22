@@ -27,8 +27,6 @@ import java.util.List;
 
 public class CartDeleteItemCommand extends Command {
     private CartService cartService;
-    private UserService userService;
-    private OrderService orderService;
 
     public CartDeleteItemCommand() throws ServletException {
         init();
@@ -37,12 +35,6 @@ public class CartDeleteItemCommand extends Command {
     @Override
     public void init() throws ServletException {
         cartService = new CartService();
-        try {
-            userService = new UserService();
-            orderService = new OrderService();
-        } catch (DBException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

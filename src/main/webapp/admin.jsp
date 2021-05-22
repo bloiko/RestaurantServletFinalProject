@@ -86,7 +86,7 @@
                     <td>
                             ${order.status}
                         <br/><br/>
-                        <form action="/AdminController?orderId=${order.id}" method="post">
+                        <form action="/controller?command=changeOrderStatus&orderId=${order.id}" method="post">
                             <select name="status">
                                 <c:forEach var="statusTemp" items="${statusList}">
                                     <option value="${statusTemp}">${statusTemp}</option>
@@ -96,7 +96,6 @@
                             <input type="submit" value="Change"/>
                         </form>
                     </td>
-                        <%--<th><a href="/AdminController?command=DELETE&orderId=${order.id}">Delete order</a></th>--%>
                 </tr>
             </c:forEach>
         </table>

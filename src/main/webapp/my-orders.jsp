@@ -36,29 +36,36 @@
 
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav">
-                <a href="FoodItemController" class="nav-item nav-link"><fmt:message key="header.menu"/></a>
+                <a href="/controller?command=menuList" class="nav-item nav-link"><fmt:message
+                        key="header.menu"/></a>
                 <c:if test="${sessionScope.get('username')!=null}">
                     <a href="cart.jsp" class="nav-item nav-link"><fmt:message key="header.cart"/></a>
-                    <a href="/MyOrdersController" class="nav-item nav-link"><fmt:message key="header.my_orders"/></a>
+                    <a href="/controller?command=myOrders" class="nav-item nav-link active"><fmt:message
+                            key="header.my_orders"/></a>
                 </c:if>
             </div>
             <div class="nav-item dropdown ml-auto">
-                <a class="nav-link dropdown-toggle" href="" id="dropdown09" style="color:black;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                   <span class="flag-icon flag-icon-${sessionScope.lang}"> </span> <fmt:message key="header.language"/></a>
+                <a class="nav-link dropdown-toggle" href="" id="dropdown09" style="color:black;" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    <span class="flag-icon flag-icon-${sessionScope.lang}"> </span> <fmt:message
+                        key="header.language"/></a>
                 <div class="dropdown-menu" aria-labelledby="dropdown09">
-                    <a class="dropdown-item" href="/MyOrdersController?sessionLocale=ua"><span class="flag-icon flag-icon-ua"> </span> <fmt:message key="header.ukrainian"/></a>
-                    <a class="dropdown-item" href="/MyOrdersController?sessionLocale=en"><span class="flag-icon flag-icon-us"> </span><fmt:message key="header.english"/></a>
+                    <a class="dropdown-item" href="/controller?command=myOrders&sessionLocale=ua"><span
+                            class="flag-icon flag-icon-ua"> </span> <fmt:message key="header.ukrainian"/></a>
+                    <a class="dropdown-item" href="/controller?command=myOrders&sessionLocale=en"><span
+                            class="flag-icon flag-icon-us"> </span><fmt:message key="header.english"/></a>
                 </div>
             </div>
             <c:if test="${sessionScope.get('username')==null}">
                 <div class="navbar-nav">
-                    <a href="/RegistrationController" class="nav-item nav-link"></span><fmt:message key="header.registration"/></a>
+                    <a href="registration.jsp" class="nav-item nav-link"></span><fmt:message
+                            key="header.registration"/></a>
                     <a href="login-main.jsp" class="nav-item nav-link"></span><fmt:message key="header.login"/></a>
                 </div>
             </c:if>
             <c:if test="${sessionScope.get('username')!=null}">
                 <div class="navbar-nav">
-                    <a href="/LogoutController" class="nav-item nav-link"></span><fmt:message key="header.logout"/></a>
+                    <a href="/controller?command=logout" class="nav-item nav-link"></span><fmt:message key="header.logout"/></a>
                 </div>
                 <a href="cart.jsp">
             <span class="fa-stack fa-2x has-badge" data-count="${sessionScope.cart.size()}">

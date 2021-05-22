@@ -13,22 +13,24 @@ import java.io.IOException;
  * This controller simply shows thanks-page.jsp after succesful food ordering.
  *
  * @author B.Loiko
- *
  */
-public class ThanksCommand  {
-/*    @Override
+public class ThanksCommand extends Command {
+    public ThanksCommand() {
+        try {
+            init();
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
     public void init() throws ServletException {
 
     }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("thanks-page.jsp");
-        requestDispatcher.forward(request, response);
+        return "thanks-page.jsp";
     }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }*/
 }

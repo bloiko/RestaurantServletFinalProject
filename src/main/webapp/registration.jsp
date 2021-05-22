@@ -19,7 +19,7 @@
 <body>
 <article class="card-body mx-auto" style="max-width: 400px;">
     <h4 class="card-title mt-3 text-center"><fmt:message key="registration.registration"/></h4>
-    <form action="/RegistrationController" method="post">
+    <form action="/controller?command=registration" method="post">
         <label class="errorMessage">${error_message}</label>
         <div class="form-group input-group">
             <div class="input-group-prepend">
@@ -66,23 +66,10 @@
                 <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
             </div>
             <input name="phoneNumber" class="form-control" placeholder="<fmt:message key="registration.phone_number"/>" type="text" value="${phoneNumber}">
-        </div> <!-- form-group// -->
-        <%--            <div class="form-group input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
-                        </div>
-                        <input class="form-control" placeholder="Create password" type="password">
-                    </div> <!-- form-group// -->--%>
-        <%--            <div class="form-group input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
-                        </div>
-                        <input class="form-control" placeholder="Repeat password" type="password">
-                    </div> <!-- form-group// -->--%>
+        </div>
         <div class="form-group">
             <button type="submit" class="btn btn-primary btn-block"><fmt:message key="registration.submit"/></button>
-        </div> <!-- form-group// -->
-        <%--<p class="text-center">Have an account? <a href="">Submit</a></p>--%>
+        </div>
     </form>
 </article>
 </body>

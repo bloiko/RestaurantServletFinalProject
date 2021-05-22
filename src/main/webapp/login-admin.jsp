@@ -7,7 +7,7 @@
     <title>Login</title>
 </head>
 <body>
-<form action="/LoginAdminController" method="post">
+<form action="/controller?command=loginAdmin" method="post">
     <table style="with: 50%">
         ${message}
         <tr>

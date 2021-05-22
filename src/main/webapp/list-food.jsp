@@ -38,10 +38,12 @@
 
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav">
-                <a href="FoodItemController" class="nav-item nav-link active"><fmt:message key="header.menu"/></a>
+                <a href="/controller?command=menuList" class="nav-item nav-link active"><fmt:message
+                        key="header.menu"/></a>
                 <c:if test="${sessionScope.get('username')!=null}">
                     <a href="cart.jsp" class="nav-item nav-link"><fmt:message key="header.cart"/></a>
-                    <a href="/MyOrdersController" class="nav-item nav-link"><fmt:message key="header.my_orders"/></a>
+                    <a href="/controller?command=myOrders" class="nav-item nav-link"><fmt:message
+                            key="header.my_orders"/></a>
                 </c:if>
             </div>
             <div class="nav-item dropdown ml-auto">
@@ -50,28 +52,29 @@
                     <span class="flag-icon flag-icon-${sessionScope.lang}"> </span> <fmt:message
                         key="header.language"/></a>
                 <div class="dropdown-menu" aria-labelledby="dropdown09">
-                    <a class="dropdown-item" href="/FoodItemController?sessionLocale=ua"><span
+                    <a class="dropdown-item" href="/controller?command=menuList&sessionLocale=ua"><span
                             class="flag-icon flag-icon-ua"> </span> <fmt:message key="header.ukrainian"/></a>
-                    <a class="dropdown-item" href="/FoodItemController?sessionLocale=en"><span
+                    <a class="dropdown-item" href="/controller?command=menuList&sessionLocale=en"><span
                             class="flag-icon flag-icon-us"> </span><fmt:message key="header.english"/></a>
                 </div>
             </div>
             <c:if test="${sessionScope.get('username')==null}">
                 <div class="navbar-nav">
-                    <a href="/RegistrationController" class="nav-item nav-link"></span><fmt:message key="header.registration"/></a>
+                    <a href="registration.jsp" class="nav-item nav-link"></span><fmt:message
+                            key="header.registration"/></a>
                     <a href="login-main.jsp" class="nav-item nav-link"></span><fmt:message key="header.login"/></a>
                 </div>
             </c:if>
             <c:if test="${sessionScope.get('username')!=null}">
                 <div class="navbar-nav">
-                    <a href="/LogoutController" class="nav-item nav-link"></span><fmt:message key="header.logout"/></a>
+                    <a href="/controller?command=logout" class="nav-item nav-link"></span><fmt:message key="header.logout"/></a>
                 </div>
-            <a href="cart.jsp">
+                <a href="cart.jsp">
             <span class="fa-stack fa-2x has-badge" data-count="${sessionScope.cart.size()}">
                     <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
                     <i style="" class="fa fa-shopping-cart fa-stack-2x red-cart"></i>
                 </span>
-            </a>
+                </a>
             </c:if>
         </div>
     </nav>
@@ -84,11 +87,11 @@
 <div id="container">
     <div id="content">
 
-        <a href="/FoodItemController?filter=all_categories">
+        <a href="/controller?command=menuList&filter=all_categories">
             <button type="button" class="btn btn-light">All categories</button>
         </a>
         <c:forEach var="category" items="${categories}">
-            <a href="/FoodItemController?filter=${category.name}">
+            <a href="/controller?command=menuList&filter=${category.name}">
                 <button type="button" class="btn btn-light">${category.name}</button>
             </a>
         </c:forEach>
@@ -97,12 +100,13 @@
             <thead>
             <tr>
                 <th scope="col"><fmt:message key="list_food.image"/></th>
-                <th scope="col"><fmt:message key="list_food.name"/><a href="/FoodItemController?sort=name"
+                <th scope="col"><fmt:message key="list_food.name"/><a href="/controller?command=menuList&sort=name"
                                                                       style="color:red;">&#8597;</a></th>
-                <th scope="col"><fmt:message key="list_food.price"/><a href="/FoodItemController?sort=price"
+                <th scope="col"><fmt:message key="list_food.price"/><a href="/controller?command=menuList&sort=price"
                                                                        style="color:red;">&#8597;</a></th>
-                <th scope="col"><fmt:message key="list_food.category"/><a href="/FoodItemController?sort=category"
-                                                                          style="color:red;">&#8597;</a></th>
+                <th scope="col"><fmt:message key="list_food.category"/><a
+                        href="/controller?command=menuList&sort=category"
+                        style="color:red;">&#8597;</a></th>
                 <c:if test="${sessionScope.get('username')!=null}">
                     <th scope="col"></th>
                 </c:if>
@@ -116,7 +120,7 @@
                     <td> ${foodItem.price}$</td>
                     <td>${foodItem.category.name}</td>
                     <c:if test="${sessionScope.get('username')!=null}">
-                        <td><a href="/FoodItemController?command=ORDER&foodId=${foodItem.id}" style="color:black;">
+                        <td><a href="/controller?command=menuOrder&foodId=${foodItem.id}" style="color:black;">
                             <button type="button" class="btn btn-dark"><fmt:message
                                     key="list_food.add_to_cart"/></button>
                         </a>
@@ -130,7 +134,7 @@
             <c:set var="counter" value="1"/>
             <c:set var="end" value="${requestScope.numberOfPages}"/>
             <my:looping start="1" end="${end}">
-                <a href="FoodItemController?page=${counter}">${counter}</a>
+                <a href="/controller?command=menuList&page=${counter}">${counter}</a>
                 <c:set var="counter" value="${counter+1}"/>
             </my:looping>
         </div>
