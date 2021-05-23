@@ -10,9 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FoodDAO {
-    private static volatile FoodDAO instance;
-
-
 
     /**
      * Returns list of food items from the database.
@@ -37,9 +34,9 @@ public class FoodDAO {
                 foodItems.add(foodItem);
             }
             return foodItems;
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(myConn);
-            throw new DBException("Cannot get food items from database", throwables);
+            throw new DBException("Cannot get food items from database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(myConn);
         }
@@ -73,9 +70,9 @@ public class FoodDAO {
                 foodItems.add(foodItem);
             }
             return foodItems;
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(myConn);
-            throw new DBException("Cannot get food items from database", throwables);
+            throw new DBException("Cannot get food items from database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(myConn);
         }
@@ -86,7 +83,7 @@ public class FoodDAO {
      *
      * @param limit  shows how many food items to take
      * @param offset shows how many food items need to skip
-     * @param filter shows wich category use to filter data
+     * @param filter shows which category use to filter data
      * @return list of food items  .
      */
     public List<FoodItem> getFoodItemsWithSkipLimitFilter(int limit, int offset, String filter) throws DBException {
@@ -112,9 +109,9 @@ public class FoodDAO {
                 foodItems.add(foodItem);
             }
             return foodItems;
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(myConn);
-            throw new DBException("Cannot get food items from database", throwables);
+            throw new DBException("Cannot get food items from database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(myConn);
         }
@@ -126,8 +123,8 @@ public class FoodDAO {
      *
      * @param limit  shows how many food items to take
      * @param offset shows how many food items need to skip
-     * @param sortBy shows wich entity field use to sort data
-     * @param order  shows in wich way data should be sorted ASC or DESC
+     * @param sortBy shows which entity field use to sort data
+     * @param order  shows in which way data should be sorted ASC or DESC
      * @return list of food items  .
      */
     public List<FoodItem> getFoodItemsWithSkipLimitAndOrder(int limit, int offset, String sortBy, String order) throws DBException {
@@ -152,9 +149,9 @@ public class FoodDAO {
                 foodItems.add(foodItem);
             }
             return foodItems;
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(myConn);
-            throw new DBException("Cannot get food items from database", throwables);
+            throw new DBException("Cannot get food items from database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(myConn);
         }
@@ -166,9 +163,9 @@ public class FoodDAO {
      *
      * @param limit  shows how many food items to take
      * @param offset shows how many food items need to skip
-     * @param filter shows wich category use to filter data
-     * @param sortBy shows wich entity field use to sort data
-     * @param order  shows in wich way data should be sorted ASC or DESC
+     * @param filter shows which category use to filter data
+     * @param sortBy shows which entity field use to sort data
+     * @param order  shows in which way data should be sorted ASC or DESC
      * @return list of food items  .
      */
     public List<FoodItem> getFoodItemsWithFilterSkipLimitAndOrder(String filter, int limit, int offset, String sortBy, String order) throws DBException {
@@ -195,9 +192,9 @@ public class FoodDAO {
                 foodItems.add(foodItem);
             }
             return foodItems;
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(myConn);
-            throw new DBException("Cannot get food items from database", throwables);
+            throw new DBException("Cannot get food items from database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(myConn);
         }
@@ -232,9 +229,9 @@ public class FoodDAO {
                 throw new DBException("Could not find food item with id: " + theFoodItemId);
             }
             return foodItem;
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(myConn);
-            throw new DBException("Cannot get food item with id" + theFoodItemId + " from database", throwables);
+            throw new DBException("Cannot get food item with id" + theFoodItemId + " from database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(myConn);
         }
@@ -262,9 +259,9 @@ public class FoodDAO {
                 categories.add(category);
             }
             return categories;
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(myConn);
-            throw new DBException("Cannot get all categories from database", throwables);
+            throw new DBException("Cannot get all categories from database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(myConn);
         }

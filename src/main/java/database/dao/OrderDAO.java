@@ -12,71 +12,66 @@ import java.util.List;
 public class OrderDAO {
 
     /**
-     * Returns list of users from the daabase.
+     * Returns list of users from the database.
      *
      * @return list of all orders  .
      */
     public List<Order> getOrders() throws DBException {
         List<Order> orders = new ArrayList<>();
         Connection connection = null;
-        Statement myStmt = null;
-        ResultSet myRs = null;
         try {
             connection = DBManager.getInstance().getConnection();
             String sql = "select * from food_order" +
                     " join user u on u.id = food_order.user_id" +
                     " join status s on s.id = food_order.status_id";
-            myStmt = connection.createStatement();
-            myRs = myStmt.executeQuery(sql);
+            Statement myStmt = connection.createStatement();
+            ResultSet myRs = myStmt.executeQuery(sql);
             while (myRs.next()) {
                 OrderMapper mapper = new OrderMapper();
                 Order order = mapper.mapRow(myRs);
                 orders.add(order);
             }
             return orders;
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(connection);
-            throw new DBException("Cannot get all orders from database", throwables);
+            throw new DBException("Cannot get all orders from database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(connection);
         }
     }
 
     /**
-     * Returns list of users with DONE OrderStatus from the daabase.
+     * Returns list of users with DONE OrderStatus from the database.
      *
      * @return list of all orders  .
      */
     public List<Order> getDoneOrders() throws DBException {
         List<Order> orders = new ArrayList<>();
-        int foodOrderId;
         Connection connection = null;
-        Statement myStmt = null;
-        ResultSet myRs = null;
         try {
             connection = DBManager.getInstance().getConnection();
             String sql = "select * from food_order" +
                     " join user u on u.id = food_order.user_id" +
                     " join status s on s.id = food_order.status_id" +
                     " where status_name ='DONE'";
-            myStmt = connection.createStatement();
-            myRs = myStmt.executeQuery(sql);
+            Statement myStmt = connection.createStatement();
+            ResultSet myRs = myStmt.executeQuery(sql);
             while (myRs.next()) {
                 OrderMapper mapper = new OrderMapper();
                 Order order = mapper.mapRow(myRs);
                 orders.add(order);
             }
             return orders;
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(connection);
-            throw new DBException("Cannot get all orders from database", throwables);
+            throw new DBException("Cannot get all orders from database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(connection);
         }
     }
 
     /**
-     * Returns list of users without DONE OrderStatus from the daabase.This list will be in
+     * Returns list of users without DONE OrderStatus from the database.This list will be in
      * sorted order.
      *
      * @return list of all orders .
@@ -84,8 +79,6 @@ public class OrderDAO {
     public List<Order> getNotDoneOrdersSortById() throws DBException {
         List<Order> orders = new ArrayList<>();
         Connection connection = null;
-        Statement myStmt = null;
-        ResultSet myRs = null;
         try {
             connection = DBManager.getInstance().getConnection();
             String sql = "select * from food_order " +
@@ -93,17 +86,17 @@ public class OrderDAO {
                     " join status s on s.id = food_order.status_id " +
                     " where status_name !='DONE'" +
                     " order by food_order.id DESC ";
-            myStmt = connection.createStatement();
-            myRs = myStmt.executeQuery(sql);
+            Statement myStmt = connection.createStatement();
+            ResultSet myRs = myStmt.executeQuery(sql);
             while (myRs.next()) {
                 OrderMapper mapper = new OrderMapper();
                 Order order = mapper.mapRow(myRs);
                 orders.add(order);
             }
             return orders;
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(connection);
-            throw new DBException("Cannot get all orders from database", throwables);
+            throw new DBException("Cannot get all orders from database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(connection);
         }
@@ -118,25 +111,23 @@ public class OrderDAO {
     public List<Order> getOrdersByUserId(int theUserId) throws DBException {
         List<Order> orders = new ArrayList<>();
         Connection connection = null;
-        PreparedStatement myStmt;
-        ResultSet myRs;
         try {
             connection = DBManager.getInstance().getConnection();
             String sql = "select * from food_order" +
                     " join user u on u.id = food_order.user_id" +
                     " join status s on s.id = food_order.status_id where u.id=?";
-            myStmt = connection.prepareStatement(sql);
+            PreparedStatement myStmt = connection.prepareStatement(sql);
             myStmt.setInt(1, theUserId);
-            myRs = myStmt.executeQuery();
+            ResultSet myRs = myStmt.executeQuery();
             while (myRs.next()) {
                 OrderMapper mapper = new OrderMapper();
                 Order order = mapper.mapRow(myRs);
                 orders.add(order);
             }
             return orders;
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(connection);
-            throw new DBException("Cannot get all orders by user id " + theUserId + " from database", throwables);
+            throw new DBException("Cannot get all orders by user id " + theUserId + " from database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(connection);
         }
@@ -151,24 +142,22 @@ public class OrderDAO {
     private List<Item> getOrderItems(int orderId) throws DBException {
         List<Item> items = new ArrayList<>();
         Connection connection = null;
-        PreparedStatement myStmt = null;
-        ResultSet resultSet = null;
         try {
             String sql = "select * from order_item " +
                     "where order_id= ? ;";
             connection = DBManager.getInstance().getConnection();
-            myStmt = connection.prepareStatement(sql);
+            PreparedStatement myStmt = connection.prepareStatement(sql);
             myStmt.setInt(1, orderId);
-            resultSet = myStmt.executeQuery();
+            ResultSet resultSet = myStmt.executeQuery();
             while (resultSet.next()) {
                 int itemId = resultSet.getInt("item_id");
                 Item item = getItemById(itemId);
                 items.add(item);
             }
             return items;
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(connection);
-            throw new DBException("Cannot get order items with order id " + orderId + " from database", throwables);
+            throw new DBException("Cannot get order items with order id " + orderId + " from database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(connection);
         }
@@ -183,15 +172,13 @@ public class OrderDAO {
     private Item getItemById(int itemId) throws DBException {
         Item item;
         Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
         try {
             String sql = "select * from item " +
                     "where id= ? ";
             connection = DBManager.getInstance().getConnection();
-            statement = connection.prepareStatement(sql);
+            PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, itemId);
-            resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 itemId = resultSet.getInt("id");
                 int foodId = resultSet.getInt("food_id");
@@ -203,9 +190,9 @@ public class OrderDAO {
                 throw new DBException("Could not find item by id: " + itemId);
             }
             return item;
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(connection);
-            throw new DBException("Cannot get item by id" + itemId + " from database", throwables);
+            throw new DBException("Cannot get item by id" + itemId + " from database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(connection);
         }
@@ -221,20 +208,18 @@ public class OrderDAO {
         int orderId = getOrderId(order);
         addItemToDataBase(item);
         int itemId = getItemId(item);
-
         Connection connection = null;
-        PreparedStatement myStmt = null;
         try {
             connection = DBManager.getInstance().getConnection();
             String sql = "insert into order_item(order_id, item_id) " +
                     "VALUES (?,?)";
-            myStmt = connection.prepareStatement(sql);
+            PreparedStatement myStmt = connection.prepareStatement(sql);
             myStmt.setInt(1, orderId);
             myStmt.setInt(2, itemId);
             myStmt.execute();
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(connection);
-            throw new DBException("Cannot add item to order in the database", throwables);
+            throw new DBException("Cannot add item to order in the database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(connection);
         }
@@ -248,24 +233,20 @@ public class OrderDAO {
      */
     public int getOrderId(Order order) throws DBException {
         Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
         try {
             String sql = "select id from food_order " +
                     "where user_id=? AND status_id=? ORDER BY order_date DESC";
             connection = DBManager.getInstance().getConnection();
-            statement = connection.prepareStatement(sql);
+            PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, order.getUser().getId());
             statement.setInt(2, getStatusId(order.getStatus()));
-
-            resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                int orderId = resultSet.getInt("id");
-                return orderId;
+                return resultSet.getInt("id");
             }
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(connection);
-            throw new DBException("Cannot get order id from database", throwables);
+            throw new DBException("Cannot get order id from database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(connection);
         }
@@ -280,23 +261,20 @@ public class OrderDAO {
      */
     private int getItemId(Item item) throws DBException {
         Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
         try {
             String sql = "select id from item " +
                     "where food_id= ? AND quantity=? ;";
             connection = DBManager.getInstance().getConnection();
-            statement = connection.prepareStatement(sql);
+            PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, item.getFoodItem().getId());
             statement.setInt(2, item.getQuantity());
-            resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                int itemId = resultSet.getInt("id");
-                return itemId;
+                return resultSet.getInt("id");
             }
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(connection);
-            throw new DBException("Cannot get item id from the database", throwables);
+            throw new DBException("Cannot get item id from the database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(connection);
         }
@@ -310,18 +288,17 @@ public class OrderDAO {
      */
     private void addItemToDataBase(Item item) throws DBException {
         Connection connection = null;
-        PreparedStatement myStmt = null;
         try {
             connection = DBManager.getInstance().getConnection();
             String sql = "insert into item(food_id, quantity) " +
                     "VALUES (?,?)";
-            myStmt = connection.prepareStatement(sql);
+            PreparedStatement myStmt = connection.prepareStatement(sql);
             myStmt.setInt(1, item.getFoodItem().getId());
             myStmt.setInt(2, item.getQuantity());
             myStmt.execute();
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(connection);
-            throw new DBException("Cannot add item to the database", throwables);
+            throw new DBException("Cannot add item to the database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(connection);
         }
@@ -334,12 +311,11 @@ public class OrderDAO {
      */
     public void addOrder(Order theOrder) throws DBException {
         Connection connection = null;
-        PreparedStatement myStmt = null;
         try {
             connection = DBManager.getInstance().getConnection();
             String sql = "insert into food_order( order_date, user_id, status_id) " +
                     "VALUES (?,?,?)";
-            myStmt = connection.prepareStatement(sql);
+            PreparedStatement myStmt = connection.prepareStatement(sql);
             UserDAO userDAO = new UserDAO();
             int userId = userDAO.getUserId(theOrder.getUser());
             theOrder.getUser().setId(userId);
@@ -350,9 +326,9 @@ public class OrderDAO {
             for (Item item : theOrder.getItems()) {
                 addItemToOrder(theOrder, item);
             }
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(connection);
-            throw new DBException("Cannot add order to the database", throwables);
+            throw new DBException("Cannot add order to the database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(connection);
         }
@@ -366,24 +342,21 @@ public class OrderDAO {
      */
     private int getStatusId(OrderStatus status) throws DBException {
         Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
         try {
             String sql = "select * from status " +
                     "where status_name=? ";
             connection = DBManager.getInstance().getConnection();
-            statement = connection.prepareStatement(sql);
+            PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, status.value());
-            resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                int statusId = resultSet.getInt("id");
-                return statusId;
+                return resultSet.getInt("id");
             } else {
                 throw new DBException("Could not find status by name: " + status.value());
             }
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(connection);
-            throw new DBException("Cannot get status id from database", throwables);
+            throw new DBException("Cannot get status id from database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(connection);
         }
@@ -396,52 +369,47 @@ public class OrderDAO {
      * @return order that was found.
      */
     public Order getOrder(String theOrderId) throws DBException {
-        int foodOrderId;
         Connection connection = null;
-        PreparedStatement myStmt = null;
-        ResultSet myRs = null;
         try {
             connection = DBManager.getInstance().getConnection();
             String sql = "select * from food_order" +
                     " join user u on u.id = food_order.user_id " +
                     " join status s on s.id = food_order.status_id  where food_order.id=?";
-            myStmt = connection.prepareStatement(sql);
+            PreparedStatement myStmt = connection.prepareStatement(sql);
             myStmt.setInt(1, Integer.parseInt(theOrderId));
-            myRs = myStmt.executeQuery();
+            ResultSet myRs = myStmt.executeQuery();
             if (myRs.next()) {
                 OrderMapper mapper = new OrderMapper();
-                Order order = mapper.mapRow(myRs);
-                return order;
+                return mapper.mapRow(myRs);
             }
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(connection);
-            throw new DBException("Cannot get order by id " + theOrderId + " from database", throwables);
+            throw new DBException("Cannot get order by id " + theOrderId + " from database", throwable);
         } finally {
-            DBManager.getInstance().commitAndClose(connection);;
+            DBManager.getInstance().commitAndClose(connection);
         }
         return null;
     }
 
     /**
-     * Updete order to the database .
+     * Update order to the database .
      *
      * @param orderId     order identifier that should be changed
-     * @param orderStatus order status that should be setted
+     * @param orderStatus order status that should be set
      */
     public void updateOrder(int orderId, OrderStatus orderStatus) throws DBException {
         Connection connection = null;
-        PreparedStatement myStmt = null;
         try {
             int statusId = getStatusId(orderStatus);
             connection = DBManager.getInstance().getConnection();
             String sql = "UPDATE food_order SET status_id =? WHERE id =? ;";
-            myStmt = connection.prepareStatement(sql);
+            PreparedStatement myStmt = connection.prepareStatement(sql);
             myStmt.setInt(1, statusId);
             myStmt.setInt(2, orderId);
             myStmt.execute();
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(connection);
-            throw new DBException("Cannot update order in the database", throwables);
+            throw new DBException("Cannot update order in the database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(connection);
         }
@@ -455,21 +423,20 @@ public class OrderDAO {
      */
     public void deleteOrder(String theOrderId) throws DBException {
         Connection connection = null;
-        PreparedStatement myStmt = null;
         try {
             connection = DBManager.getInstance().getConnection();
             int orderId = Integer.parseInt(theOrderId);
             String sql = "delete from order_item where order_id=?";
-            myStmt = connection.prepareStatement(sql);
+            PreparedStatement myStmt = connection.prepareStatement(sql);
             myStmt.setInt(1, orderId);
             myStmt.execute();
             sql = "delete from food_order where id=?";
             myStmt = connection.prepareStatement(sql);
             myStmt.setInt(1, orderId);
             myStmt.execute();
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(connection);
-            throw new DBException("Cannot delet order from database", throwables);
+            throw new DBException("Cannot delete order from database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(connection);
         }
@@ -483,22 +450,20 @@ public class OrderDAO {
     public List<OrderStatus> getStatuses() throws DBException {
         List<OrderStatus> statuses = new ArrayList<>();
         Connection connection = null;
-        Statement myStmt = null;
-        ResultSet myRs = null;
         try {
             connection = DBManager.getInstance().getConnection();
             String sql = "select * from status;";
-            myStmt = connection.createStatement();
-            myRs = myStmt.executeQuery(sql);
+            Statement myStmt = connection.createStatement();
+            ResultSet myRs = myStmt.executeQuery(sql);
             while (myRs.next()) {
                 String statusName = myRs.getString("status_name");
                 OrderStatus orderStatus = OrderStatus.getOrderStatus(statusName);
                 statuses.add(orderStatus);
             }
             return statuses;
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(connection);
-            throw new DBException("Cannot get all statuses from database", throwables);
+            throw new DBException("Cannot get all statuses from database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(connection);
         }

@@ -36,9 +36,9 @@ public class UserDAO {
             preparedStatement.setString(7, user.getPhoneNumber());
             preparedStatement.setInt(8, roleId);
             preparedStatement.execute();
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(connection);
-            throw new DBException("Cannot add user to the database", throwables);
+            throw new DBException("Cannot add user to the database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(connection);
         }
@@ -47,7 +47,7 @@ public class UserDAO {
     /**
      * Get user role identifier from the database
      *
-     * @param theUser user to be seached.
+     * @param theUser user to be searched.
      * @return user's role identifier.
      */
     private int getRoleId(User theUser) throws DBException {
@@ -67,9 +67,9 @@ public class UserDAO {
                 throw new DBException("Could not find user id: " + roleId);
             }
             return roleId;
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(connection);
-            throw new DBException("Cannot get role id from database", throwables);
+            throw new DBException("Cannot get role id from database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(connection);
         }
@@ -78,7 +78,7 @@ public class UserDAO {
     /**
      * Get user identifier from the database
      *
-     * @param user user to be seached.
+     * @param user user to be searched.
      * @return User identifier.
      */
     public int getUserId(User user) throws DBException {
@@ -100,9 +100,9 @@ public class UserDAO {
             } else {
                 return -1;
             }
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(connection);
-            throw new DBException("Cannot get user id from database", throwables);
+            throw new DBException("Cannot get user id from database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(connection);
         }
@@ -111,7 +111,7 @@ public class UserDAO {
     /**
      * Get user by user identifier from the database
      *
-     * @param userId user identifier to be seached.
+     * @param userId user identifier to be searched.
      * @return user that was searched.
      */
     public User getUserByUserId(int userId) throws DBException {
@@ -132,9 +132,9 @@ public class UserDAO {
             } else {
                 throw new DBException("Could not find user userId: " + userId);
             }
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(connection);
-            throw new DBException("Cannot get user by user id " + userId + " from database", throwables);
+            throw new DBException("Cannot get user by user id " + userId + " from database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(connection);
         }
@@ -143,7 +143,7 @@ public class UserDAO {
     /**
      * Get user by his username from the database
      *
-     * @param theUserName user name to be seached.
+     * @param theUserName user name to be searched.
      * @return user that was searched.
      */
     public User getUserByUserName(String theUserName) throws DBException {
@@ -164,9 +164,9 @@ public class UserDAO {
             } else {
                 throw new DBException("Could not find user userName: " + theUserName);
             }
-        } catch (SQLException throwables) {
+        } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(connection);
-            throw new DBException("Cannot get user by username " + theUserName + " from database", throwables);
+            throw new DBException("Cannot get user by username " + theUserName + " from database", throwable);
         } finally {
             DBManager.getInstance().commitAndClose(connection);
         }
