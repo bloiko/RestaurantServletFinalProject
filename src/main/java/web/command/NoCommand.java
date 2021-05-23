@@ -11,7 +11,7 @@ import java.io.PrintWriter;
 /**
  * No command.
  * 
- * @author D.Kolesnikov
+ * @author B.Loiko
  * 
  */
 public class NoCommand extends Command {

@@ -22,8 +22,8 @@ public class UserService {
     }
 
     public UserService() throws DBException {
-        this.userDAO = UserDAO.getInstance();
-        orderListDAO = OrderDAO.getInstance();
+        this.userDAO = new UserDAO();
+        orderListDAO = new OrderDAO();
     }
 
     /**

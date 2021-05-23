@@ -14,9 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Food Item controller.
+ * Command that order item to the cart from munu list.
  *
  * @author B.Loiko
+ *
  */
 public class MenuOrderCommand extends Command {
     private FoodItemService foodItemService;

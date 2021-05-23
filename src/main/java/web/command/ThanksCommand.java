@@ -9,10 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Thanks controller.
- * This controller simply shows thanks-page.jsp after succesful food ordering.
+ * Command that show thanks page.
  *
  * @author B.Loiko
+ *
  */
 public class ThanksCommand extends Command {
     private static final Logger log = LogManager.getLogger(ThanksCommand.class);

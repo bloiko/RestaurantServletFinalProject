@@ -13,9 +13,10 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Food Item controller.
+ * Command show menu list in the main page.
  *
  * @author B.Loiko
+ *
  */
 public class MenuListCommand extends Command {
     private static final int NUMBER_ITEMS_ON_PAGE = 5;

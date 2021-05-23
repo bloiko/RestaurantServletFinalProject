@@ -5,67 +5,12 @@ import database.dao.mapper.EntityMapper;
 import database.entity.User;
 import exception.DBException;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class UserDAO {
-    private DataSource dataSource;
-    private static volatile UserDAO instance;
-
-    private UserDAO() throws DBException {
-        Context initContext = null;
-        try {
-            initContext = new InitialContext();
-            Context envContext = (Context) initContext.lookup("java:/comp/env");
-            this.dataSource = (DataSource) envContext.lookup("jdbc/restaurant_system");
-        } catch (NamingException e) {
-            throw new DBException("Cannot connect to the database", e);
-        }
-    }
-
-    /**
-     * Returns  data access object. Using Singleton pattern (Double Checked Locking & volatile)
-     *
-     * @return data access object of the UserDAO class .
-     */
-    public static UserDAO getInstance() throws DBException {
-        UserDAO localInstance = instance;
-        if (localInstance == null) {
-            synchronized (UserDAO.class) {
-                localInstance = instance;
-                if (localInstance == null) {
-                    instance = localInstance = new UserDAO();
-                }
-            }
-        }
-        return localInstance;
-    }
-
-    /**
-     * Close connection, statement and resultSet of the database
-     *
-     * @param connection connection to be closed
-     * @param statement  statement to be closed.
-     * @param resultSet  Result Set to be closed.
-     */
-    private void close(Connection connection, Statement statement, ResultSet resultSet) throws DBException {
-        try {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-            if (statement != null) {
-                statement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (SQLException throwables) {
-            throw new DBException("Cannot close all conections to the database", throwables);
-        }
-    }
 
     /**
      * Add user to the database
@@ -77,7 +22,7 @@ public class UserDAO {
         PreparedStatement preparedStatement = null;
         try {
             int roleId = getRoleId(user);
-            connection = dataSource.getConnection();
+            connection = DBManager.getInstance().getConnection();
             String sql = "insert into user "
                     + "(first_name,last_name,username,password, email,address,phone_number,role_id) "
                     + "values ( ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -92,9 +37,10 @@ public class UserDAO {
             preparedStatement.setInt(8, roleId);
             preparedStatement.execute();
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(connection);
             throw new DBException("Cannot add user to the database", throwables);
         } finally {
-            close(connection, preparedStatement, null);
+            DBManager.getInstance().commitAndClose(connection);
         }
     }
 
@@ -109,7 +55,7 @@ public class UserDAO {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            connection = dataSource.getConnection();
+            connection = DBManager.getInstance().getConnection();
             String sql = "select role_id from role where name= ? ;";
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, theUser.getRole());
@@ -122,9 +68,10 @@ public class UserDAO {
             }
             return roleId;
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(connection);
             throw new DBException("Cannot get role id from database", throwables);
         } finally {
-            close(connection, preparedStatement, resultSet);
+            DBManager.getInstance().commitAndClose(connection);
         }
     }
 
@@ -140,7 +87,7 @@ public class UserDAO {
         ResultSet resultSet = null;
         try {
             String sql = "select id from user where first_name= ? && last_name= ? && email= ? && address= ? && phone_number= ? ;";
-            connection = dataSource.getConnection();
+            connection = DBManager.getInstance().getConnection();
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, user.getFirstName());
             preparedStatement.setString(2, user.getLastName());
@@ -154,9 +101,10 @@ public class UserDAO {
                 return -1;
             }
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(connection);
             throw new DBException("Cannot get user id from database", throwables);
         } finally {
-            close(connection, preparedStatement, resultSet);
+            DBManager.getInstance().commitAndClose(connection);
         }
     }
 
@@ -171,7 +119,7 @@ public class UserDAO {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            connection = dataSource.getConnection();
+            connection = DBManager.getInstance().getConnection();
             String sql = "SELECT u.id, u.first_name ,u.last_name,u.username,u.password, u.email,u.address,u.phone_number,role.name as role_name FROM user as u" +
                     "        INNER JOIN role on u.role_id = role.role_id" +
                     "        WHERE u.id=?";
@@ -185,9 +133,10 @@ public class UserDAO {
                 throw new DBException("Could not find user userId: " + userId);
             }
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(connection);
             throw new DBException("Cannot get user by user id " + userId + " from database", throwables);
         } finally {
-            close(connection, preparedStatement, resultSet);
+            DBManager.getInstance().commitAndClose(connection);
         }
     }
 
@@ -202,7 +151,7 @@ public class UserDAO {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            connection = dataSource.getConnection();
+            connection = DBManager.getInstance().getConnection();
             String sql = "SELECT u.id,u.first_name,u.last_name,u.username,u.password, u.email,u.address,u.phone_number,role.name as role_name FROM user as u" +
                     "        INNER JOIN role on u.role_id = role.role_id" +
                     "        WHERE username=?";
@@ -216,9 +165,10 @@ public class UserDAO {
                 throw new DBException("Could not find user userName: " + theUserName);
             }
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(connection);
             throw new DBException("Cannot get user by username " + theUserName + " from database", throwables);
         } finally {
-            close(connection, preparedStatement, resultSet);
+            DBManager.getInstance().commitAndClose(connection);
         }
     }
 

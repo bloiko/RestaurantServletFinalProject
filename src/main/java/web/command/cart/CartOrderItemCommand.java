@@ -18,11 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Cart controller.
+ * Command that orders item to the cart
  *
  * @author B.Loiko
  */
-
 public class CartOrderItemCommand extends Command {
     private UserService userService;
     private OrderService orderService;
@@ -31,6 +30,7 @@ public class CartOrderItemCommand extends Command {
     public CartOrderItemCommand() throws ServletException {
         init();
     }
+
     @Override
     public void init() throws ServletException {
         try {
@@ -46,29 +46,29 @@ public class CartOrderItemCommand extends Command {
         log.debug("Command starts");
         HttpSession session = request.getSession();
         String username = (String) session.getAttribute("username");
-        log.trace("Set attribute to the session: username --> "+username);
+        log.trace("Set attribute to the session: username --> " + username);
 
         User user = null;
         if (username != null) {
             try {
                 user = userService.getUserByUserName(username);
-                log.info("User with username "+username+" was taken from the database");
+                log.info("User with username " + username + " was taken from the database");
             } catch (DBException e) {
                 e.printStackTrace();
             }
         } else {
             session.setAttribute("command", "ORDER_IN_CART");
-            log.trace("Set attribute to the session: command --> "+"ORDER_IN_CART");
+            log.trace("Set attribute to the session: command --> " + "ORDER_IN_CART");
 
             log.debug("Command finished");
-            return"login-main.jsp";
+            return "login-main.jsp";
         }
 
         try {
             List<Item> cart = (List<Item>) session.getAttribute("cart");
             int orderId = orderService.addOrderAndGetId(cart, user);
             request.setAttribute("orderId", orderId);
-            log.trace("Set attribute to the request: orderId --> "+orderId);
+            log.trace("Set attribute to the request: orderId --> " + orderId);
 
             session.setAttribute("cart", new ArrayList<Order>());
             log.trace("Set attribute to the request: cart --> new list with 0 size");

@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * Main interface for the web.command.Command pattern implementation.
  * 
- * @author D.Kolesnikov
+ * @author B.Loiko
  * 
  */
 public abstract class Command implements Serializable {	

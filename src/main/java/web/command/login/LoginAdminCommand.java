@@ -12,8 +12,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * Login Admin controller.
- * This login is used in AdminFilter that goes before showing admin.jsp
+ * Command that process data from the admin login.
  *
  * @author B.Loiko
  */
@@ -54,7 +53,7 @@ public class LoginAdminCommand extends Command {
 
                 HttpSession session = request.getSession();
                 session.setAttribute("username_admin", username);
-                log.trace("Set attribute to the session: username -->"+username);
+                log.trace("Set attribute to the session: username -->" + username);
 
                 log.debug("Command finished");
                 return "/controller?command=adminList";
@@ -63,7 +62,7 @@ public class LoginAdminCommand extends Command {
             e.printStackTrace();
         }
         request.setAttribute("message", "Account's Invalid");
-        log.trace("Set attribute to the request: message -->"+"Account's Invalid");
+        log.trace("Set attribute to the request: message -->" + "Account's Invalid");
 
         log.debug("Command finished");
         return "login-admin.jsp";

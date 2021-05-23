@@ -13,7 +13,7 @@ import java.io.IOException;
 /**
  * Main servlet controller.
  * 
- * @author D.Kolesnikov
+ * @author B.Loiko
  * 
  */
 @WebServlet("/controller")

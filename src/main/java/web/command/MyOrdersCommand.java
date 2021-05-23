@@ -15,10 +15,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * My Orders controller.
- * This controller show to the user his orders
+ * Command that shows list of all user's orders.
  *
  * @author B.Loiko
+ *
  */
 public class MyOrdersCommand extends Command {
     private UserService userService;

@@ -15,9 +15,10 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Admin controller.
+ * Command that shows list of orders in admin page.
  *
  * @author B.Loiko
+ *
  */
 public class AdminListCommand extends Command {
     private OrderDAO orderListDAO;
@@ -31,7 +32,7 @@ public class AdminListCommand extends Command {
     public void init() throws ServletException {
         try {
             orderService = new OrderService();
-            orderListDAO = OrderDAO.getInstance();
+            orderListDAO = new OrderDAO();
         } catch (Exception exc) {
             throw new ServletException(exc);
         }

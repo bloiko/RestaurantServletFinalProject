@@ -13,8 +13,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * Registration controller.
- * This controller show registration page and proccess dota from the registration form.
+ * Command process data from the registration.
  *
  * @author B.Loiko
  */
@@ -32,6 +31,7 @@ public class RegistrationCommand extends Command {
     public RegistrationCommand() throws ServletException {
         init();
     }
+
     @Override
     public void init() throws ServletException {
         try {
@@ -57,7 +57,7 @@ public class RegistrationCommand extends Command {
                 userService.addUserAndReturnId(user);
                 log.info("User was added to the database");
             } catch (DBException e) {
-                log.error("This is DBException",e);
+                log.error("This is DBException", e);
                 e.printStackTrace();
             }
 
@@ -69,35 +69,35 @@ public class RegistrationCommand extends Command {
     private void prepareDataToTheRedirection(HttpServletRequest request) {
         String firstName = request.getParameter(FIRST_NAME);
         request.setAttribute(FIRST_NAME, firstName);
-        log.trace("Set parameter to the request: FIRST_NAME --> "+ firstName);
+        log.trace("Set parameter to the request: FIRST_NAME --> " + firstName);
 
         String lastName = request.getParameter(LAST_NAME);
         request.setAttribute(LAST_NAME, lastName);
-        log.trace("Set parameter to the request: LAST_NAME --> "+ lastName);
+        log.trace("Set parameter to the request: LAST_NAME --> " + lastName);
 
         String email = request.getParameter(EMAIL);
         request.setAttribute(EMAIL, email);
-        log.trace("Set parameter to the request: EMAIL --> "+ email);
+        log.trace("Set parameter to the request: EMAIL --> " + email);
 
         String address = request.getParameter(ADDRESS);
         request.setAttribute(ADDRESS, address);
-        log.trace("Set parameter to the request: ADDRESS --> "+ address);
+        log.trace("Set parameter to the request: ADDRESS --> " + address);
 
         String phoneNumber = request.getParameter(PHONE_NUMBER);
         request.setAttribute(PHONE_NUMBER, phoneNumber);
-        log.trace("Set parameter to the request: PHONE_NUMBER --> "+ phoneNumber);
+        log.trace("Set parameter to the request: PHONE_NUMBER --> " + phoneNumber);
 
 
         String username = request.getParameter(USERNAME);
         request.setAttribute(USERNAME, username);
-        log.trace("Set parameter to the request: USERNAME --> "+ username);
+        log.trace("Set parameter to the request: USERNAME --> " + username);
 
         String password = request.getParameter(PASSWORD);
         request.setAttribute(PASSWORD, password);
-        log.trace("Set parameter to the request: PASSWORD --> "+ password);
+        log.trace("Set parameter to the request: PASSWORD --> " + password);
 
         request.setAttribute("command", "REDIRECT");
-        log.trace("Set attribute to the request: command --> "+ "REDIRECT");
+        log.trace("Set attribute to the request: command --> " + "REDIRECT");
 
     }
 
@@ -122,7 +122,7 @@ public class RegistrationCommand extends Command {
             isCorrect = false;
         }
         try {
-            if (username != null && userService.getUserByUserName(username)!=null) {//if user exists
+            if (username != null && userService.getUserByUserName(username) != null) {//if user exists
                 session.setAttribute("username_error_message", "Username should be unique!");
                 isCorrect = false;
             }
@@ -142,7 +142,7 @@ public class RegistrationCommand extends Command {
             session.setAttribute("email_error_message", "Incorrect email format!");
             isCorrect = false;
         }
-        log.debug("Data was checked with result: "+isCorrect);
+        log.debug("Data was checked with result: " + isCorrect);
         if (isCorrect) {
             return new User(0, firstName, lastName, username, password, email, address, phoneNumber, "USER");
         } else {

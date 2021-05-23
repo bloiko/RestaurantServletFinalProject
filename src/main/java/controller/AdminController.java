@@ -31,7 +31,7 @@ public class AdminController extends HttpServlet {
         super.init();
         try {
             orderService = new OrderService();
-            orderListDAO = OrderDAO.getInstance();
+            orderListDAO =new OrderDAO();
         } catch (Exception exc) {
             throw new ServletException(exc);
         }

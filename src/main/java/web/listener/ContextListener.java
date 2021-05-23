@@ -10,7 +10,7 @@ import javax.servlet.ServletContextListener;
 /**
  * Context web.listener.
  * 
- * @author D.Kolesnikov
+ * @author B.Loiko
  * 
  */
 public class ContextListener implements ServletContextListener {

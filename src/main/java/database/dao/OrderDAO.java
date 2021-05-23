@@ -5,46 +5,11 @@ import database.dao.mapper.EntityMapper;
 import database.entity.*;
 import exception.DBException;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDAO {
-    private DataSource dataSource;
-    private static volatile OrderDAO instance;
-
-    private OrderDAO() throws DBException {
-        Context initContext;
-        try {
-            initContext = new InitialContext();
-            Context envContext = (Context) initContext.lookup("java:/comp/env");
-            this.dataSource = (DataSource) envContext.lookup("jdbc/restaurant_system");
-        } catch (NamingException e) {
-            throw new DBException("Cannot connect to the database", e);
-        }
-    }
-
-    /**
-     * Returns data access object. Using Singleton pattern (Double Checked Locking & volatile)
-     *
-     * @return data access object of the OrderDAO class .
-     */
-    public static OrderDAO getInstance() throws DBException {
-        OrderDAO localInstance = instance;
-        if (localInstance == null) {
-            synchronized (OrderDAO.class) {
-                localInstance = instance;
-                if (localInstance == null) {
-                    instance = localInstance = new OrderDAO();
-                }
-            }
-        }
-        return localInstance;
-    }
 
     /**
      * Returns list of users from the daabase.
@@ -53,12 +18,11 @@ public class OrderDAO {
      */
     public List<Order> getOrders() throws DBException {
         List<Order> orders = new ArrayList<>();
-        int foodOrderId;
         Connection connection = null;
         Statement myStmt = null;
         ResultSet myRs = null;
         try {
-            connection = dataSource.getConnection();
+            connection = DBManager.getInstance().getConnection();
             String sql = "select * from food_order" +
                     " join user u on u.id = food_order.user_id" +
                     " join status s on s.id = food_order.status_id";
@@ -71,9 +35,10 @@ public class OrderDAO {
             }
             return orders;
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(connection);
             throw new DBException("Cannot get all orders from database", throwables);
         } finally {
-            close(connection, myStmt, myRs);
+            DBManager.getInstance().commitAndClose(connection);
         }
     }
 
@@ -89,7 +54,7 @@ public class OrderDAO {
         Statement myStmt = null;
         ResultSet myRs = null;
         try {
-            connection = dataSource.getConnection();
+            connection = DBManager.getInstance().getConnection();
             String sql = "select * from food_order" +
                     " join user u on u.id = food_order.user_id" +
                     " join status s on s.id = food_order.status_id" +
@@ -103,9 +68,10 @@ public class OrderDAO {
             }
             return orders;
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(connection);
             throw new DBException("Cannot get all orders from database", throwables);
         } finally {
-            close(connection, myStmt, myRs);
+            DBManager.getInstance().commitAndClose(connection);
         }
     }
 
@@ -117,12 +83,11 @@ public class OrderDAO {
      */
     public List<Order> getNotDoneOrdersSortById() throws DBException {
         List<Order> orders = new ArrayList<>();
-        int foodOrderId;
         Connection connection = null;
         Statement myStmt = null;
         ResultSet myRs = null;
         try {
-            connection = dataSource.getConnection();
+            connection = DBManager.getInstance().getConnection();
             String sql = "select * from food_order " +
                     " join user u on u.id = food_order.user_id " +
                     " join status s on s.id = food_order.status_id " +
@@ -137,9 +102,10 @@ public class OrderDAO {
             }
             return orders;
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(connection);
             throw new DBException("Cannot get all orders from database", throwables);
         } finally {
-            close(connection, myStmt, myRs);
+            DBManager.getInstance().commitAndClose(connection);
         }
     }
 
@@ -152,10 +118,10 @@ public class OrderDAO {
     public List<Order> getOrdersByUserId(int theUserId) throws DBException {
         List<Order> orders = new ArrayList<>();
         Connection connection = null;
-        PreparedStatement myStmt = null;
-        ResultSet myRs = null;
+        PreparedStatement myStmt;
+        ResultSet myRs;
         try {
-            connection = dataSource.getConnection();
+            connection = DBManager.getInstance().getConnection();
             String sql = "select * from food_order" +
                     " join user u on u.id = food_order.user_id" +
                     " join status s on s.id = food_order.status_id where u.id=?";
@@ -169,9 +135,10 @@ public class OrderDAO {
             }
             return orders;
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(connection);
             throw new DBException("Cannot get all orders by user id " + theUserId + " from database", throwables);
         } finally {
-            close(connection, myStmt, myRs);
+            DBManager.getInstance().commitAndClose(connection);
         }
     }
 
@@ -189,7 +156,7 @@ public class OrderDAO {
         try {
             String sql = "select * from order_item " +
                     "where order_id= ? ;";
-            connection = dataSource.getConnection();
+            connection = DBManager.getInstance().getConnection();
             myStmt = connection.prepareStatement(sql);
             myStmt.setInt(1, orderId);
             resultSet = myStmt.executeQuery();
@@ -200,11 +167,13 @@ public class OrderDAO {
             }
             return items;
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(connection);
             throw new DBException("Cannot get order items with order id " + orderId + " from database", throwables);
         } finally {
-            close(connection, myStmt, resultSet);
+            DBManager.getInstance().commitAndClose(connection);
         }
     }
+
     /**
      * Returns item with given identifier from database.
      *
@@ -219,7 +188,7 @@ public class OrderDAO {
         try {
             String sql = "select * from item " +
                     "where id= ? ";
-            connection = dataSource.getConnection();
+            connection = DBManager.getInstance().getConnection();
             statement = connection.prepareStatement(sql);
             statement.setInt(1, itemId);
             resultSet = statement.executeQuery();
@@ -227,7 +196,7 @@ public class OrderDAO {
                 itemId = resultSet.getInt("id");
                 int foodId = resultSet.getInt("food_id");
                 int quantity = resultSet.getInt("quantity");
-                FoodDAO foodDAO = FoodDAO.getInstance();
+                FoodDAO foodDAO = new FoodDAO();
                 FoodItem foodItem = foodDAO.getFoodItem(String.valueOf(foodId));
                 item = new Item(itemId, foodItem, quantity);
             } else {
@@ -235,33 +204,17 @@ public class OrderDAO {
             }
             return item;
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(connection);
             throw new DBException("Cannot get item by id" + itemId + " from database", throwables);
         } finally {
-            close(connection, statement, resultSet);
+            DBManager.getInstance().commitAndClose(connection);
         }
     }
 
-    private void close(Connection connection, Statement myStmt, ResultSet myRs) throws DBException {
-        try {
-            if (myRs != null) {
-                myRs.close();
-            }
-
-            if (myStmt != null) {
-                myStmt.close();
-            }
-
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (SQLException throwables) {
-            throw new DBException("Cannot close connection with database", throwables);
-        }
-    }
     /**
      * Add item to the specified order.
      *
-     * @param item that should be added
+     * @param item  that should be added
      * @param order is the object were item should be added
      */
     public void addItemToOrder(Order order, Item item) throws DBException {
@@ -272,7 +225,7 @@ public class OrderDAO {
         Connection connection = null;
         PreparedStatement myStmt = null;
         try {
-            connection = dataSource.getConnection();
+            connection = DBManager.getInstance().getConnection();
             String sql = "insert into order_item(order_id, item_id) " +
                     "VALUES (?,?)";
             myStmt = connection.prepareStatement(sql);
@@ -280,11 +233,13 @@ public class OrderDAO {
             myStmt.setInt(2, itemId);
             myStmt.execute();
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(connection);
             throw new DBException("Cannot add item to order in the database", throwables);
         } finally {
-            close(connection, myStmt, null);
+            DBManager.getInstance().commitAndClose(connection);
         }
     }
+
     /**
      * Returns order identifier from the database.
      *
@@ -298,7 +253,7 @@ public class OrderDAO {
         try {
             String sql = "select id from food_order " +
                     "where user_id=? AND status_id=? ORDER BY order_date DESC";
-            connection = dataSource.getConnection();
+            connection = DBManager.getInstance().getConnection();
             statement = connection.prepareStatement(sql);
             statement.setInt(1, order.getUser().getId());
             statement.setInt(2, getStatusId(order.getStatus()));
@@ -309,12 +264,14 @@ public class OrderDAO {
                 return orderId;
             }
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(connection);
             throw new DBException("Cannot get order id from database", throwables);
         } finally {
-            close(connection, statement, resultSet);
+            DBManager.getInstance().commitAndClose(connection);
         }
         return -1;
     }
+
     /**
      * Returns item identifier of some item from database .
      *
@@ -328,7 +285,7 @@ public class OrderDAO {
         try {
             String sql = "select id from item " +
                     "where food_id= ? AND quantity=? ;";
-            connection = dataSource.getConnection();
+            connection = DBManager.getInstance().getConnection();
             statement = connection.prepareStatement(sql);
             statement.setInt(1, item.getFoodItem().getId());
             statement.setInt(2, item.getQuantity());
@@ -338,12 +295,14 @@ public class OrderDAO {
                 return itemId;
             }
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(connection);
             throw new DBException("Cannot get item id from the database", throwables);
         } finally {
-            close(connection, statement, resultSet);
+            DBManager.getInstance().commitAndClose(connection);
         }
         return -1;
     }
+
     /**
      * Add item entity to the database.
      *
@@ -353,7 +312,7 @@ public class OrderDAO {
         Connection connection = null;
         PreparedStatement myStmt = null;
         try {
-            connection = dataSource.getConnection();
+            connection = DBManager.getInstance().getConnection();
             String sql = "insert into item(food_id, quantity) " +
                     "VALUES (?,?)";
             myStmt = connection.prepareStatement(sql);
@@ -361,11 +320,13 @@ public class OrderDAO {
             myStmt.setInt(2, item.getQuantity());
             myStmt.execute();
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(connection);
             throw new DBException("Cannot add item to the database", throwables);
         } finally {
-            close(connection, myStmt, null);
+            DBManager.getInstance().commitAndClose(connection);
         }
     }
+
     /**
      * Add order to the database .
      *
@@ -375,11 +336,11 @@ public class OrderDAO {
         Connection connection = null;
         PreparedStatement myStmt = null;
         try {
-            connection = dataSource.getConnection();
+            connection = DBManager.getInstance().getConnection();
             String sql = "insert into food_order( order_date, user_id, status_id) " +
                     "VALUES (?,?,?)";
             myStmt = connection.prepareStatement(sql);
-            UserDAO userDAO = UserDAO.getInstance();
+            UserDAO userDAO = new UserDAO();
             int userId = userDAO.getUserId(theOrder.getUser());
             theOrder.getUser().setId(userId);
             myStmt.setTimestamp(1, theOrder.getOrderDate());
@@ -390,11 +351,13 @@ public class OrderDAO {
                 addItemToOrder(theOrder, item);
             }
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(connection);
             throw new DBException("Cannot add order to the database", throwables);
         } finally {
-            close(connection, myStmt, null);
+            DBManager.getInstance().commitAndClose(connection);
         }
     }
+
     /**
      * Returns status identifier by specified status from database .
      *
@@ -408,7 +371,7 @@ public class OrderDAO {
         try {
             String sql = "select * from status " +
                     "where status_name=? ";
-            connection = dataSource.getConnection();
+            connection = DBManager.getInstance().getConnection();
             statement = connection.prepareStatement(sql);
             statement.setString(1, status.value());
             resultSet = statement.executeQuery();
@@ -419,11 +382,13 @@ public class OrderDAO {
                 throw new DBException("Could not find status by name: " + status.value());
             }
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(connection);
             throw new DBException("Cannot get status id from database", throwables);
         } finally {
-            close(connection, statement, resultSet);
+            DBManager.getInstance().commitAndClose(connection);
         }
     }
+
     /**
      * Returns order by identifier from database.
      *
@@ -436,7 +401,7 @@ public class OrderDAO {
         PreparedStatement myStmt = null;
         ResultSet myRs = null;
         try {
-            connection = dataSource.getConnection();
+            connection = DBManager.getInstance().getConnection();
             String sql = "select * from food_order" +
                     " join user u on u.id = food_order.user_id " +
                     " join status s on s.id = food_order.status_id  where food_order.id=?";
@@ -449,16 +414,18 @@ public class OrderDAO {
                 return order;
             }
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(connection);
             throw new DBException("Cannot get order by id " + theOrderId + " from database", throwables);
         } finally {
-            close(connection, myStmt, myRs);
+            DBManager.getInstance().commitAndClose(connection);;
         }
         return null;
     }
+
     /**
      * Updete order to the database .
      *
-     * @param orderId order identifier that should be changed
+     * @param orderId     order identifier that should be changed
      * @param orderStatus order status that should be setted
      */
     public void updateOrder(int orderId, OrderStatus orderStatus) throws DBException {
@@ -466,19 +433,21 @@ public class OrderDAO {
         PreparedStatement myStmt = null;
         try {
             int statusId = getStatusId(orderStatus);
-            connection = dataSource.getConnection();
+            connection = DBManager.getInstance().getConnection();
             String sql = "UPDATE food_order SET status_id =? WHERE id =? ;";
             myStmt = connection.prepareStatement(sql);
             myStmt.setInt(1, statusId);
             myStmt.setInt(2, orderId);
             myStmt.execute();
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(connection);
             throw new DBException("Cannot update order in the database", throwables);
         } finally {
-            close(connection, myStmt, null);
+            DBManager.getInstance().commitAndClose(connection);
         }
 
     }
+
     /**
      * Delete order from the database .
      *
@@ -488,7 +457,7 @@ public class OrderDAO {
         Connection connection = null;
         PreparedStatement myStmt = null;
         try {
-            connection = dataSource.getConnection();
+            connection = DBManager.getInstance().getConnection();
             int orderId = Integer.parseInt(theOrderId);
             String sql = "delete from order_item where order_id=?";
             myStmt = connection.prepareStatement(sql);
@@ -499,15 +468,17 @@ public class OrderDAO {
             myStmt.setInt(1, orderId);
             myStmt.execute();
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(connection);
             throw new DBException("Cannot delet order from database", throwables);
         } finally {
-            close(connection, myStmt, null);
+            DBManager.getInstance().commitAndClose(connection);
         }
     }
+
     /**
      * Returns all statuses from the database database .
      *
-     * @return  list of the order statuses
+     * @return list of the order statuses
      */
     public List<OrderStatus> getStatuses() throws DBException {
         List<OrderStatus> statuses = new ArrayList<>();
@@ -515,7 +486,7 @@ public class OrderDAO {
         Statement myStmt = null;
         ResultSet myRs = null;
         try {
-            connection = dataSource.getConnection();
+            connection = DBManager.getInstance().getConnection();
             String sql = "select * from status;";
             myStmt = connection.createStatement();
             myRs = myStmt.executeQuery(sql);
@@ -526,11 +497,13 @@ public class OrderDAO {
             }
             return statuses;
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(connection);
             throw new DBException("Cannot get all statuses from database", throwables);
         } finally {
-            close(connection, myStmt, myRs);
+            DBManager.getInstance().commitAndClose(connection);
         }
     }
+
     /**
      * Extracts a order from the result set row.
      */
@@ -544,9 +517,9 @@ public class OrderDAO {
             User user = null;
             List<Item> items = null;
             try {
-                UserDAO userDAO = UserDAO.getInstance();
+                UserDAO userDAO = new UserDAO();
                 user = userDAO.getUserByUserId(userId);
-                OrderDAO orderDAO = OrderDAO.getInstance();
+                OrderDAO orderDAO = new OrderDAO();
                 items = orderDAO.getOrderItems(foodOrderId);
             } catch (DBException e) {
                 e.printStackTrace();

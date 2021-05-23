@@ -12,10 +12,10 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * Login Main controller.
- * This login is used main part of the program. Also, after registration.
+ * Command that process user data from the main login page.
  *
  * @author B.Loiko
+ *
  */
 public class LoginMainCommand extends Command {
     public static final String COMMAND = "web/command";

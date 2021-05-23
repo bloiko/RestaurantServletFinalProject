@@ -11,10 +11,10 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * Logout controller.
- * This controller simply delete all session data about user and simulate logout from the system.
+ * Command that log out user.
  *
  * @author B.Loiko
+ *
  */
 public class LogoutCommand extends Command {
     private static final Logger LOGGER = LogManager.getLogger(LogoutCommand.class);

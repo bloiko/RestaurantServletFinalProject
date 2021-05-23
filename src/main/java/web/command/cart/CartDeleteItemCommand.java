@@ -13,9 +13,10 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Cart controller.
+ * Command that deletes item from the cart in cart page.
  *
  * @author B.Loiko
+ *
  */
 
 public class CartDeleteItemCommand extends Command {

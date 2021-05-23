@@ -5,47 +5,14 @@ import database.entity.Category;
 import database.entity.FoodItem;
 import exception.DBException;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FoodDAO {
-    private DataSource dataSource;
     private static volatile FoodDAO instance;
 
-    private FoodDAO() throws DBException {
-        Context initContext = null;
-        try {
-            initContext = new InitialContext();
-            Context envContext = (Context) initContext.lookup("java:/comp/env");
-            this.dataSource = (DataSource) envContext.lookup("jdbc/restaurant_system");
-        } catch (NamingException e) {
-            throw new DBException("Cannot connect to the database", e);
-        }
 
-    }
-
-    /**
-     * Returns data access object. Using Singleton pattern (Double Checked Locking & volatile)
-     *
-     * @return data access object of the FoodDAO class .
-     */
-    public static FoodDAO getInstance() throws DBException {
-        FoodDAO localInstance = instance;
-        if (localInstance == null) {
-            synchronized (FoodDAO.class) {
-                localInstance = instance;
-                if (localInstance == null) {
-                    instance = localInstance = new FoodDAO();
-                }
-            }
-        }
-        return localInstance;
-    }
 
     /**
      * Returns list of food items from the database.
@@ -58,7 +25,7 @@ public class FoodDAO {
         Statement myStmt = null;
         ResultSet myRs = null;
         try {
-            myConn = dataSource.getConnection();
+            myConn = DBManager.getInstance().getConnection();
             String sql = "select fi.id, fi.name, fi.price,fi.image,category_id, c.name as category " +
                     "from food_item as fi" +
                     " inner join category as c on fi.category_id=c.id";
@@ -71,9 +38,10 @@ public class FoodDAO {
             }
             return foodItems;
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(myConn);
             throw new DBException("Cannot get food items from database", throwables);
         } finally {
-            close(myConn, myStmt, myRs);
+            DBManager.getInstance().commitAndClose(myConn);
         }
     }
 
@@ -90,7 +58,7 @@ public class FoodDAO {
         PreparedStatement myStmt = null;
         ResultSet myRs = null;
         try {
-            myConn = dataSource.getConnection();
+            myConn = DBManager.getInstance().getConnection();
             String sql = "select fi.id, fi.name, fi.price,fi.image,category_id, c.name as category  " +
                     " from food_item as fi " +
                     " inner join category as c on fi.category_id=c.id" +
@@ -106,9 +74,10 @@ public class FoodDAO {
             }
             return foodItems;
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(myConn);
             throw new DBException("Cannot get food items from database", throwables);
         } finally {
-            close(myConn, myStmt, myRs);
+            DBManager.getInstance().commitAndClose(myConn);
         }
     }
 
@@ -126,7 +95,7 @@ public class FoodDAO {
         PreparedStatement myStmt = null;
         ResultSet myRs = null;
         try {
-            myConn = dataSource.getConnection();
+            myConn = DBManager.getInstance().getConnection();
             String sql = "select fi.id, fi.name, fi.price,fi.image,category_id, c.name as category  " +
                     " from food_item as fi " +
                     " inner join category as c on fi.category_id=c.id" +
@@ -144,9 +113,10 @@ public class FoodDAO {
             }
             return foodItems;
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(myConn);
             throw new DBException("Cannot get food items from database", throwables);
         } finally {
-            close(myConn, myStmt, myRs);
+            DBManager.getInstance().commitAndClose(myConn);
         }
     }
 
@@ -166,7 +136,7 @@ public class FoodDAO {
         PreparedStatement myStmt = null;
         ResultSet myRs = null;
         try {
-            myConn = dataSource.getConnection();
+            myConn = DBManager.getInstance().getConnection();
             String sql = "select fi.id, fi.name as name, fi.price as price,fi.image,category_id, c.name as category  " +
                     " from food_item as fi " +
                     " inner join category as c on fi.category_id=c.id" +
@@ -183,9 +153,10 @@ public class FoodDAO {
             }
             return foodItems;
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(myConn);
             throw new DBException("Cannot get food items from database", throwables);
         } finally {
-            close(myConn, myStmt, myRs);
+            DBManager.getInstance().commitAndClose(myConn);
         }
     }
 
@@ -206,7 +177,7 @@ public class FoodDAO {
         PreparedStatement myStmt = null;
         ResultSet myRs = null;
         try {
-            myConn = dataSource.getConnection();
+            myConn = DBManager.getInstance().getConnection();
             String sql = "select fi.id, fi.name, fi.price,fi.image,category_id, c.name as category  " +
                     " from food_item as fi " +
                     " inner join category as c on fi.category_id=c.id" +
@@ -225,29 +196,10 @@ public class FoodDAO {
             }
             return foodItems;
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(myConn);
             throw new DBException("Cannot get food items from database", throwables);
         } finally {
-            close(myConn, myStmt, myRs);
-        }
-    }
-
-
-    private void close(Connection myConn, Statement myStmt, ResultSet myRs) {
-
-        try {
-            if (myRs != null) {
-                myRs.close();
-            }
-
-            if (myStmt != null) {
-                myStmt.close();
-            }
-
-            if (myConn != null) {
-                myConn.close();
-            }
-        } catch (Exception exc) {
-            exc.printStackTrace();
+            DBManager.getInstance().commitAndClose(myConn);
         }
     }
 
@@ -265,7 +217,7 @@ public class FoodDAO {
         int foodId;
         try {
             foodId = Integer.parseInt(theFoodItemId);
-            myConn = dataSource.getConnection();
+            myConn = DBManager.getInstance().getConnection();
             String sql = "select fi.id, fi.name, fi.price,fi.image,category_id, c.name as category" +
                     " from food_item as fi" +
                     " inner join category as c on fi.category_id=c.id " +
@@ -281,9 +233,10 @@ public class FoodDAO {
             }
             return foodItem;
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(myConn);
             throw new DBException("Cannot get food item with id" + theFoodItemId + " from database", throwables);
         } finally {
-            close(myConn, myStmt, resultSet);
+            DBManager.getInstance().commitAndClose(myConn);
         }
     }
 
@@ -298,7 +251,7 @@ public class FoodDAO {
         Statement myStmt = null;
         ResultSet myRs = null;
         try {
-            myConn = dataSource.getConnection();
+            myConn = DBManager.getInstance().getConnection();
             String sql = "select * from category;";
             myStmt = myConn.createStatement();
             myRs = myStmt.executeQuery(sql);
@@ -310,9 +263,10 @@ public class FoodDAO {
             }
             return categories;
         } catch (SQLException throwables) {
+            DBManager.getInstance().rollbackAndClose(myConn);
             throw new DBException("Cannot get all categories from database", throwables);
         } finally {
-            close(myConn, myStmt, myRs);
+            DBManager.getInstance().commitAndClose(myConn);
         }
     }
 

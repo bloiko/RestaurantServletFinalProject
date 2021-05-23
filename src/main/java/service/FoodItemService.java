@@ -12,7 +12,7 @@ public class FoodItemService {
     private FoodDAO foodItemDAO;
 
     public FoodItemService() throws DBException {
-        foodItemDAO = FoodDAO.getInstance();
+        foodItemDAO = new FoodDAO();
     }
 
     public FoodItemService(FoodDAO foodItemDAO) {

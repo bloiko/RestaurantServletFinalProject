@@ -13,9 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Admin controller.
+ * Command that change order status in admin page.
  *
  * @author B.Loiko
+ *
  */
 public class AdminChangeOrderStatusCommand extends Command {
     private OrderService orderService;

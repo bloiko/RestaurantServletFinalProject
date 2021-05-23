@@ -21,7 +21,7 @@ public class OrderService {
     }
 
     public OrderService() throws DBException {
-        orderDAO = OrderDAO.getInstance();
+        orderDAO = new OrderDAO();
     }
 
     public int addOrderAndGetId(List<Item> cart, User user) throws DBException {
