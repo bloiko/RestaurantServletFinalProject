@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class Category implements Comparable<Category> {
     private int id;
     private String name;
+    private String nameUa;
 
     @Override
     public int compareTo(Category o) {

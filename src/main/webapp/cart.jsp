@@ -49,8 +49,14 @@
             <div class="nav-item dropdown ml-auto">
                 <a class="nav-link dropdown-toggle" href="" id="dropdown09" style="color:black;" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
+                    <c:if test="${sessionScope.lang!='ua'}">
+                        <span class="flag-icon flag-icon-us"> </span> <fmt:message
+                            key="header.language"/></a>
+                    </c:if>
+                    <c:if test="${sessionScope.lang=='ua'}">
                     <span class="flag-icon flag-icon-${sessionScope.lang}"> </span> <fmt:message
                         key="header.language"/></a>
+                    </c:if>
                 <div class="dropdown-menu" aria-labelledby="dropdown09">
                     <a class="dropdown-item" href="/controller?command=cartList&sessionLocale=ua"><span
                             class="flag-icon flag-icon-ua"> </span> <fmt:message key="header.ukrainian"/></a>
@@ -100,15 +106,20 @@
                 <c:set var="sum" value="${sum+item.foodItem.price*item.quantity}"/>
                 <tr>
                     <td><img src="${item.foodItem.image}" width="80" height="80"></td>
-                    <td> ${item.foodItem.name} </td>
-                    <td> ${item.foodItem.price}</td>
+                    <c:if test="${sessionScope.lang!='ua'}">
+                        <td> ${item.foodItem.name} </td>
+                    </c:if>
+                    <c:if test="${sessionScope.lang=='ua'}">
+                        <td> ${item.foodItem.nameUa} </td>
+                    </c:if>
+                    <td> ${item.foodItem.price}$</td>
                     <td> ${item.quantity} </td>
                     <td align="left"><a href="/controller?command=cartDeleteItem&itemId=${item.foodItem.id}"
                                         onclick="return confirm('Are you sure?')">
                         <button type="button" class="btn btn-dark"><fmt:message key="cart.delete"/></button>
                     </a></td>
                     >
-                    <td>${item.foodItem.price*item.quantity}</td>
+                    <td>${item.foodItem.price*item.quantity}$</td>
                 </tr>
             </c:forEach>
             </tbody>
@@ -116,7 +127,7 @@
     </div>
 </div>
 <div class="order" style="position: relative;">
-    <h2><fmt:message key="cart.sum"/>: ${sum}</h2>
+    <h2><fmt:message key="cart.sum"/>: ${sum}$</h2>
     <a href="/controller?command=cartOrderItem">
         <button type="button" class="btn btn-danger order-button" style="position: absolute; right: 10%"><fmt:message
                 key="cart.order"/></button>

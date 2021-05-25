@@ -7,7 +7,11 @@ import database.entity.Item;
 import exception.DBException;
 
 import java.util.List;
-
+/**
+ * Food Item service.
+ *
+ * @author B.Loiko
+ */
 public class FoodItemService {
     private FoodDAO foodItemDAO;
 

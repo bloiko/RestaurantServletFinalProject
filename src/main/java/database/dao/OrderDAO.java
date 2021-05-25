@@ -210,7 +210,7 @@ public class OrderDAO {
         int itemId = getItemId(item);
         Connection connection = null;
         try {
-            connection = DBManager.getInstance().getConnection();
+            connection = DBManager.getInstance().getConnectionWithDriverManager();
             String sql = "insert into order_item(order_id, item_id) " +
                     "VALUES (?,?)";
             PreparedStatement myStmt = connection.prepareStatement(sql);
@@ -218,10 +218,14 @@ public class OrderDAO {
             myStmt.setInt(2, itemId);
             myStmt.execute();
         } catch (SQLException throwable) {
-            DBManager.getInstance().rollbackAndClose(connection);
+            //DBManager.getInstance().rollbackAndClose(connection);
             throw new DBException("Cannot add item to order in the database", throwable);
         } finally {
-            DBManager.getInstance().commitAndClose(connection);
+            try {
+                connection.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
     }
 
@@ -289,7 +293,7 @@ public class OrderDAO {
     private void addItemToDataBase(Item item) throws DBException {
         Connection connection = null;
         try {
-            connection = DBManager.getInstance().getConnection();
+            connection = DBManager.getInstance().getConnectionWithDriverManager();
             String sql = "insert into item(food_id, quantity) " +
                     "VALUES (?,?)";
             PreparedStatement myStmt = connection.prepareStatement(sql);
@@ -297,10 +301,14 @@ public class OrderDAO {
             myStmt.setInt(2, item.getQuantity());
             myStmt.execute();
         } catch (SQLException throwable) {
-            DBManager.getInstance().rollbackAndClose(connection);
+            //DBManager.getInstance().rollbackAndClose(connection);
             throw new DBException("Cannot add item to the database", throwable);
         } finally {
-            DBManager.getInstance().commitAndClose(connection);
+            try {
+                connection.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
     }
 
@@ -312,7 +320,7 @@ public class OrderDAO {
     public void addOrder(Order theOrder) throws DBException {
         Connection connection = null;
         try {
-            connection = DBManager.getInstance().getConnection();
+            connection = DBManager.getInstance().getConnectionWithDriverManager();
             String sql = "insert into food_order( order_date, user_id, status_id) " +
                     "VALUES (?,?,?)";
             PreparedStatement myStmt = connection.prepareStatement(sql);
@@ -327,10 +335,14 @@ public class OrderDAO {
                 addItemToOrder(theOrder, item);
             }
         } catch (SQLException throwable) {
-            DBManager.getInstance().rollbackAndClose(connection);
+            //DBManager.getInstance().rollbackAndClose(connection);
             throw new DBException("Cannot add order to the database", throwable);
         } finally {
-            DBManager.getInstance().commitAndClose(connection);
+            try {
+                connection.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
     }
 

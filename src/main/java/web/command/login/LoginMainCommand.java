@@ -1,9 +1,8 @@
 package web.command.login;
 
 import org.apache.log4j.Logger;
-import web.command.Command;
-import exception.DBException;
 import service.UserService;
+import web.command.Command;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -44,7 +43,6 @@ public class LoginMainCommand extends Command {
 
         String password = request.getParameter("password");
         log.trace("Get parameter from the request: password --> "+ password);
-        try {
             if (userService.isCorrectUser(username, password)) {
                 log.info("User "+username+" is correct user");
 
@@ -62,15 +60,12 @@ public class LoginMainCommand extends Command {
                     return "/controller?command=menuList";
                 }
             }
-        } catch (DBException e) {
-            log.error("This is DBException",e);
-            e.printStackTrace();
-        }
         session.setAttribute("message", "Account's Invalid");
         log.trace("Set attribute to the session: message --> "+ "Account's Invalid");
 
         log.debug("Command finished");
-        return "/controller?command=loginMain";
+        //return "/controller?command=loginMain";
+        return "login-main.jsp";
     }
 
     private void removePastErrorMessagesIfExist(HttpSession session) {

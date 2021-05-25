@@ -50,7 +50,7 @@ public class DBManager {
             DataSource dataSource = (DataSource) envContext.lookup("jdbc/restaurant_system");
             con = dataSource.getConnection();
             //con.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
-            //con.setAutoCommit(false);
+            con.setAutoCommit(false);
         } catch (NamingException ex) {
             log.error("Cannot obtain a connection from the pool", ex);
         }
@@ -75,7 +75,7 @@ public class DBManager {
 
     public void commitAndClose(Connection con) {
         try {
-           // con.commit();
+            con.commit();
             con.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -92,7 +92,7 @@ public class DBManager {
 
     public void rollbackAndClose(Connection con) {
         try {
-          //  con.rollback();
+            con.rollback();
             con.close();
         } catch (SQLException ex) {
             ex.printStackTrace();

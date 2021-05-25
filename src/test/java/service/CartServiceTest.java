@@ -34,7 +34,7 @@ public class CartServiceTest {
     @Test
     public void testService_isExisting_ShouldReturnCoorectIndex() throws Exception {
         List<Item> cart = new ArrayList<>();
-        Item item = new Item(1,new FoodItem(1,"name",1,"image", new Category(1,"")),1);
+        Item item = new Item(1,new FoodItem(1,"name","",1,"image", new Category(1,"","")),1);
         cart.add(item);
         int was = service.isExisting(1,cart);
         Assert.assertEquals(0,was);
@@ -48,8 +48,8 @@ public class CartServiceTest {
     @Test
     public void testService_removeItemFromCart_ShouldRemoveOneItem() throws Exception {
         List<Item> cart = new ArrayList<>();
-        Item item = new Item(1,new FoodItem(1,"name",1,"image", new Category(1,"")),1);
-        Item item2 = new Item(2,new FoodItem(2,"name2",1,"image2", new Category(1,"")),1);
+        Item item = new Item(1,new FoodItem(1,"name","",1,"image", new Category(1,"","")),1);
+        Item item2 = new Item(2,new FoodItem(2,"name2","",1,"image2", new Category(1,"","")),1);
 
         cart.add(item);
         cart.add(item2);
@@ -60,8 +60,8 @@ public class CartServiceTest {
     @Test
     public void testService_removeItemFromCart_ShouldNotRemoveAnything() throws Exception {
         List<Item> cart = new ArrayList<>();
-        Item item = new Item(1,new FoodItem(1,"name",1,"image", new Category(1,"")),1);
-        Item item2 = new Item(2,new FoodItem(2,"name2",1,"image2", new Category(1,"")),1);
+        Item item = new Item(1,new FoodItem(1,"name","",1,"image", new Category(1,"","")),1);
+        Item item2 = new Item(2,new FoodItem(2,"name2","",1,"image2", new Category(1,"","")),1);
 
         cart.add(item);
         cart.add(item2);

@@ -23,7 +23,7 @@ public class FoodDAO {
         ResultSet myRs = null;
         try {
             myConn = DBManager.getInstance().getConnection();
-            String sql = "select fi.id, fi.name, fi.price,fi.image,category_id, c.name as category " +
+            String sql = "select fi.id, fi.name,fi.nameFoodUa, fi.price,fi.image,category_id, c.name as category,c.nameUa " +
                     "from food_item as fi" +
                     " inner join category as c on fi.category_id=c.id";
             myStmt = myConn.createStatement();
@@ -56,7 +56,7 @@ public class FoodDAO {
         ResultSet myRs = null;
         try {
             myConn = DBManager.getInstance().getConnection();
-            String sql = "select fi.id, fi.name, fi.price,fi.image,category_id, c.name as category  " +
+            String sql = "select fi.id, fi.name,fi.nameFoodUa, fi.price,fi.image,category_id, c.name as category,c.nameUa  " +
                     " from food_item as fi " +
                     " inner join category as c on fi.category_id=c.id" +
                     " LIMIT ? OFFSET ?";
@@ -93,7 +93,7 @@ public class FoodDAO {
         ResultSet myRs = null;
         try {
             myConn = DBManager.getInstance().getConnection();
-            String sql = "select fi.id, fi.name, fi.price,fi.image,category_id, c.name as category  " +
+            String sql = "select fi.id, fi.name,fi.nameFoodUa, fi.price,fi.image,category_id, c.name as category,c.nameUa  " +
                     " from food_item as fi " +
                     " inner join category as c on fi.category_id=c.id" +
                     " WHERE c.name = ? " +
@@ -134,7 +134,7 @@ public class FoodDAO {
         ResultSet myRs = null;
         try {
             myConn = DBManager.getInstance().getConnection();
-            String sql = "select fi.id, fi.name as name, fi.price as price,fi.image,category_id, c.name as category  " +
+            String sql = "select fi.id, fi.name as name,fi.nameFoodUa, fi.price as price,fi.image,category_id, c.name as category,c.nameUa  " +
                     " from food_item as fi " +
                     " inner join category as c on fi.category_id=c.id" +
                     " ORDER BY " + sortBy + " " + order +
@@ -175,7 +175,7 @@ public class FoodDAO {
         ResultSet myRs = null;
         try {
             myConn = DBManager.getInstance().getConnection();
-            String sql = "select fi.id, fi.name, fi.price,fi.image,category_id, c.name as category  " +
+            String sql = "select fi.id, fi.name,fi.nameFoodUa, fi.price,fi.image,category_id, c.name as category ,c.nameUa " +
                     " from food_item as fi " +
                     " inner join category as c on fi.category_id=c.id" +
                     " WHERE c.name = ? " +
@@ -215,7 +215,7 @@ public class FoodDAO {
         try {
             foodId = Integer.parseInt(theFoodItemId);
             myConn = DBManager.getInstance().getConnection();
-            String sql = "select fi.id, fi.name, fi.price,fi.image,category_id, c.name as category" +
+            String sql = "select fi.id, fi.name,fi.nameFoodUa, fi.price,fi.image,category_id, c.name as category,c.nameUa" +
                     " from food_item as fi" +
                     " inner join category as c on fi.category_id=c.id " +
                     "where fi.id=? ";
@@ -255,7 +255,8 @@ public class FoodDAO {
             while (myRs.next()) {
                 int id = myRs.getInt("id");
                 String name = myRs.getString("name");
-                Category category = new Category(id, name);
+                String nameUa = myRs.getString("nameUa");
+                Category category = new Category(id, name,nameUa);
                 categories.add(category);
             }
             return categories;
@@ -274,12 +275,15 @@ public class FoodDAO {
         public FoodItem mapRow(ResultSet myRs) throws SQLException {
             int id = myRs.getInt("id");
             String name = myRs.getString("name");
+            String nameUa = myRs.getString("nameFoodUa");
             int price = myRs.getInt("price");
             String image = myRs.getString("image");
             int categoryId = myRs.getInt("category_id");
             String categoryName = myRs.getString("category");
-            Category category = new Category(categoryId, categoryName);
-            return new FoodItem(id, name, price, image, category);
+            String categoryNameUa = myRs.getString("nameUa");
+
+            Category category = new Category(categoryId, categoryName,categoryNameUa);
+            return new FoodItem(id, name,nameUa, price, image, category);
         }
     }
 }

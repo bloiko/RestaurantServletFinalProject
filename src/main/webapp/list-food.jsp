@@ -49,8 +49,14 @@
             <div class="nav-item dropdown ml-auto">
                 <a class="nav-link dropdown-toggle" href="" id="dropdown09" style="color:black;" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
+                <c:if test="${sessionScope.lang!='ua'}">
+                    <span class="flag-icon flag-icon-us"> </span> <fmt:message
+                        key="header.language"/></a>
+                </c:if>
+                <c:if test="${sessionScope.lang=='ua'}">
                     <span class="flag-icon flag-icon-${sessionScope.lang}"> </span> <fmt:message
                         key="header.language"/></a>
+                </c:if>
                 <div class="dropdown-menu" aria-labelledby="dropdown09">
                     <a class="dropdown-item" href="/controller?command=menuList&sessionLocale=ua"><span
                             class="flag-icon flag-icon-ua"> </span> <fmt:message key="header.ukrainian"/></a>
@@ -88,11 +94,21 @@
     <div id="content">
 
         <a href="/controller?command=menuList&filter=all_categories">
-            <button type="button" class="btn btn-light">All categories</button>
+            <c:if test="${sessionScope.lang!='ua'}">
+                <button type="button" class="btn btn-light">All categories</button>
+            </c:if>
+            <c:if test="${sessionScope.lang=='ua'}">
+                <button type="button" class="btn btn-light">Всі категорії</button>
+            </c:if>
         </a>
         <c:forEach var="category" items="${categories}">
             <a href="/controller?command=menuList&filter=${category.name}">
-                <button type="button" class="btn btn-light">${category.name}</button>
+                <c:if test="${sessionScope.lang!='ua'}">
+                    <button type="button" class="btn btn-light">${category.name}</button>
+                </c:if>
+                <c:if test="${sessionScope.lang=='ua'}">
+                    <button type="button" class="btn btn-light">${category.nameUa}</button>
+                </c:if>
             </a>
         </c:forEach>
 
@@ -116,9 +132,19 @@
             <c:forEach var="foodItem" items="${FOOD_LIST}">
                 <tr>
                     <td><img src="${foodItem.image}" width="100" height="100"></td>
-                    <td> ${foodItem.name} </td>
+                    <c:if test="${sessionScope.lang!='ua'}">
+                        <td> ${foodItem.name} </td>
+                    </c:if>
+                    <c:if test="${sessionScope.lang=='ua'}">
+                        <td> ${foodItem.nameUa} </td>
+                    </c:if>
                     <td> ${foodItem.price}$</td>
-                    <td>${foodItem.category.name}</td>
+                    <c:if test="${sessionScope.lang!='ua'}">
+                        <td>${foodItem.category.name}</td>
+                    </c:if>
+                    <c:if test="${sessionScope.lang=='ua'}">
+                        <td>${foodItem.category.nameUa}</td>
+                    </c:if>
                     <c:if test="${sessionScope.get('username')!=null}">
                         <td><a href="/controller?command=menuOrder&foodId=${foodItem.id}" style="color:black;">
                             <button type="button" class="btn btn-dark"><fmt:message

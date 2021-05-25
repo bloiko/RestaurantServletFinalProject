@@ -39,7 +39,7 @@ public class OrderServiceTest {
         doNothing().when(orderDAO).addOrder(any(Order.class));
         when(orderDAO.getOrderId(any(Order.class))).thenReturn(1);
         List<Item> cart = new ArrayList<>();
-        Item item = new Item(1,new FoodItem(1,"name",1,"image", new Category(1,"")),1);
+        Item item = new Item(1,new FoodItem(1,"name","",1,"image", new Category(1,"","")),1);
         cart.add(item);
 
         int orderId = service.addOrderAndGetId(cart, new User());

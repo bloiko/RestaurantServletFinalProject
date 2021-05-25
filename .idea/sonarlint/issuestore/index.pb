@@ -35,10 +35,6 @@ P
  src/main/webapp/log4j.properties,c\4\c4f7df19b5b6ca33969650808fbd4a4db4a78856
 W
 'src/main/resources/resources.properties,8\e\8e08a09b69df893cdc0f98783b3b6b063b3deefc
-Z
-*src/main/resources/resources_en.properties,5\d\5d29831975e82fd03400e84753eff5ad65339351
-Z
-*src/main/resources/resources_ua.properties,7\5\75ef0e55be70de7fac2cf4ea9007b0ff6b93a651
 `
 0src/test/java/controller/CartControllerTest.java,5\0\5019cb7980b8bb5a60ec0252e88db1aa5c2ab773
 h

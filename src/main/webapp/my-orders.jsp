@@ -47,8 +47,14 @@
             <div class="nav-item dropdown ml-auto">
                 <a class="nav-link dropdown-toggle" href="" id="dropdown09" style="color:black;" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
+                    <c:if test="${sessionScope.lang!='ua'}">
+                    <span class="flag-icon flag-icon-us"> </span> <fmt:message
+                        key="header.language"/></a>
+                </c:if>
+                <c:if test="${sessionScope.lang=='ua'}">
                     <span class="flag-icon flag-icon-${sessionScope.lang}"> </span> <fmt:message
                         key="header.language"/></a>
+                </c:if>
                 <div class="dropdown-menu" aria-labelledby="dropdown09">
                     <a class="dropdown-item" href="/controller?command=myOrders&sessionLocale=ua"><span
                             class="flag-icon flag-icon-ua"> </span> <fmt:message key="header.ukrainian"/></a>
@@ -109,7 +115,12 @@
                             <c:forEach var="item" items="${order.items}">
                                 <c:set var="orderPrice" value="${orderPrice+item.foodItem.price*item.quantity}"/>
                                 <tr>
-                                    <td> ${item.foodItem.name} </td>
+                                    <c:if test="${sessionScope.lang!='ua'}">
+                                        <td> ${item.foodItem.name} </td>
+                                    </c:if>
+                                    <c:if test="${sessionScope.lang=='ua'}">
+                                        <td> ${item.foodItem.nameUa} </td>
+                                    </c:if>
                                     <td> ${item.foodItem.price}</td>
                                     <td>${item.quantity}</td>
                                     <td>${item.foodItem.price*item.quantity}</td>
@@ -117,9 +128,14 @@
                             </c:forEach>
                         </table>
                     </td>
-                    <td>${orderPrice}</td>
+                    <td>${orderPrice}$</td>
                     <td>
-                            ${order.status}
+                        <c:if test="${sessionScope.lang!='ua'}">
+                            ${order.status.value}
+                    </c:if>
+                    <c:if test="${sessionScope.lang=='ua'}">
+                        ${order.status.valueUa}
+                    </c:if>
                     </td>
                 </tr>
             </c:forEach>

@@ -12,7 +12,11 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-
+/**
+ * Order service.
+ *
+ * @author B.Loiko
+ */
 public class OrderService {
     private OrderDAO orderDAO;
 

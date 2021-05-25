@@ -162,7 +162,7 @@ public class UserDAO {
                 UserMapper userMapper = new UserMapper();
                 return userMapper.mapRow(resultSet);
             } else {
-                throw new DBException("Could not find user userName: " + theUserName);
+                return null;
             }
         } catch (SQLException throwable) {
             DBManager.getInstance().rollbackAndClose(connection);

@@ -1,6 +1,5 @@
 package controller;
 
-import exception.DBException;
 import service.UserService;
 
 import javax.servlet.RequestDispatcher;
@@ -47,7 +46,6 @@ public class LoginMainController extends HttpServlet {
         removePastErrorMessagesIfExist(session);
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        try {
             if (userService.isCorrectUser(username, password)) {
                 session.setAttribute("username", username);
                 if ("ORDER_IN_CART".equals(session.getAttribute(COMMAND))) {
@@ -60,9 +58,6 @@ public class LoginMainController extends HttpServlet {
                 session.setAttribute("message", "Account's Invalid");
                 response.sendRedirect("/LoginMainController");
             }
-        } catch (DBException e) {
-            e.printStackTrace();
-        }
     }
 
     private void removePastErrorMessagesIfExist(HttpSession session) {

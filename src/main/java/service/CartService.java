@@ -2,7 +2,11 @@ package service;
 
 import database.entity.Item;
 import java.util.List;
-
+/**
+ * Cart service.
+ *
+ * @author B.Loiko
+ */
 public class CartService {
     public List<Item> removeItemFromCart(List<Item> cart, String itemId) {
         int index = isExisting(Integer.parseInt(itemId), cart);

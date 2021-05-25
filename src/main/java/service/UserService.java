@@ -11,7 +11,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+/**
+ * User service.
+ *
+ * @author B.Loiko
+ */
 public class UserService {
     private UserDAO userDAO;
     private OrderDAO orderListDAO;
@@ -68,8 +72,13 @@ public class UserService {
         return matcher.matches();
     }
 
-    public boolean isCorrectUser(String userName, String password) throws DBException {
-        User user = userDAO.getUserByUserName(userName);
+    public boolean isCorrectUser(String userName, String password) {
+        User user = null;
+        try {
+            user = userDAO.getUserByUserName(userName);
+        } catch (DBException e) {
+            e.printStackTrace();
+        }
         return user != null && user.getUserName().equals(userName) && user.getPassword().equals(password)
                 && (user.getRole().equals("USER")||user.getRole().equals("ADMIN"));
     }

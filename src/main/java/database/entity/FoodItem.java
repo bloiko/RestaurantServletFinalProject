@@ -18,6 +18,7 @@ import java.io.Serializable;
 public class FoodItem implements Serializable {
     private int id;
     private String name;
+    private String nameUa;
     private int price;
     private String image;
     private Category category;

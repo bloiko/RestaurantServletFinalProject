@@ -104,14 +104,8 @@
             <div class="nav-item dropdown ml-auto">
                 <a class="nav-link dropdown-toggle" href="" id="dropdown09" style="color:black;" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
-                    <c:if test="${sessionScope.lang!='ua'}">
-                    <span class="flag-icon flag-icon-us"> </span> <fmt:message
-                        key="header.language"/></a>
-                </c:if>
-                <c:if test="${sessionScope.lang=='ua'}">
                     <span class="flag-icon flag-icon-${sessionScope.lang}"> </span> <fmt:message
                         key="header.language"/></a>
-                </c:if>
                 <div class="dropdown-menu" aria-labelledby="dropdown09">
                     <a class="dropdown-item" href="/controller?command=thanks&sessionLocale=ua"><span
                             class="flag-icon flag-icon-ua"> </span> <fmt:message key="header.ukrainian"/></a>
@@ -141,26 +135,9 @@
     </nav>
 </div>
 <div class="container1">
-    <div class="row1">
-        <h3 class="title-gratitude">
-            <fmt:message key="thanks.message.gratitude"/>
-        </h3>
-        <div class="item">
-            <span><fmt:message key="thanks.your_order_number_is"/> <a class="link" href="#">${orderId}</a> </span>
-        </div>
-        <div style="padding-bottom: 20px;" class="item">
-            <span><fmt:message key="thanks.will_be_delivered"/> </span>
-        </div>
-        <div class="item">
-            <span><fmt:message key="thanks.email_us"/> <a class="link" href="#">contact@dessertcafe.com.ua</a> <fmt:message key="thanks.for_help"/></span>
-        </div>
-        <div class="item">
-            <span><fmt:message key="thanks.message.contact"/></span>
-        </div>
-        <div class="item">
-            <span><fmt:message key="thanks.message.track"/></span>
-        </div>
-    </div>
+   You have not access to this page!
+    <br/>
+    <a href="/controller?command=menuList"><fmt:message key="header.menu"/></a>
 </div>
 <%@ include file="/WEB-INF/jspf/footer.jspf" %>
 </body>
