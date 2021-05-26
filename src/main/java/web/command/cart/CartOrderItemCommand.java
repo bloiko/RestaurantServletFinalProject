@@ -82,4 +82,12 @@ public class CartOrderItemCommand extends Command {
         log.debug("Command finished");
         return "cart.jsp";
     }
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    public void setOrderService(OrderService orderService) {
+        this.orderService = orderService;
+    }
 }

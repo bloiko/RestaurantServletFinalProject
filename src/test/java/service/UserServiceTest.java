@@ -2,6 +2,7 @@ package service;
 
 import database.dao.OrderDAO;
 import database.dao.UserDAO;
+import database.entity.Order;
 import database.entity.User;
 import exception.DBException;
 import org.junit.Assert;
@@ -12,6 +13,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -41,7 +44,20 @@ public class UserServiceTest {
         boolean shouldBeTrue = service.isCorrectAdmin("username", "password");
         Assert.assertTrue(shouldBeTrue);
     }
-
+    @Test
+    public void testService_isCorrectUser_WithUserRole_ShouldReturnTrue() throws Exception {
+        User user = new User(1, "first", "last", "username", "password", "email", "address", "+380981180662", "USER");
+        when(userDAO.getUserByUserName("username")).thenReturn(user);
+        boolean shouldBeTrue = service.isCorrectUser("username", "password");
+        Assert.assertTrue(shouldBeTrue);
+    }
+    @Test
+    public void testService_isCorrectUser_WithAdminRole_ShouldReturnTrue() throws Exception {
+        User user = new User(1, "first", "last", "username", "password", "email", "address", "+380981180662", "ADMIN");
+        when(userDAO.getUserByUserName("username")).thenReturn(user);
+        boolean shouldBeTrue = service.isCorrectUser("username", "password");
+        Assert.assertTrue(shouldBeTrue);
+    }
     /*@Test
     public void testService_getUserOrdersSortByOrderDateReversed_ShouldReturnList() throws Exception {
         User user = new User(1, "first", "last", "user", "pass", "email", "address", "+380981180662", "ADMIN");
@@ -114,5 +130,21 @@ public class UserServiceTest {
     public void testService_isCorrectEmail_ShouldReturnFalse2() throws Exception {
         boolean shouldBeFalse = service.isCorrectEmail("firstlastgmail.com");
         Assert.assertFalse(shouldBeFalse);
+    }
+    @Test
+    public void testService_getUserOrdersSortByOrderDateReversed() throws Exception {
+        User user = new User(1, "first", "last", "user", "pass", "email", "address", "+380981180662", "ADMIN");
+        when(userDAO.getUserByUserName(anyString())).thenReturn(user);
+        when(orderDAO.getOrdersByUserId(1)).thenReturn(new ArrayList<>());
+        List<Order> orderList = service.getUserOrdersSortByOrderDateReversed("username");
+        verify(orderDAO,times(1)).getOrdersByUserId(anyInt());
+        Assert.assertEquals(0,orderList.size());
+    }
+    @Test
+    public void testService_getUserByUserName_ShouldUseUserDao() throws Exception {
+        User expected = new User(1, "first", "last", "user", "pass", "email", "address", "+380981180662", "ADMIN");
+        when(userDAO.getUserByUserName(anyString())).thenReturn(expected);
+        User userWas = service.getUserByUserName("username");
+        Assert.assertEquals(expected,userWas);
     }
 }

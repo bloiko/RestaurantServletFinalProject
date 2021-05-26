@@ -22,6 +22,11 @@ public class MenuListCommand extends Command {
     private static final int NUMBER_ITEMS_ON_PAGE = 5;
     public static final String FILTER = "filter";
     private FoodItemService foodItemService;
+
+    public void setFoodItemService(FoodItemService foodItemService) {
+        this.foodItemService = foodItemService;
+    }
+
     public MenuListCommand() throws ServletException {
         init();
     }

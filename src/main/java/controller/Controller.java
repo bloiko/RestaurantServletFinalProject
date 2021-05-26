@@ -1,3 +1,5 @@
+package controller;
+
 import web.command.Command;
 import web.command.CommandContainer;
 import org.apache.log4j.Logger;

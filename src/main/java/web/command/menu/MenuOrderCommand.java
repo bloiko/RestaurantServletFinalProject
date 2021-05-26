@@ -56,6 +56,10 @@ public class MenuOrderCommand extends Command {
         }
         return cart;
     }
+
+    public void setFoodItemService(FoodItemService foodItemService) {
+        this.foodItemService = foodItemService;
+    }
 }
 
 
