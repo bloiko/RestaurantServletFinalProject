@@ -52,4 +52,8 @@ public class CartDeleteItemCommand extends Command {
         log.debug("Command finished");
         return "cart.jsp";
     }
+
+    public void setCartService(CartService cartService) {
+        this.cartService = cartService;
+    }
 }

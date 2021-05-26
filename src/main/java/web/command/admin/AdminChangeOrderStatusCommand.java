@@ -57,4 +57,8 @@ public class AdminChangeOrderStatusCommand extends Command {
         log.debug("Command finished");
         return "/controller?command=adminList";
     }
+
+    public void setOrderService(OrderService orderService) {
+        this.orderService = orderService;
+    }
 }

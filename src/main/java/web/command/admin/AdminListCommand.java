@@ -1,6 +1,5 @@
 package web.command.admin;
 
-import database.dao.OrderDAO;
 import database.entity.Order;
 import database.entity.OrderStatus;
 import exception.DBException;
@@ -21,7 +20,6 @@ import java.util.List;
  *
  */
 public class AdminListCommand extends Command {
-    private OrderDAO orderListDAO;
     private OrderService orderService;
     private static final Logger log = Logger.getLogger(AdminListCommand.class);
 
@@ -32,7 +30,6 @@ public class AdminListCommand extends Command {
     public void init() throws ServletException {
         try {
             orderService = new OrderService();
-            orderListDAO = new OrderDAO();
         } catch (Exception exc) {
             throw new ServletException(exc);
         }
@@ -43,7 +40,7 @@ public class AdminListCommand extends Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("Command starts");
         try {
-            List<OrderStatus> orderStatuses = orderListDAO.getStatuses();
+            List<OrderStatus> orderStatuses = orderService.getStatuses();
             log.trace("Get statuses from Service : satuses --> " + orderStatuses);
 
             List<Order> notDoneOrders = orderService.getNotDoneOrdersSortById();
@@ -68,7 +65,7 @@ public class AdminListCommand extends Command {
         return  "admin.jsp";
     }
 
-    public void setOrderListDAO(OrderDAO orderListDAO) {
-        this.orderListDAO = orderListDAO;
+    public void setOrderService(OrderService orderService) {
+        this.orderService = orderService;
     }
 }
