@@ -115,14 +115,13 @@
         <table class="table">
             <thead>
             <tr>
-                <th scope="col"><fmt:message key="list_food.image"/></th>
-                <th scope="col"><fmt:message key="list_food.name"/><a href="/controller?command=menuList&sort=name"
-                                                                      style="color:red;">&#8597;</a></th>
-                <th scope="col"><fmt:message key="list_food.price"/><a href="/controller?command=menuList&sort=price"
-                                                                       style="color:red;">&#8597;</a></th>
-                <th scope="col"><fmt:message key="list_food.category"/><a
-                        href="/controller?command=menuList&sort=category"
-                        style="color:red;">&#8597;</a></th>
+                <th scope="col"><a style="color:red;"><fmt:message key="list_food.image"/></a></th>
+                <th scope="col"><a href="/controller?command=menuList&sort=name"
+                                   style="color:red;"><fmt:message key="list_food.name"/>&#8597;</a></th>
+                <th scope="col"><a href="/controller?command=menuList&sort=price"
+                                   style="color:red;"><fmt:message key="list_food.price"/>&#8597;</a></th>
+                <th scope="col"><a  href="/controller?command=menuList&sort=category"
+                        style="color:red;"><fmt:message key="list_food.category"/>&#8597;</a></th>
                 <c:if test="${sessionScope.get('username')!=null}">
                     <th scope="col"></th>
                 </c:if>
