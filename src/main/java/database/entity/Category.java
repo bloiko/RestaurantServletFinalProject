@@ -2,7 +2,6 @@ package database.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 /**
  * Category entity.
  *
@@ -10,7 +9,6 @@ import lombok.NoArgsConstructor;
  *
  */
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class Category implements Comparable<Category> {
     private int id;

@@ -11,7 +11,6 @@ import java.io.Serializable;
  *
  */
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class Item implements Serializable {
     private int id;

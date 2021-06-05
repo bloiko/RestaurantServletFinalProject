@@ -149,5 +149,9 @@ public class RegistrationCommand extends Command {
             return null;
         }
     }
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
 }
 

@@ -45,26 +45,7 @@ public enum OrderStatus implements Serializable {
         return DONE;
     }
 
-    public boolean equalsTo(String name) {
-        return value.equals(name);
-    }
-
     public String value() {
         return value;
     }
-    public String valueUa() {
-        return valueUa;
-    }
-    public OrderStatus nextStatus(){
-        if(this.equals(OrderStatus.WAITING)){
-            return OrderStatus.PREPARING;
-        }else if(this.equals(OrderStatus.PREPARING)){
-            return OrderStatus.READY;
-        }else if(this.equals(OrderStatus.READY)){
-            return OrderStatus.DELIVERED;
-        }else if(this.equals(OrderStatus.DELIVERED)){
-            return OrderStatus.DONE;
-        }
-        return DONE;
-    }
-}
+   }

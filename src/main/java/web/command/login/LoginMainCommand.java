@@ -64,7 +64,6 @@ public class LoginMainCommand extends Command {
         log.trace("Set attribute to the session: message --> "+ "Account's Invalid");
 
         log.debug("Command finished");
-        //return "/controller?command=loginMain";
         return "login-main.jsp";
     }
 
@@ -74,6 +73,9 @@ public class LoginMainCommand extends Command {
             session.removeAttribute("message");
         }
         log.trace("Remove attribute from the session: message");
+    }
 
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 }

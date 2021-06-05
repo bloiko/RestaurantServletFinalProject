@@ -41,9 +41,6 @@ public class OrderService {
         return orderDAO.getOrderId(order);
     }
 
-    /*    public void deleteOrder(String orderId) throws DBException {
-            orderDAO.deleteOrder(orderId);
-        }*/
     public List<OrderStatus> getStatuses() throws DBException {
         return orderDAO.getStatuses();
     }

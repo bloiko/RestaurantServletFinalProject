@@ -117,23 +117,25 @@
                                 <tr>
                                     <c:if test="${sessionScope.lang!='ua'}">
                                         <td> ${item.foodItem.name} </td>
+                                    <td> ${item.foodItem.price}$</td>
                                     </c:if>
                                     <c:if test="${sessionScope.lang=='ua'}">
                                         <td> ${item.foodItem.nameUa} </td>
+                                        <td> ${item.foodItem.price*28} грн.</td>
                                     </c:if>
-                                    <td> ${item.foodItem.price}</td>
                                     <td>${item.quantity}</td>
                                     <td>${item.foodItem.price*item.quantity}</td>
                                 </tr>
                             </c:forEach>
                         </table>
                     </td>
-                    <td>${orderPrice}$</td>
                     <td>
                         <c:if test="${sessionScope.lang!='ua'}">
+                    <td>${orderPrice}$</td>
                             ${order.status.value}
                     </c:if>
                     <c:if test="${sessionScope.lang=='ua'}">
+                        <td>${orderPrice*28} грн.</td>
                         ${order.status.valueUa}
                     </c:if>
                     </td>

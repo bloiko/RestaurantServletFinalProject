@@ -30,7 +30,8 @@ public class UserFilter implements Filter {
         log.trace("Get attribute from the session: username_admin --> " + username);
 
         if (username != null && ("loginMain".equals(servletRequest.getParameter("command")) ||
-                "registration".equals(servletRequest.getParameter("command")))) {
+                "registration".equals(servletRequest.getParameter("command"))||
+                servletRequest.getRequestURI().endsWith("admin-main.jsp"))) {
             log.info("User " + username + " try to get to the command" + servletRequest.getParameter("command"));
             log.debug("Filter finished");
             ((HttpServletResponse) response).sendRedirect("no-access.jsp");

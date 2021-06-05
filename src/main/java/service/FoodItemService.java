@@ -56,15 +56,14 @@ public class FoodItemService {
     }
     public List<FoodItem> getFoodItems(int page, int number, String sortBy, String order, String filter) throws DBException {
         int offset = (page - 1) * number;
-        int itemsLimit = number;
         if (sortBy == null && filter != null) {
-            return foodItemDAO.getFoodItemsWithSkipLimitFilter(itemsLimit, offset, filter);
-        } else if (sortBy == null && filter == null) {
-            return foodItemDAO.getFoodItemsWithSkipAndLimit(itemsLimit, offset);
-        } else if (filter == null && sortBy != null) {
-            return foodItemDAO.getFoodItemsWithSkipLimitAndOrder(itemsLimit, offset, sortBy, order);
+            return foodItemDAO.getFoodItemsWithSkipLimitFilter(number, offset, filter);
+        } else if (sortBy == null) {
+            return foodItemDAO.getFoodItemsWithSkipAndLimit(number, offset);
+        } else if (filter == null) {
+            return foodItemDAO.getFoodItemsWithSkipLimitAndOrder(number, offset, sortBy, order);
         } else {
-            return foodItemDAO.getFoodItemsWithFilterSkipLimitAndOrder(filter, itemsLimit, offset, sortBy, order);
+            return foodItemDAO.getFoodItemsWithFilterSkipLimitAndOrder(filter, number, offset, sortBy, order);
         }
     }
 }

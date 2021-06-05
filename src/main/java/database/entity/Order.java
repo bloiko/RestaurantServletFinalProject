@@ -23,7 +23,4 @@ public class Order implements Serializable {
     private User user;
     private List<Item> items;
     private OrderStatus status;
-    public void addFoodItem(Item item){
-        items.add(item);
-    }
 }

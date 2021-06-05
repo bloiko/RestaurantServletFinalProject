@@ -24,7 +24,6 @@ public class AdminChangeOrderStatusCommand extends Command {
     public AdminChangeOrderStatusCommand() throws ServletException {
         init();
     }
-
     @Override
     public void init() throws ServletException {
         try {
@@ -33,8 +32,6 @@ public class AdminChangeOrderStatusCommand extends Command {
             throw new ServletException(exc);
         }
     }
-
-
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("Command starts");

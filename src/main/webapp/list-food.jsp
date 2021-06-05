@@ -137,11 +137,12 @@
                     <c:if test="${sessionScope.lang=='ua'}">
                         <td> ${foodItem.nameUa} </td>
                     </c:if>
-                    <td> ${foodItem.price}$</td>
                     <c:if test="${sessionScope.lang!='ua'}">
+                    <td> ${foodItem.price}$</td>
                         <td>${foodItem.category.name}</td>
                     </c:if>
                     <c:if test="${sessionScope.lang=='ua'}">
+                        <td> ${foodItem.price*28} грн.</td>
                         <td>${foodItem.category.nameUa}</td>
                     </c:if>
                     <c:if test="${sessionScope.get('username')!=null}">

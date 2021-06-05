@@ -4,15 +4,18 @@
          id="WebApp_ID" version="3.1">
     <display-name>web-student-tracker-solution</display-name>
     <welcome-file-list>
+        <welcome-file>login-main.jsp</welcome-file>
         <welcome-file>list-food.jsp</welcome-file>
-        <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
 
     <resource-ref>
         <res-ref-name>jdbc/restaurant_system</res-ref-name>
         <res-type>javax.sql.DataSource</res-type>
     </resource-ref>
-
+    <resource-ref>
+        <res-ref-name>jdbc/test_restaurant_system</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+    </resource-ref>
     <error-page>
         <error-code>404</error-code>
         <location>/AppExceptionHandler</location>

@@ -49,7 +49,6 @@ public class DBManager {
             Context envContext = (Context) initContext.lookup("java:/comp/env");
             DataSource dataSource = (DataSource) envContext.lookup("jdbc/restaurant_system");
             con = dataSource.getConnection();
-            //con.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             con.setAutoCommit(false);
         } catch (NamingException ex) {
             log.error("Cannot obtain a connection from the pool", ex);

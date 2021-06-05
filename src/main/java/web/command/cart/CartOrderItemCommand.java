@@ -49,19 +49,19 @@ public class CartOrderItemCommand extends Command {
         log.trace("Set attribute to the session: username --> " + username);
 
         User user = null;
-        if (username != null) {
+        if (username == null) {
+            session.setAttribute("command", "ORDER_IN_CART");
+            log.trace("Set attribute to the session: command --> " + "ORDER_IN_CART");
+
+            log.debug("Command finished");
+            return "login-main.jsp";
+        } else {
             try {
                 user = userService.getUserByUserName(username);
                 log.info("User with username " + username + " was taken from the database");
             } catch (DBException e) {
                 e.printStackTrace();
             }
-        } else {
-            session.setAttribute("command", "ORDER_IN_CART");
-            log.trace("Set attribute to the session: command --> " + "ORDER_IN_CART");
-
-            log.debug("Command finished");
-            return "login-main.jsp";
         }
 
         try {

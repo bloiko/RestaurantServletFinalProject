@@ -1,4 +1,4 @@
-package controller;
+package web;
 
 import web.command.Command;
 import web.command.CommandContainer;

@@ -50,13 +50,13 @@
                 <a class="nav-link dropdown-toggle" href="" id="dropdown09" style="color:black;" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
                     <c:if test="${sessionScope.lang!='ua'}">
-                        <span class="flag-icon flag-icon-us"> </span> <fmt:message
-                            key="header.language"/></a>
-                    </c:if>
-                    <c:if test="${sessionScope.lang=='ua'}">
+                    <span class="flag-icon flag-icon-us"> </span> <fmt:message
+                        key="header.language"/></a>
+                </c:if>
+                <c:if test="${sessionScope.lang=='ua'}">
                     <span class="flag-icon flag-icon-${sessionScope.lang}"> </span> <fmt:message
                         key="header.language"/></a>
-                    </c:if>
+                </c:if>
                 <div class="dropdown-menu" aria-labelledby="dropdown09">
                     <a class="dropdown-item" href="/controller?command=cartList&sessionLocale=ua"><span
                             class="flag-icon flag-icon-ua"> </span> <fmt:message key="header.ukrainian"/></a>
@@ -73,7 +73,8 @@
             </c:if>
             <c:if test="${sessionScope.get('username')!=null}">
                 <div class="navbar-nav">
-                    <a href="/controller?command=logout" class="nav-item nav-link"></span><fmt:message key="header.logout"/></a>
+                    <a href="/controller?command=logout" class="nav-item nav-link"></span><fmt:message
+                            key="header.logout"/></a>
                 </div>
                 <a href="cart.jsp">
             <span class="fa-stack fa-2x has-badge" data-count="${sessionScope.cart.size()}">
@@ -108,11 +109,12 @@
                     <td><img src="${item.foodItem.image}" width="80" height="80"></td>
                     <c:if test="${sessionScope.lang!='ua'}">
                         <td> ${item.foodItem.name} </td>
+                        <td> ${item.foodItem.price}$</td>
                     </c:if>
                     <c:if test="${sessionScope.lang=='ua'}">
                         <td> ${item.foodItem.nameUa} </td>
+                        <td> ${item.foodItem.price*28} грн.</td>
                     </c:if>
-                    <td> ${item.foodItem.price}$</td>
                     <td> ${item.quantity} </td>
                     <td align="left"><a href="/controller?command=cartDeleteItem&itemId=${item.foodItem.id}"
                                         onclick="return confirm('Are you sure?')">
@@ -127,7 +129,12 @@
     </div>
 </div>
 <div class="order" style="position: relative;">
-    <h2><fmt:message key="cart.sum"/>: ${sum}$</h2>
+    <c:if test="${sessionScope.lang!='ua'}">
+        <h2><fmt:message key="cart.sum"/>: ${sum}$</h2>
+    </c:if>
+    <c:if test="${sessionScope.lang=='ua'}">
+        <h2><fmt:message key="cart.sum"/>: ${sum*28} грн.</h2>
+    </c:if>
     <a href="/controller?command=cartOrderItem">
         <button type="button" class="btn btn-danger order-button" style="position: absolute; right: 10%"><fmt:message
                 key="cart.order"/></button>
