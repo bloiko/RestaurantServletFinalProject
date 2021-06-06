@@ -20,7 +20,7 @@
 <article class="card-body mx-auto" style="max-width: 400px;">
     <h4 class="card-title mt-3 text-center"><fmt:message key="registration.registration"/></h4>
     <form action="/controller?command=registration" method="post">
-        <label class="errorMessage">${error_message}</label>
+        <h2><label class="errorMessage">${error_message}</label></h2>
         <div class="form-group input-group">
             <div class="input-group-prepend">
                 <span class="input-group-text"> <i class="fa fa-user"></i> </span>

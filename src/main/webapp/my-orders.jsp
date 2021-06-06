@@ -1,5 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
+<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="mypredefinedtaglibrary" prefix="my" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page isELIgnored="false" %>
@@ -20,7 +20,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.1.0/css/flag-icon.min.css" rel="stylesheet">
     <%--<link rel="stylesheet" type="text/css" href="/WEB-INF/css/styles.css"/>--%>
     <title>My Orders</title>
-    <style><%@include file="/WEB-INF/css/styles.css"%></style>
+    <style>
+        <%@include file="/WEB-INF/css/styles.css" %>
+    </style>
 </head>
 <body>
 <div class="bs-example">
@@ -71,7 +73,8 @@
             </c:if>
             <c:if test="${sessionScope.get('username')!=null}">
                 <div class="navbar-nav">
-                    <a href="/controller?command=logout" class="nav-item nav-link"></span><fmt:message key="header.logout"/></a>
+                    <a href="/controller?command=logout" class="nav-item nav-link"></span><fmt:message
+                            key="header.logout"/></a>
                 </div>
                 <a href="cart.jsp">
             <span class="fa-stack fa-2x has-badge" data-count="${sessionScope.cart.size()}">
@@ -117,7 +120,7 @@
                                 <tr>
                                     <c:if test="${sessionScope.lang!='ua'}">
                                         <td> ${item.foodItem.name} </td>
-                                    <td> ${item.foodItem.price}$</td>
+                                        <td> ${item.foodItem.price}$</td>
                                     </c:if>
                                     <c:if test="${sessionScope.lang=='ua'}">
                                         <td> ${item.foodItem.nameUa} </td>
@@ -129,16 +132,16 @@
                             </c:forEach>
                         </table>
                     </td>
-                    <td>
+
                         <c:if test="${sessionScope.lang!='ua'}">
                     <td>${orderPrice}$</td>
-                            ${order.status.value}
+                    <td> ${order.status.value}</td>
                     </c:if>
                     <c:if test="${sessionScope.lang=='ua'}">
                         <td>${orderPrice*28} грн.</td>
-                        ${order.status.valueUa}
+                    <td>${order.status.valueUa}</td>
                     </c:if>
-                    </td>
+
                 </tr>
             </c:forEach>
             </tbody>

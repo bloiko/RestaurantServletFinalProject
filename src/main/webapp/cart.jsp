@@ -121,7 +121,12 @@
                         <button type="button" class="btn btn-dark"><fmt:message key="cart.delete"/></button>
                     </a></td>
                     >
+                    <c:if test="${sessionScope.lang!='ua'}">
                     <td>${item.foodItem.price*item.quantity}$</td>
+                    </c:if>
+                    <c:if test="${sessionScope.lang=='ua'}">
+                        <td>${item.foodItem.price*item.quantity*28} грн.</td>
+                    </c:if>
                 </tr>
             </c:forEach>
             </tbody>

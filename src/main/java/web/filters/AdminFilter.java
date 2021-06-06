@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter("/AdminController")
+@WebFilter("/controller")
 public class AdminFilter implements Filter {
     private static final Logger log = Logger.getLogger(AdminFilter.class);
 
@@ -29,7 +29,7 @@ public class AdminFilter implements Filter {
         String username = (String) session.getAttribute("username_admin");
         log.trace("Get attribute from the session: username_admin --> "+username);
 
-        if ( username== null && servletRequest.getRequestURI().endsWith("/AdminController")) {
+        if ( username== null && "adminList".equals(servletRequest.getParameter("command"))) {
             log.info("User "+ username+ " try to get to the admin page");
 
             log.debug("Filter finished");
